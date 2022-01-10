@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  # maintain poetry dependencies daily
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    # Disable pip version update due to noise of Dependabot PR to repo
+    open-pull-requests-limit: 0

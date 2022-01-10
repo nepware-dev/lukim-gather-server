@@ -112,7 +112,9 @@ WSGI_APPLICATION = "lukimgather.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # Database
-DATABASES = {"default": env.dj_db_url("DATABASE_URL", default="spatialite:///db.sqlite3")}
+DATABASES = {
+    "default": env.dj_db_url("DATABASE_URL", default="spatialite:///db.sqlite3")
+}
 
 # CACHES
 CACHE = {"default": env.dj_cache_url("CACHE_URL", default="dummy://")}
