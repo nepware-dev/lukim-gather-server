@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  server:
+    container_name: "${PROJECT_NAME}"
+    env_file: .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+      cache_from:
+        - ghcr.io/nepware-dev/lukim-gather-server:latest
+    volumes:
+      - .:/code
+    networks:
+      - default
+      - external-services
+
+networks:
+  external-services:
+    external: true

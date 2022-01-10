@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "lukim-gather-server"
 version = "0.1.0"
@@ -7,12 +11,18 @@ authors = ["Your Name <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Django = "^3.2.11"
+environs = {version = "^9.4.0", extras = ["django"]}
+marshmallow = "^3.14.1"
+psycopg2-binary = "^2.9.3"
+uvicorn = {version = "^0.16.0", optional = true, extras = ["standard"]}
+gunicorn = {version = "^20.1.0", optional = true}
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
 isort = "^5.10.1"
 safety = "^1.10.3"
+django-extensions = "^3.1.5"
+Werkzeug = "^2.0.2"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.extras]
+asgi = ["uvicorn", "gunicorn"]
