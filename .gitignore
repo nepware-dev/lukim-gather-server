@@ -8,3 +8,7 @@ media/
 static/
 *.sqlite3
 .env
+
+# Docker related
+docker-compose.yml
+external-services.yml
