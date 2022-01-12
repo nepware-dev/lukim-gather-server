@@ -1,0 +1,31 @@
+name: Test Django application
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+
+env:
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: iamsauravsharma/create-dotenv@v1.2.0
+        with:
+          env-prefix: "ENV_"
+        env:
+          ENV_PROJECT_NAME: "lukimgather"
+          ENV_SERVER_ENVIRONMENT: "testing"
+      - name: Initial docker related setup
+        run: |
+          docker network create external-services
+          ln -s docker/docker-compose.test.yml docker-compose.yml
+      - name: Run test
+        run: |
+          docker-compose up --exit-code-from server
