@@ -65,7 +65,9 @@ DJANGO_APPS = [
 ]
 
 # Internal apps
-INTERNAL_APPS = []
+INTERNAL_APPS = [
+    "user",
+]
 
 # Third party apps
 THIRD_PARTY_APPS = []
@@ -118,6 +120,9 @@ DATABASES = {
 
 # CACHES
 CACHE = {"default": env.dj_cache_url("CACHE_URL", default="dummy://")}
+
+# AUTH User model
+AUTH_USER_MODEL = "user.User"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
