@@ -10,4 +10,4 @@ Your email change request confirmation pin is {{ email_change_object.pin }}
 Your pin will expire in 1 hour at {{email_change_object.pin_expiry_time }} UTC
 
 Thanks,
-Lukim Gather team
+Lukim Gather Team

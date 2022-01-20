@@ -5,10 +5,11 @@ from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from graphene.types.generic import GenericScalar
 
 from lukimgather.utils import gen_random_number, gen_random_string
 from user.models import EmailChangePin, EmailConfirmationPin, PasswordResetPin, User
-from user.types import UserType
+from user.types import PasswordResetPinType, UserType
 
 
 class RegisterUserInput(graphene.InputObjectType):
@@ -18,6 +19,12 @@ class RegisterUserInput(graphene.InputObjectType):
     password = graphene.String(description=_("Password"), required=True)
     re_password = graphene.String(description=_("Retype Password"), required=True)
     username = graphene.String(description=_("Username"), required=True)
+
+
+class ChangePasswordInput(graphene.InputObjectType):
+    password = graphene.String(description=_("Password"), required=True)
+    new_password = graphene.String(description=_("New Password"), required=True)
+    re_password = graphene.String(description=_("Retype Password"), required=True)
 
 
 class PasswordResetPinInput(graphene.InputObjectType):
@@ -54,76 +61,97 @@ class EmailChangePinInput(graphene.InputObjectType):
         description=_("No Of Incorrect Attempts"), default_value=0
     )
     pin = graphene.Int(description=_("Pin"))
-    pin_expiry_time = graphene.DateTime(description=_("Pin Expiry Time"))
     new_email = graphene.String(description=_("New Email"))
     is_active = graphene.Boolean(description=_("Is Active"))
 
 
-class RegisterUser(graphene.Mutation):
-    user = graphene.Field(UserType, required=True)
+class EmailChangeInput(graphene.InputObjectType):
+    new_email = graphene.String(description=_("New Email"))
+    password = graphene.String(description=_("Password"), required=True)
 
+
+class EmailChangePinVerifyInput(graphene.InputObjectType):
+    pin = graphene.Int(description=_("Pin"))
+
+
+class RegisterUser(graphene.Mutation):
     class Arguments:
         data = RegisterUserInput(
             description=_("Fields required to create a user."), required=True
         )
 
+    errors = GenericScalar()
+    result = graphene.Field(UserType)
+    ok = graphene.Boolean()
+
     def mutate(self, info, data):
         user_exists = User.objects.filter_by_username(data.username).exists()
         if user_exists:
-            raise ValidationError(
-                {_("error"): _("User with username/email already exists")},
+            return RegisterUser(
+                errors={"error": "User with username/email already exists"},
+                ok=False,
             )
         user_password = data.pop("re_password")
         try:
             validate_password(password=user_password)
         except ValidationError as e:
             errors = list(e.messages)
-            raise ValidationError({_("errors"): errors})
+            return RegisterUser(errors={"errors": errors}, ok=False)
         user = User.objects.create_user(**data)
-        return RegisterUser(user=user)
+        return RegisterUser(result=user, ok=True, errors=None)
 
 
 class ChangePassword(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
-        data = PasswordResetChangeInput(
+        data = ChangePasswordInput(
             description=_("Fields required to change password."), required=True
         )
 
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
     def mutate(self, info, data):
         user = User.objects.filter_by_username(
-            self.request.user, is_active=True
+            info.context.user.username, is_active=True
         ).first()
         new_password = data.new_password
-        re_new_password = data.re_new_password
+        re_new_password = data.re_password
         if re_new_password != new_password:
-            raise ValidationError(
-                {_("error"): _("New password and re new password doesn't match")},
+            return ChangePassword(
+                errors={"error": "New password and re new password doesn't match"},
+                result=None,
+                ok=False,
             )
         user.set_password(new_password)
         user.save()
-        return ChangePassword(message={_("detail"): _("Password successfully updated")})
+        return ChangePassword(
+            result={"detail": "Password successfully updated"},
+            ok=True,
+            errors=None,
+        )
 
 
 class ResetUserPassword(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
         data = PasswordResetPinInput(
             description=_("Fields required to reset password."), required=True
         )
 
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
     def mutate(self, info, data):
         username = data.username
         user = User.objects.filter_by_username(username, is_active=True).first()
         if not user:
-            raise ValidationError(
-                {
-                    _("error"): _(
-                        "No active user present for username/email your account may be blocked"
-                    )
+            return ResetUserPassword(
+                errors={
+                    "error": "No active user present for username/email your account may be blocked"
                 },
+                result=None,
+                ok=False,
             )
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
@@ -143,24 +171,30 @@ class ResetUserPassword(graphene.Mutation):
         )
         user.email_user("Password reset pin", message)
         return ResetUserPassword(
-            message={_("detail"): _("Password reset email successfully send")}
+            result={"detail": "Password reset email successfully send"},
+            errors=None,
+            ok=True,
         )
 
 
 class ResetUserPasswordVerify(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
         data = PasswordResetPinInput(
             description=_("Fields required to reset password."), required=True
         )
 
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = graphene.Field(PasswordResetPinType)
+
     def mutate(self, info, data):
         username = data.username
         user = User.objects.filter_by_username(username, is_active=True).first()
         if not user:
-            raise ValidationError(
-                {_("error"): _("No active user present for username/email")},
+            return ResetUserPasswordVerify(
+                errors={"error": "No active user present for username/email"},
+                result=None,
+                ok=False,
             )
         pin = data.pin
         current_time = timezone.now()
@@ -179,60 +213,75 @@ class ResetUserPasswordVerify(graphene.Mutation):
                 user_only_password_reset_object.no_of_incorrect_attempts += 1
                 user_only_password_reset_object.save()
                 if not user.is_active:
-                    raise ValidationError(
-                        {_("error"): _("User is inactive")},
+                    return ResetUserPasswordVerify(
+                        errors={"error": "User is inactive"},
+                        result=None,
+                        ok=False,
                     )
                 elif user_only_password_reset_object.no_of_incorrect_attempts >= 5:
                     user.is_active = False
                     user.save()
-                    raise ValidationError(
-                        {
-                            _("error"): _(
-                                "User is now inactive for trying too many times"
-                            )
+                    return ResetUserPasswordVerify(
+                        errors={
+                            "error": "User is now inactive for trying too many times"
                         },
+                        result=None,
+                        ok=False,
                     )
                 elif user_only_password_reset_object.pin != pin:
-                    raise ValidationError(
-                        {_("error"): _("Password reset pin is incorrect")},
+                    return ResetUserPasswordVerify(
+                        error={"error": "Password reset pin is incorrect"},
+                        result=None,
+                        ok=False,
                     )
                 else:
-                    raise ValidationError(
-                        {_("error"): _("Password reset pin has expired")},
+                    return ResetUserPasswordVerify(
+                        errors={"error": "Password reset pin has expired"},
+                        result=None,
+                        ok=False,
                     )
-            raise ValidationError(
-                {_("error"): _("No matching active user pin found")},
+            return ResetUserPasswordVerify(
+                errors={"error": "No matching active user pin found"},
+                result=None,
+                ok=False,
             )
         else:
-            password_reset_pin_object_identifier = password_reset_pin_object.identifier
             password_reset_pin_object.no_of_incorrect_attempts = 0
             password_reset_pin_object.save()
             return ResetUserPasswordVerify(
-                message={"identifier": password_reset_pin_object_identifier}
+                errors=None,
+                result=password_reset_pin_object,
+                ok=True,
             )
 
 
 class PasswordResetChange(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
         data = PasswordResetChangeInput(
             description=_("Fields required to reset password."), required=True
         )
 
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
     def mutate(self, info, data):
         username = data.username
         user = User.objects.filter_by_username(username, is_active=True).first()
         if not user:
-            raise ValidationError(
-                {_("error"): _("No active user present for username/email")}
+            return PasswordResetChange(
+                errors={"error": "No active user present for username/email"},
+                result=None,
+                ok=False,
             )
         identifier = data.identifier
         password = data.password
         re_password = data.re_password
         if re_password != password:
-            raise ValidationError(
-                {_("error"): _("Password and re_password doesn't match")}
+            return PasswordResetChange(
+                errors={"error": "Password and re_password doesn't match"},
+                result=None,
+                ok=False,
             )
         current_time = timezone.now()
         password_reset_pin_object = PasswordResetPin.objects.filter(
@@ -250,29 +299,37 @@ class PasswordResetChange(graphene.Mutation):
                 user_only_password_reset_object.no_of_incorrect_attempts += 1
                 user_only_password_reset_object.save()
                 if not user.is_active:
-                    raise ValidationError(
-                        {_("error"): _("User is inactive")},
+                    return PasswordResetChange(
+                        errors={"error": "User is inactive"},
+                        result=None,
+                        ok=False,
                     )
                 elif user_only_password_reset_object.no_of_incorrect_attempts >= 5:
                     user.is_active = False
                     user.save()
-                    raise ValidationError(
-                        {
-                            _("error"): _(
-                                "User is now inactive for trying too many times"
-                            )
+                    return PasswordResetChange(
+                        errors={
+                            "error": "User is now inactive for trying too many times"
                         },
+                        result=None,
+                        ok=False,
                     )
                 elif user_only_password_reset_object.identifier != identifier:
-                    raise ValidationError(
-                        {_("error"): _("Password reset identifier is incorrect")},
+                    return PasswordResetChange(
+                        errors={"error": "Password reset identifier is incorrect"},
+                        result=None,
+                        ok=False,
                     )
                 else:
-                    raise ValidationError(
-                        {_("error"): _("Password reset pin has expired")},
+                    return PasswordResetChange(
+                        errors={"error": "Password reset pin has expired"},
+                        resut=None,
+                        ok=False,
                     )
-            raise ValidationError(
-                {_("error"): _("No matching active user pin found")},
+            return PasswordResetChange(
+                errors={"error": "No matching active user pin found"},
+                result=None,
+                ok=False,
             )
         else:
             password_reset_pin_object.no_of_incorrect_attempts = 0
@@ -282,37 +339,49 @@ class PasswordResetChange(graphene.Mutation):
                 validate_password(password=password, user=user)
             except ValidationError as e:
                 errors = list(e.messages)
-                raise ValidationError({_("errors"): errors})
+                return PasswordResetChange(
+                    errors={"errors": errors}, result=None, ok=False
+                )
             user.set_password(password)
             user.save()
             return PasswordResetChange(
-                message={_("detail"): _("Password successfully changed")}
+                result={"detail": "Password successfully changed"},
+                errors=None,
+                ok=True,
             )
 
 
 class EmailConfirm(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
         data = EmailConfirmInput(
             description=_("Fields required to reset password."), required=True
         )
 
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username).first()
         if not user:
-            raise ValidationError(
-                {_("error"): _("No user present with given email address/username")}
+            return EmailConfirm(
+                errors={"error": "No user present with given email address/username"},
+                result=None,
+                ok=True,
             )
         email_confirm_pin = EmailConfirmationPin.objects.filter(user=user).first()
         if email_confirm_pin:
             if email_confirm_pin.no_of_incorrect_attempts >= 5:
-                raise ValidationError(
-                    {_("error"): _("User is inactive for trying too many times")},
+                return EmailConfirm(
+                    errors={"error": "User is inactive for trying too many times"},
+                    result=None,
+                    ok=False,
                 )
             if not email_confirm_pin.is_active:
-                raise ValidationError(
-                    {_("error"): _("Email address has already been confirmed")},
+                return EmailConfirm(
+                    errors={"error": "Email address has already been confirmed"},
+                    result=None,
+                    ok=False,
                 )
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
@@ -329,23 +398,29 @@ class EmailConfirm(graphene.Mutation):
         message = template.render(context)
         user.email_user("Email confirmation mail", message)
         return EmailConfirm(
-            message={_("detail"): _("Email confirmation mail successfully send")}
+            result={"detail": "Email confirmation mail successfully send"},
+            errors=None,
+            ok=True,
         )
 
 
 class EmailConfirmVerify(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
         data = EmailConfirmInput(
             description=_("Fields required to reset password."), required=True
         )
 
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username, is_active=False).first()
         if not user:
-            raise ValidationError(
-                {_("error"): _("No inactive user present for username")},
+            return EmailConfirmVerify(
+                errors={"error": "No inactive user present for username"},
+                result=None,
+                ok=False,
             )
         pin = data.pin
         current_time = timezone.now()
@@ -361,29 +436,37 @@ class EmailConfirmVerify(graphene.Mutation):
             ).first()
             if user_only_email_confirm_mail_object:
                 if not user_only_email_confirm_mail_object.is_active:
-                    raise ValidationError(
-                        {_("error"): _("Email is already confirmed for user")},
+                    return EmailConfirmVerify(
+                        errors={"error": "Email is already confirmed for user"},
+                        result=None,
+                        ok=False,
                     )
                 user_only_email_confirm_mail_object.no_of_incorrect_attempts += 1
                 user_only_email_confirm_mail_object.save()
                 if user_only_email_confirm_mail_object.no_of_incorrect_attempts >= 5:
-                    raise ValidationError(
-                        {
-                            _("error"): _(
-                                "User is now inactive for trying too many times"
-                            )
+                    return EmailConfirmVerify(
+                        errors={
+                            "error": "User is now inactive for trying too many times"
                         },
+                        result=None,
+                        ok=False,
                     )
                 elif user_only_email_confirm_mail_object.pin != pin:
-                    raise ValidationError(
-                        {_("error"): _("Email confirmation pin is incorrect")},
+                    return EmailConfirmVerify(
+                        errors={"error": "Email confirmation pin is incorrect"},
+                        result=None,
+                        ok=False,
                     )
                 else:
-                    raise ValidationError(
-                        {_("error"): _("Email confirmation pin has expired")},
+                    return EmailConfirmVerify(
+                        errors={"error": "Email confirmation pin has expired"},
+                        result=None,
+                        ok=False,
                     )
-            raise ValidationError(
-                {_("error"): _("No matching active username/email found")},
+            return EmailConfirmVerify(
+                errors={"error": "No matching active username/email found"},
+                result=None,
+                ok=False,
             )
         else:
             email_confirmation_mail_object.no_of_incorrect_attempts = 0
@@ -392,25 +475,31 @@ class EmailConfirmVerify(graphene.Mutation):
             user.is_active = True
             user.save()
             return EmailConfirmVerify(
-                message={_("detail"): _("Email successfully confirmed")}
+                result={"detail": "Email successfully confirmed"},
+                errors=None,
+                ok=True,
             )
 
 
 class EmailChange(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
-        data = EmailChangePinInput(
+        data = EmailChangeInput(
             description=_("Fields required to reset password."), required=True
         )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
 
     def mutate(self, info, data):
         user = info.context.user
         email_change_pin = EmailChangePin.objects.filter(user=user).first()
         if email_change_pin:
             if email_change_pin.no_of_incorrect_attempts >= 5:
-                raise ValidationError(
-                    {_("error"): _("User is inactive for trying too many times")},
+                return EmailChange(
+                    errors={"error": "User is inactive for trying too many times"},
+                    result=None,
+                    ok=False,
                 )
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
@@ -427,23 +516,27 @@ class EmailChange(graphene.Mutation):
         context = {"email_change_object": email_change_pin_object}
         message = email_template.render(context)
         send_mail(
-            "Email change mail",
+            _("Email change mail"),
             message,
             from_email=None,
             recipient_list=[email_change_pin_object.new_email],
         )
         return EmailChange(
-            message={_("detail"): _("Email change mail successfully send")}
+            result={"detail": "Email change mail successfully send"},
+            errors=None,
+            ok=True,
         )
 
 
 class EmailChangeVerify(graphene.Mutation):
-    message = graphene.String()
-
     class Arguments:
-        data = EmailChangePinInput(
+        data = EmailChangePinVerifyInput(
             description=_("Fields required to reset password."), required=True
         )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
 
     def mutate(self, info, data):
         user = info.context.user
@@ -461,40 +554,52 @@ class EmailChangeVerify(graphene.Mutation):
             ).first()
             if user_only_email_change_mail_object:
                 if not user_only_email_change_mail_object.is_active:
-                    raise ValidationError(
-                        {_("error"): _("Email is already changed for user")},
+                    return EmailChangeVerify(
+                        errors={"error": "Email is already changed for user"},
+                        result=None,
+                        ok=False,
                     )
                 user_only_email_change_mail_object.no_of_incorrect_attempts += 1
                 user_only_email_change_mail_object.save()
                 if user_only_email_change_mail_object.no_of_incorrect_attempts >= 5:
-                    raise ValidationError(
-                        {
-                            _("error"): _(
-                                "User is now inactive for trying too many times"
-                            )
+                    return EmailChangeVerify(
+                        errors={
+                            "error": "User is now inactive for trying too many times"
                         },
+                        result=None,
+                        ok=False,
                     )
                 elif user_only_email_change_mail_object.pin != pin:
-                    raise ValidationError(
-                        {_("error"): _("Email change pin is incorrect")},
+                    return EmailChangeVerify(
+                        errors={"error": "Email change pin is incorrect"},
+                        result=None,
+                        ok=False,
                     )
                 else:
-                    raise ValidationError(
-                        {_("error"): _("Email change pin has expired")},
+                    return EmailChangeVerify(
+                        errors={"error": "Email change pin has expired"},
+                        result=None,
+                        ok=False,
                     )
-            raise ValidationError(
-                {_("error"): _("No matching active change change request found")},
+            return EmailChangeVerify(
+                errors={"error": "No matching active change change request found"},
+                result=None,
+                ok=False,
             )
         else:
             email_change_mail_object.no_of_incorrect_attempts = 0
             email_change_mail_object.is_active = False
             email_change_mail_object.save()
             if User.objects.filter(email=email_change_mail_object.new_email).exists():
-                raise ValidationError(
-                    {_("error"): _("email already used for account creation")},
+                return EmailChangeVerify(
+                    errors={"error": "email already used for account creation"},
+                    result=None,
+                    ok=False,
                 )
             user.email = email_change_mail_object.new_email
             user.save()
             return EmailChangeVerify(
-                message={_("detail"): _("Email successfully changed")}
+                result={"detail": "Email successfully changed"},
+                errors=None,
+                ok=True,
             )

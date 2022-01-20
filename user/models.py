@@ -66,6 +66,9 @@ class User(AbstractUser):
             kwargs["update_fields"] = changed_fields
         super().save(*args, **kwargs)
 
+    def send_email_user(self, subject, message, from_email=None, **kwargs):
+        self.email_user(subject, message, from_email=from_email, **kwargs)
+
 
 class PasswordResetPin(TimeStampedModel):
     user = models.OneToOneField(
