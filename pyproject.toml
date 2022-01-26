@@ -19,6 +19,8 @@ gunicorn = {version = "^20.1.0", optional = true}
 graphene-django = "^2.15.0"
 django-filter = "^21.1"
 django-graphql-jwt = "^0.3.4"
+celery = "^5.2.3"
+redis = "^4.1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
