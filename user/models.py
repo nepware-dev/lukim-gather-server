@@ -9,6 +9,8 @@ from lukimgather.fields import LowerCharField, LowerEmailField
 from lukimgather.managers import CustomUserManager
 from lukimgather.models import TimeStampedModel
 
+from .tasks import send_user_mail
+
 
 class User(AbstractUser):
     username_validator = CustomASCIIUsernameValidator
@@ -66,8 +68,13 @@ class User(AbstractUser):
             kwargs["update_fields"] = changed_fields
         super().save(*args, **kwargs)
 
-    def send_email_user(self, subject, message, from_email=None, **kwargs):
-        self.email_user(subject, message, from_email=from_email, **kwargs)
+    def celery_email_user(self, subject, message, from_email=None, **kwargs):
+        if settings.ENABLE_CELERY:
+            send_user_mail.delay(
+                self.pk, subject, message, from_email=from_email, **kwargs
+            )
+        else:
+            self.email_user(subject, message, from_email=from_email, **kwargs)
 
 
 class PasswordResetPin(TimeStampedModel):
