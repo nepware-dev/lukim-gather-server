@@ -10,7 +10,7 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Django = "^3.2.11"
+Django = "^4.0.2"
 environs = {version = "^9.4.0", extras = ["django"]}
 marshmallow = "^3.14.1"
 psycopg2-binary = "^2.9.3"
