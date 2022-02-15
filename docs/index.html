@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coming Soon | Lukim Gather</title>
+    <style>
+      :root {
+        /** colors **/
+        --color-white: #fff;
+        --font-size-base: 1rem;
+        /** fonts **/
+        --font-size-small: 0.875rem;
+        --font-size-header: 3.25rem;
+        --font-family-header: "sans-serif";
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        background-image: url("./lukim-gather-background.png");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      }
+
+      .titleContainer {
+        height: 100%;
+      }
+
+      .title {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .title > h1 {
+        color: var(--color-white);
+        text-align: center;
+        font-size: 6.25em;
+        font-family: var(--primary-font);
+        line-height: 0.9em;
+        letter-spacing: normal;
+      }
+      @media only screen and (max-width: 479px) {
+        .title > h1 {
+          font-size: 3.75em;
+        }
+      }
+      /** form specific css **/
+      form {
+        display: flex;
+        flex-wrap: wrap;
+
+        & > input {
+          flex: 1 1 10ch;
+          margin: 0.5rem;
+
+          &[type="email"] {
+            flex: 3 1 30ch;
+          }
+        }
+      }
+
+      input {
+        border: none;
+        background: hsl(0 0% 93%);
+        border-radius: 0.25rem;
+        padding: 0.75rem 1rem;
+        margin: 9px 0px 10px 0;
+        &[type="submit"] {
+          background: hotpink;
+          color: white;
+          box-shadow: 0 0.75rem 0.5rem -0.5rem hsl(0 50% 80%);
+        }
+      }
+
+      .email {
+        width: 100%;
+      }
+
+      .response {
+        color: red;
+      }
+
+      .button {
+        display: flex;
+        background-color: black;
+        color: white;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="titleContainer">
+      <div class="title">
+        <h1>We're Coming Soon</h1>
+        <!-- Begin Mailchimp Signup Form -->
+        <div id="mc_embed_signup">
+          <form
+            action="https://nepware.us14.list-manage.com/subscribe/post?u=1df1563a4be5744706f78b37d&amp;id=27252c7db3"
+            method="post"
+            id="mc-embedded-subscribe-form"
+            name="mc-embedded-subscribe-form"
+            class="validate"
+            target="_blank"
+            novalidate
+          >
+            <input
+              type="email"
+              value=""
+              name="EMAIL"
+              class="required email"
+              id="mce-EMAIL"
+              placeholder="Be the first to know. Enter your email"
+            />
+            <div id="mce-responses" class="clear foot">
+              <div
+                class="response"
+                id="mce-error-response"
+                style="display: none"
+              ></div>
+              <div
+                class="response"
+                id="mce-success-response"
+                style="display: none"
+              ></div>
+            </div>
+            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+            <div style="position: absolute; left: -5000px" aria-hidden="true">
+              <input
+                type="text"
+                name="b_1df1563a4be5744706f78b37d_27252c7db3"
+                tabindex="-1"
+                value=""
+              />
+            </div>
+            <input
+              type="submit"
+              value="Subscribe"
+              name="subscribe"
+              id="mc-embedded-subscribe"
+              class="button"
+            />
+          </form>
+        </div>
+        <script
+          type="text/javascript"
+          src="https://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"
+        ></script>
+        <script type="text/javascript">
+          (function ($) {
+            window.fnames = new Array();
+            window.ftypes = new Array();
+            fnames[0] = "EMAIL";
+            ftypes[0] = "email";
+          })(jQuery);
+          var $mcj = jQuery.noConflict(true);
+        </script>
+        <!--End mc_embed_signup-->
+      </div>
+    </div>
+  </body>
+</html>
