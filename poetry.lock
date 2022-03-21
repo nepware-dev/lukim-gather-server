@@ -297,6 +297,18 @@ graphene-django = ">=2.0.0"
 PyJWT = ">=2,<3"
 
 [[package]]
+name = "django-modeltranslation"
+version = "0.17.5"
+description = "Translates Django models using a registration approach."
+category = "main"
+optional = false
+python-versions = ">=3.6.2"
+
+[package.dependencies]
+django = ">=2.2"
+six = ">=1.15.0,<2.0.0"
+
+[[package]]
 name = "dparse"
 version = "0.5.1"
 description = "A parser for Python dependency files"
@@ -926,7 +938,7 @@ asgi = ["uvicorn", "gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "690e9c83519013fbeca489fc0a2e3c7e2218b4eac8350a99d5340ecac878abb6"
+content-hash = "99e2d3fbc17e5230a6ffa943b6adb4a5bc1e808df48d8d7bdb343b58f36df684"
 
 [metadata.files]
 amqp = [
@@ -1020,6 +1032,9 @@ django-filter = [
 django-graphql-jwt = [
     {file = "django-graphql-jwt-0.3.4.tar.gz", hash = "sha256:654808417a1fa97e4d489766b61046fa8006f58dfad1c44cc3a37a9e4929203b"},
     {file = "django_graphql_jwt-0.3.4-py3-none-any.whl", hash = "sha256:fb20194bda649b2b1b49049ef84d0e957851df485fba7f1901aace54ca328063"},
+]
+django-modeltranslation = [
+    {file = "django-modeltranslation-0.17.5.tar.gz", hash = "sha256:d9b3278dc3a799261861e090c27a3e1c46b3471e979e07b01cdd4ea2696a9f41"},
 ]
 dparse = [
     {file = "dparse-0.5.1-py3-none-any.whl", hash = "sha256:e953a25e44ebb60a5c6efc2add4420c177f1d8404509da88da9729202f306994"},

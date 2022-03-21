@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
+from django.utils.translation import gettext_lazy as _
 from environs import Env
 from marshmallow.validate import OneOf
 
@@ -51,7 +52,9 @@ else:
 # Application definition
 
 # Apps which need to be before django default apps
-BEFORE_DJANGO_APPS = []
+BEFORE_DJANGO_APPS = [
+    "modeltranslation",
+]
 
 # Django apps
 DJANGO_APPS = [
@@ -85,6 +88,7 @@ if importlib.util.find_spec("django_extensions"):
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -184,7 +188,7 @@ if "DEFAULT_FROM_EMAIL" in email_config:
 
 # Internationalization
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
@@ -193,6 +197,19 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
+
+gettext = lambda s: s
+
+LANGUAGES = (
+    ("en", _("English")),
+    ("ho", _("Hiri Motu")),
+)
+
+# Model translation
+MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
+MODELTRANSLATION_AUTO_POPULATE = True
 
 
 # Static files (CSS, JavaScript, Images)

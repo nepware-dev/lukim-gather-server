@@ -20,6 +20,10 @@ Repository for Lukim Gather Server
 7. Access server using url http://localhost:8000 and access admin using http://localhost:8000/admin
 </details>
 
+## Translation
+
+To translate Lukim Gather visit [Hosted Weblate](https://hosted.weblate.org/projects/lukim-gather/server/)
+
 ## License
 
 Project is licensed under GPL v3.0
