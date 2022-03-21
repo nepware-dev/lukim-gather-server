@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-03-21 05:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lukimgather/auth_validators.py:12
+msgid ""
+"Enter a valid username. This value may contain only English letters, "
+"numbers, and ./-/_ characters."
+msgstr ""
+
+#: lukimgather/settings.py:206
+msgid "English"
+msgstr ""
+
+#: lukimgather/settings.py:207
+msgid "Hiri Motu"
+msgstr ""
+
+#: lukimgather/settings.py:208
+msgid "Tok Pisin"
+msgstr ""
+
+#: user/models.py:20 user/mutations.py:21 user/mutations.py:31
+#: user/mutations.py:42 user/mutations.py:49 user/mutations.py:59
+msgid "Username"
+msgstr ""
+
+#: user/models.py:24
+msgid ""
+"Required. Length can be between 5 to 20. Letters, digits and ./-/_ only."
+msgstr ""
+
+#: user/models.py:31
+msgid "A user with that username already exists."
+msgstr ""
+
+#: user/models.py:35
+msgid "Email Address"
+msgstr ""
+
+#: user/models.py:38
+msgid "A user with that email already exists."
+msgstr ""
+
+#: user/models.py:42
+msgid "Active"
+msgstr ""
+
+#: user/models.py:45
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: user/models.py:87 user/models.py:104 user/models.py:120 user/mutations.py:33
+#: user/mutations.py:51 user/mutations.py:61
+msgid "No Of Incorrect Attempts"
+msgstr ""
+
+#: user/models.py:90 user/models.py:107 user/models.py:123 user/mutations.py:35
+#: user/mutations.py:53 user/mutations.py:63 user/mutations.py:74
+msgid "Pin"
+msgstr ""
+
+#: user/models.py:92 user/models.py:109 user/models.py:125 user/mutations.py:36
+#: user/mutations.py:54
+msgid "Pin Expiry Time"
+msgstr ""
+
+#: user/models.py:93 user/models.py:110 user/models.py:127 user/mutations.py:37
+#: user/mutations.py:55 user/mutations.py:65
+msgid "Is Active"
+msgstr ""
+
+#: user/models.py:94 user/mutations.py:38 user/mutations.py:45
+msgid "Identifier"
+msgstr ""
+
+#: user/mutations.py:16
+msgid "First Name"
+msgstr ""
+
+#: user/mutations.py:17
+msgid "Last Name"
+msgstr ""
+
+#: user/mutations.py:18
+msgid "Email"
+msgstr ""
+
+#: user/mutations.py:19 user/mutations.py:25 user/mutations.py:43
+#: user/mutations.py:70
+msgid "Password"
+msgstr ""
+
+#: user/mutations.py:20 user/mutations.py:27 user/mutations.py:44
+msgid "Retype Password"
+msgstr ""
+
+#: user/mutations.py:26
+msgid "New Password"
+msgstr ""
+
+#: user/mutations.py:64 user/mutations.py:69
+msgid "New Email"
+msgstr ""
+
+#: user/mutations.py:80
+msgid "Fields required to create a user."
+msgstr ""
+
+#: user/mutations.py:107
+msgid "Fields required to change password."
+msgstr ""
+
+#: user/mutations.py:138 user/mutations.py:183 user/mutations.py:261
+#: user/mutations.py:357 user/mutations.py:410 user/mutations.py:487
+#: user/mutations.py:534
+msgid "Fields required to reset password."
+msgstr ""
+
+#: user/mutations.py:519
+msgid "Email change mail"
+msgstr ""
+
+#: user/schema.py:21
+msgid "Return the currently authenticated user."
+msgstr ""

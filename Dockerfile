@@ -44,7 +44,8 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     curl \
     build-essential \
-    libsqlite3-mod-spatialite
+    libsqlite3-mod-spatialite \
+    gettext
 
 # Install pip
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python3.9
