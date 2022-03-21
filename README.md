@@ -19,3 +19,7 @@ Repository for Lukim Gather Server
 6. Execute `docker-compose exec server sh` and run command `./manage.py createsuperuser` if super user is not created
 7. Access server using url http://localhost:8000 and access admin using http://localhost:8000/admin
 </details>
+
+## License
+
+Project is licensed under GPL v3.0
