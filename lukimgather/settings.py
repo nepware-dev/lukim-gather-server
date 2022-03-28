@@ -2,10 +2,12 @@ import importlib.util
 import os
 from pathlib import Path
 
+import sentry_sdk
 from django.core.management.utils import get_random_secret_key
 from django.utils.translation import gettext_lazy as _
 from environs import Env
 from marshmallow.validate import OneOf
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Read .env file for environment variable
 env = Env()
@@ -261,3 +263,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # CKEDITOR settings
 CKEDITOR_UPLOAD_PATH = "ckeditor-uploads/"
+
+# Sentry
+ENABLE_SENTRY = env.bool("ENABLE_SENTRY", default=False)
+if ENABLE_SENTRY:
+    sentry_sdk.init(
+        dsn=env.url("SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        send_default_pii=True,
+        environment=SERVER_ENVIRONMENT,
+    )
