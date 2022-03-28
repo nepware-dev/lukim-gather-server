@@ -69,13 +69,19 @@ DJANGO_APPS = [
 
 # Internal apps
 INTERNAL_APPS = [
+    "gallery",
+    "survey",
     "user",
 ]
 
 # Third party apps
 THIRD_PARTY_APPS = [
+    "ckeditor",
+    "ckeditor_uploader",
     "django_filters",
     "graphene_django",
+    "mptt",
+    "ordered_model",
 ]
 
 INSTALLED_APPS = BEFORE_DJANGO_APPS + DJANGO_APPS + INTERNAL_APPS + THIRD_PARTY_APPS
@@ -252,3 +258,6 @@ if ENABLE_CELERY:
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# CKEDITOR settings
+CKEDITOR_UPLOAD_PATH = "ckeditor-uploads/"

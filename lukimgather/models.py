@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class TimeStampedModel(models.Model):
@@ -29,6 +30,13 @@ class UserStampedModel(models.Model):
         blank=True,
         default=None,
     )
+
+    class Meta:
+        abstract = True
+
+
+class CodeModel(models.Model):
+    code = models.CharField(_("code"), max_length=50, unique=True)
 
     class Meta:
         abstract = True

@@ -1,6 +1,7 @@
 import graphene
 import graphql_jwt
 from django.utils.translation import gettext_lazy as _
+from graphql_jwt.decorators import login_required
 
 from user.mutations import (
     ChangePassword,
@@ -21,6 +22,7 @@ class UserQueries(graphene.ObjectType):
         UserType, description=_("Return the currently authenticated user.")
     )
 
+    @login_required
     def resolve_me(self, info):
         user = info.context.user
         return user if user.is_authenticated else None
