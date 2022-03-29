@@ -5,6 +5,7 @@ from graphql_jwt.decorators import login_required
 
 from user.mutations import (
     ChangePassword,
+    CustomObtainJSONWebToken,
     EmailChange,
     EmailChangeVerify,
     EmailConfirm,
@@ -29,7 +30,7 @@ class UserQueries(graphene.ObjectType):
 
 
 class UserMutations(graphene.ObjectType):
-    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    token_auth = CustomObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
     change_password = ChangePassword.Field()

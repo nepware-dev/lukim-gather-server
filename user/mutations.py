@@ -1,4 +1,5 @@
 import graphene
+import graphql_jwt
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
@@ -10,6 +11,14 @@ from graphene.types.generic import GenericScalar
 from lukimgather.utils import gen_random_number, gen_random_string
 from user.models import EmailChangePin, EmailConfirmationPin, PasswordResetPin, User
 from user.types import PasswordResetPinType, UserType
+
+
+class CustomObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
+    user = graphene.Field(UserType)
+
+    @classmethod
+    def resolve(cls, root, info, **kwargs):
+        return cls(user=info.context.user)
 
 
 class RegisterUserInput(graphene.InputObjectType):

@@ -16,7 +16,7 @@ class APITest(TestBase):
         cls.activated_user = authenticate(
             username=users[0].username, password=cls.activated_initial_password
         )
-        cls.headers = {"HTTP_AUTHORIZATION": f"JWT {get_token(users[0])}"}
+        cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
 
     def test_survey_get(self):
         response = self.query(

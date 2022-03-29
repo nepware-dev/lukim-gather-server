@@ -1,5 +1,6 @@
 import importlib.util
 import os
+from datetime import timedelta
 from pathlib import Path
 
 import sentry_sdk
@@ -82,6 +83,7 @@ THIRD_PARTY_APPS = [
     "ckeditor_uploader",
     "django_filters",
     "graphene_django",
+    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "mptt",
     "ordered_model",
 ]
@@ -111,6 +113,15 @@ GRAPHENE = {
     "MIDDLEWARE": [
         "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ],
+}
+
+GRAPHQL_JWT = {
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(weeks=26),
+    "JWT_SECRET_KEY": SECRET_KEY,
+    "JWT_ALGORITHM": "HS512",
 }
 
 if DEBUG:

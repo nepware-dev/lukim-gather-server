@@ -18,7 +18,7 @@ class APITest(TestBase):
         cls.activated_user = authenticate(
             username=users[0].username, password=cls.activated_initial_password
         )
-        cls.headers = {"HTTP_AUTHORIZATION": f"JWT {get_token(users[0])}"}
+        cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
 
     def test_me_get(self):
         response = self.query(
@@ -55,7 +55,7 @@ class APITest(TestBase):
                 "newPassword": new_password,
                 "rePassword": new_password,
             },
-            headers={"HTTP_AUTHORIZATION": f"JWT {get_token(user)}"},
+            headers={"HTTP_AUTHORIZATION": f"Bearer {get_token(user)}"},
         )
         self.assertEqual(response.status_code, 200)
         user = authenticate(username=user.username, password=new_password)
