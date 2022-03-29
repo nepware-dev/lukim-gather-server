@@ -30,3 +30,21 @@ class APITest(TestBase):
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
+
+    def test_categories_get(self):
+        response = self.query(
+            """
+            query {
+              protectedAreaCategories {
+                id
+                title
+                child {
+                  id
+                  title
+                }
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
