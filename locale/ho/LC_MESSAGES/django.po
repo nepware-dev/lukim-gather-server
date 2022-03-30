@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-21 05:51+0000\n"
+"POT-Creation-Date: 2022-03-29 10:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,22 +17,94 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: gallery/models.py:8
+msgid "Video"
+msgstr ""
+
+#: gallery/models.py:9
+msgid "Image"
+msgstr ""
+
+#: gallery/models.py:10
+msgid "Other"
+msgstr ""
+
+#: gallery/models.py:14 survey/models.py:12
+msgid "Title"
+msgstr ""
+
+#: gallery/models.py:16
+msgid "Media Type"
+msgstr ""
+
+#: gallery/models.py:22
+msgid "Media File"
+msgstr ""
+
 #: lukimgather/auth_validators.py:12
 msgid ""
 "Enter a valid username. This value may contain only English letters, "
 "numbers, and ./-/_ characters."
 msgstr ""
 
-#: lukimgather/settings.py:206
+#: lukimgather/models.py:39
+msgid "code"
+msgstr ""
+
+#: lukimgather/settings.py:214
 msgid "English"
 msgstr ""
 
-#: lukimgather/settings.py:207
+#: lukimgather/settings.py:215
 msgid "Hiri Motu"
 msgstr ""
 
-#: lukimgather/settings.py:208
-msgid "Tok Pisin"
+#: survey/admin.py:24
+msgid "Local Enviromental Survey"
+msgstr ""
+
+#: survey/models.py:14 survey/models.py:42
+msgid "Description"
+msgstr ""
+
+#: survey/models.py:27
+msgid "Protected area categories"
+msgstr ""
+
+#: survey/models.py:31
+msgid "Approved"
+msgstr ""
+
+#: survey/models.py:32
+msgid "Rejected"
+msgstr ""
+
+#: survey/models.py:33
+msgid "Pending"
+msgstr ""
+
+#: survey/models.py:39
+msgid "title"
+msgstr ""
+
+#: survey/models.py:44
+msgid "Sentiments"
+msgstr ""
+
+#: survey/models.py:46
+msgid "Attachments"
+msgstr ""
+
+#: survey/models.py:48
+msgid "Location"
+msgstr ""
+
+#: survey/models.py:50
+msgid "Location Boundary"
+msgstr ""
+
+#: survey/models.py:53
+msgid "Survey Answer Status"
 msgstr ""
 
 #: user/models.py:20 user/mutations.py:21 user/mutations.py:31
@@ -138,6 +210,6 @@ msgstr ""
 msgid "Email change mail"
 msgstr ""
 
-#: user/schema.py:21
+#: user/schema.py:22
 msgid "Return the currently authenticated user."
 msgstr ""

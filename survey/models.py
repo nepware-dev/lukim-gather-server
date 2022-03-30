@@ -23,6 +23,9 @@ class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel):
     class MPTTMeta:
         order_insertion_by = ["title"]
 
+    class Meta:
+        verbose_name_plural = _("Protected area categories")
+
 
 class Status(models.TextChoices):
     APPROVED = "approved", _("Approved")
