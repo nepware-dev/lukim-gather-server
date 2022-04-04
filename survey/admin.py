@@ -11,14 +11,19 @@ class AreaCategoryAdmin(UserStampedModelAdmin, DraggableMPTTAdmin):
     list_display = (
         "tree_actions",
         "indented_title",
+        "code",
     )
     list_display_links = ("indented_title",)
 
 
 @admin.register(LocalEnviromentalSurvey)
 class LocalEnviromentalSurveyAdmin(UserStampedModelAdmin):
-    list_display = ("title",)
     autocomplete_fields = ("attachment",)
+    list_display = (
+        "title",
+        "category",
+    )
+    list_filter = ("category",)
 
     class Meta:
         verbose_name = _("Local Enviromental Survey")

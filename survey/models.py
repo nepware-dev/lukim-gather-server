@@ -5,10 +5,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
-from lukimgather.models import TimeStampedModel, UserStampedModel
+from lukimgather.models import CodeModel, TimeStampedModel, UserStampedModel
 
 
-class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel):
+class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel, CodeModel):
     title = models.CharField(_("Title"), max_length=255)
     description = models.TextField(
         _("Description"), null=True, blank=True, default=None
@@ -35,6 +35,13 @@ class Status(models.TextChoices):
 
 class LocalEnviromentalSurvey(TimeStampedModel, UserStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    category = models.ForeignKey(
+        "ProtectedAreaCategory",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="local_enviromental_survey",
+    )
     title = models.CharField(
         _("title"), max_length=255, null=True, blank=True, default=None
     )
