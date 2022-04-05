@@ -119,7 +119,7 @@ GRAPHQL_JWT = {
     "JWT_AUTH_HEADER_PREFIX": "Bearer",
     "JWT_VERIFY_EXPIRATION": True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(weeks=26),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(weeks=27),
     "JWT_SECRET_KEY": SECRET_KEY,
     "JWT_ALGORITHM": "HS512",
 }
@@ -285,3 +285,5 @@ if ENABLE_SENTRY:
         send_default_pii=True,
         environment=SERVER_ENVIRONMENT,
     )
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

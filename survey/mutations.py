@@ -9,6 +9,7 @@ from survey.types import LocalEnviromentalSurveyType
 
 
 class LocalEnviromentalSurveyInput(graphene.InputObjectType):
+    category_id = graphene.Int(description="category id", required=True)
     title = graphene.String(description="title", required=True)
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
@@ -31,6 +32,7 @@ class CreateLocalEnviromentalSurvey(graphene.Mutation):
     @login_required
     def mutate(self, info, data):
         survey = LocalEnviromentalSurvey.objects.create(
+            category_id=data.category_id,
             title=data.title,
             description=data.description,
             sentiment=data.sentiment,
