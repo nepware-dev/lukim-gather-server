@@ -1,0 +1,1082 @@
+[
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 1,
+    "fields": {
+      "created_at": "2022-04-08T07:43:23.977Z",
+      "modified_at": "2022-04-08T07:43:23.977Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place",
+      "title": "Place",
+      "title_en": "Place",
+      "title_ho": null,
+      "description": "",
+      "parent": null,
+      "lft": 1,
+      "rght": 26,
+      "tree_id": 6,
+      "level": 0
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 2,
+    "fields": {
+      "created_at": "2022-04-08T07:43:42.830Z",
+      "modified_at": "2022-04-08T07:44:16.698Z",
+      "created_by": 1,
+      "updated_by": 1,
+      "code": "lg-place-boundary",
+      "title": "Boundary",
+      "title_en": "Boundary",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 3,
+    "fields": {
+      "created_at": "2022-04-08T07:43:56.091Z",
+      "modified_at": "2022-04-08T07:44:09.881Z",
+      "created_by": 1,
+      "updated_by": 1,
+      "code": "lg-place-building",
+      "title": "Building",
+      "title_en": "Building",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 4,
+    "fields": {
+      "created_at": "2022-04-08T07:44:38.405Z",
+      "modified_at": "2022-04-08T07:44:38.405Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-airstrip",
+      "title": "Airstrip",
+      "title_en": "Airstrip",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 5,
+    "fields": {
+      "created_at": "2022-04-08T07:44:51.506Z",
+      "modified_at": "2022-04-08T07:44:51.506Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-camp",
+      "title": "Camp",
+      "title_en": "Camp",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 6,
+    "fields": {
+      "created_at": "2022-04-08T07:45:05.593Z",
+      "modified_at": "2022-04-08T07:45:05.594Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-community",
+      "title": "Community",
+      "title_en": "Community",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 7,
+    "fields": {
+      "created_at": "2022-04-08T07:45:19.223Z",
+      "modified_at": "2022-04-08T07:45:19.223Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-house",
+      "title": "House",
+      "title_en": "House",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 8,
+    "fields": {
+      "created_at": "2022-04-08T07:45:31.976Z",
+      "modified_at": "2022-04-08T07:45:31.976Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-path",
+      "title": "Path",
+      "title_en": "Path",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 22,
+      "rght": 23,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 9,
+    "fields": {
+      "created_at": "2022-04-08T07:45:43.970Z",
+      "modified_at": "2022-04-08T07:45:43.970Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-factory",
+      "title": "Factory",
+      "title_en": "Factory",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 10,
+    "fields": {
+      "created_at": "2022-04-08T07:45:59.828Z",
+      "modified_at": "2022-04-08T07:45:59.828Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-road",
+      "title": "Road",
+      "title_en": "Road",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 24,
+      "rght": 25,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 11,
+    "fields": {
+      "created_at": "2022-04-08T07:46:14.719Z",
+      "modified_at": "2022-04-08T07:46:14.719Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-construction",
+      "title": "Construction",
+      "title_en": "Construction",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 12,
+    "fields": {
+      "created_at": "2022-04-08T07:46:45.690Z",
+      "modified_at": "2022-04-08T07:46:45.690Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-oil-gas-extraction",
+      "title": "Oil and gas extraction",
+      "title_en": "Oil and gas extraction",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 20,
+      "rght": 21,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 13,
+    "fields": {
+      "created_at": "2022-04-08T07:46:58.223Z",
+      "modified_at": "2022-04-08T07:46:58.223Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-place-energy",
+      "title": "Energy",
+      "title_en": "Energy",
+      "title_ho": null,
+      "description": "",
+      "parent": 1,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 14,
+    "fields": {
+      "created_at": "2022-04-08T07:47:13.993Z",
+      "modified_at": "2022-04-08T07:47:13.993Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature",
+      "title": "Nature",
+      "title_en": "Nature",
+      "title_ho": null,
+      "description": "",
+      "parent": null,
+      "lft": 1,
+      "rght": 26,
+      "tree_id": 4,
+      "level": 0
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 15,
+    "fields": {
+      "created_at": "2022-04-08T07:47:28.061Z",
+      "modified_at": "2022-04-08T07:47:28.061Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-tree",
+      "title": "Tree",
+      "title_en": "Tree",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 22,
+      "rght": 23,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 16,
+    "fields": {
+      "created_at": "2022-04-08T07:47:43.155Z",
+      "modified_at": "2022-04-08T07:47:43.155Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-plant",
+      "title": "Plant",
+      "title_en": "Plant",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 17,
+    "fields": {
+      "created_at": "2022-04-08T07:48:02.649Z",
+      "modified_at": "2022-04-08T07:48:02.649Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-animal",
+      "title": "Animal",
+      "title_en": "Animal",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 18,
+    "fields": {
+      "created_at": "2022-04-08T07:48:14.955Z",
+      "modified_at": "2022-04-08T07:48:14.955Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-river",
+      "title": "River",
+      "title_en": "River",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 19,
+    "fields": {
+      "created_at": "2022-04-08T07:48:27.254Z",
+      "modified_at": "2022-04-08T07:48:27.254Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-lake",
+      "title": "Lake",
+      "title_en": "Lake",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 20,
+    "fields": {
+      "created_at": "2022-04-08T07:48:44.252Z",
+      "modified_at": "2022-04-08T07:48:44.252Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-stream",
+      "title": "Stream",
+      "title_en": "Stream",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 20,
+      "rght": 21,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 21,
+    "fields": {
+      "created_at": "2022-04-08T07:48:57.614Z",
+      "modified_at": "2022-04-08T07:48:57.614Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-waterfall",
+      "title": "Waterfall",
+      "title_en": "Waterfall",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 24,
+      "rght": 25,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 22,
+    "fields": {
+      "created_at": "2022-04-08T07:49:20.211Z",
+      "modified_at": "2022-04-08T07:49:20.211Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-invasive-species",
+      "title": "Invasive species",
+      "title_en": "Invasive species",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 23,
+    "fields": {
+      "created_at": "2022-04-08T07:49:47.092Z",
+      "modified_at": "2022-04-08T07:49:47.092Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-coral-reef",
+      "title": "Coral reef",
+      "title_en": "Coral reef",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 24,
+    "fields": {
+      "created_at": "2022-04-08T07:50:07.147Z",
+      "modified_at": "2022-04-08T07:50:07.147Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-sea-grass",
+      "title": "Sea grass",
+      "title_en": "Sea grass",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 25,
+    "fields": {
+      "created_at": "2022-04-08T07:50:20.538Z",
+      "modified_at": "2022-04-08T07:50:20.538Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-mangrove",
+      "title": "Mangrove",
+      "title_en": "Mangrove",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 26,
+    "fields": {
+      "created_at": "2022-04-08T07:50:39.152Z",
+      "modified_at": "2022-04-08T07:50:39.152Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-nature-beautiful-scenery",
+      "title": "Beautiful scenery",
+      "title_en": "Beautiful scenery",
+      "title_ho": null,
+      "description": "",
+      "parent": 14,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 4,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 27,
+    "fields": {
+      "created_at": "2022-04-08T07:50:49.360Z",
+      "modified_at": "2022-04-08T07:50:49.360Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people",
+      "title": "People",
+      "title_en": "People",
+      "title_ho": null,
+      "description": "",
+      "parent": null,
+      "lft": 1,
+      "rght": 32,
+      "tree_id": 5,
+      "level": 0
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 28,
+    "fields": {
+      "created_at": "2022-04-08T07:51:12.727Z",
+      "modified_at": "2022-04-08T07:51:12.727Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-fishing-site",
+      "title": "Fishing site",
+      "title_en": "Fishing site",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 29,
+    "fields": {
+      "created_at": "2022-04-08T07:51:32.498Z",
+      "modified_at": "2022-04-08T07:51:32.498Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-hunting-site",
+      "title": "Hunting site",
+      "title_en": "Hunting site",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 22,
+      "rght": 23,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 30,
+    "fields": {
+      "created_at": "2022-04-08T07:51:54.614Z",
+      "modified_at": "2022-04-08T07:51:54.614Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-gathering-site",
+      "title": "Gathering site",
+      "title_en": "Gathering site",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 31,
+    "fields": {
+      "created_at": "2022-04-08T07:52:11.056Z",
+      "modified_at": "2022-04-08T07:52:11.056Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-farmland",
+      "title": "Farmland",
+      "title_en": "Farmland",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 32,
+    "fields": {
+      "created_at": "2022-04-08T07:52:27.389Z",
+      "modified_at": "2022-04-08T07:52:27.389Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-aquaculture",
+      "title": "Aquaculture",
+      "title_en": "Aquaculture",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 33,
+    "fields": {
+      "created_at": "2022-04-08T07:52:43.586Z",
+      "modified_at": "2022-04-08T07:52:43.586Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-medicine",
+      "title": "Medicine",
+      "title_en": "Medicine",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 24,
+      "rght": 25,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 34,
+    "fields": {
+      "created_at": "2022-04-08T07:53:07.963Z",
+      "modified_at": "2022-04-08T07:53:07.963Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-sacred-site",
+      "title": "Sacred site",
+      "title_en": "Sacred site",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 28,
+      "rght": 29,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 35,
+    "fields": {
+      "created_at": "2022-04-08T07:53:22.811Z",
+      "modified_at": "2022-04-08T07:53:22.811Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-history",
+      "title": "History",
+      "title_en": "History",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 20,
+      "rght": 21,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 36,
+    "fields": {
+      "created_at": "2022-04-08T07:53:39.984Z",
+      "modified_at": "2022-04-08T07:53:39.984Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-employment",
+      "title": "Employment",
+      "title_en": "Employment",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 37,
+    "fields": {
+      "created_at": "2022-04-08T07:53:59.889Z",
+      "modified_at": "2022-04-08T07:53:59.889Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-tourism",
+      "title": "Tourism",
+      "title_en": "Tourism",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 30,
+      "rght": 31,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 38,
+    "fields": {
+      "created_at": "2022-04-08T07:54:22.209Z",
+      "modified_at": "2022-04-08T07:54:22.209Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-artisanal-mining",
+      "title": "Artisanal Mining",
+      "title_en": "Artisanal Mining",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 39,
+    "fields": {
+      "created_at": "2022-04-08T07:54:41.895Z",
+      "modified_at": "2022-04-08T07:54:41.895Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-commercial-mining",
+      "title": "Commercial mining",
+      "title_en": "Commercial mining",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 40,
+    "fields": {
+      "created_at": "2022-04-08T07:55:03.899Z",
+      "modified_at": "2022-04-08T07:55:03.899Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-poaching",
+      "title": "Poaching",
+      "title_en": "Poaching",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 26,
+      "rght": 27,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 41,
+    "fields": {
+      "created_at": "2022-04-08T07:55:19.166Z",
+      "modified_at": "2022-04-08T07:55:19.167Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-deforestation",
+      "title": "Deforestation",
+      "title_en": "Deforestation",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 42,
+    "fields": {
+      "created_at": "2022-04-08T07:55:35.418Z",
+      "modified_at": "2022-04-08T07:55:35.418Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-people-conflict",
+      "title": "Conflict",
+      "title_en": "Conflict",
+      "title_ho": null,
+      "description": "",
+      "parent": 27,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 5,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 43,
+    "fields": {
+      "created_at": "2022-04-08T07:55:49.954Z",
+      "modified_at": "2022-04-08T07:55:49.954Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard",
+      "title": "Hazard",
+      "title_en": "Hazard",
+      "title_ho": null,
+      "description": "",
+      "parent": null,
+      "lft": 1,
+      "rght": 24,
+      "tree_id": 3,
+      "level": 0
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 44,
+    "fields": {
+      "created_at": "2022-04-08T07:56:05.417Z",
+      "modified_at": "2022-04-08T07:59:17.952Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-threat",
+      "title": "Threat",
+      "title_en": "Threat",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 45,
+    "fields": {
+      "created_at": "2022-04-08T07:56:20.776Z",
+      "modified_at": "2022-04-08T07:56:20.776Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-fire",
+      "title": "Fire",
+      "title_en": "Fire",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 46,
+    "fields": {
+      "created_at": "2022-04-08T07:56:35.666Z",
+      "modified_at": "2022-04-08T07:56:35.666Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-pollution",
+      "title": "Pollution",
+      "title_en": "Pollution",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 47,
+    "fields": {
+      "created_at": "2022-04-08T07:56:46.393Z",
+      "modified_at": "2022-04-08T07:56:46.393Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-volcano",
+      "title": "Volcano",
+      "title_en": "Volcano",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 22,
+      "rght": 23,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 48,
+    "fields": {
+      "created_at": "2022-04-08T07:56:59.283Z",
+      "modified_at": "2022-04-08T07:56:59.284Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-earthquake",
+      "title": "Earthquake",
+      "title_en": "Earthquake",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 49,
+    "fields": {
+      "created_at": "2022-04-08T07:57:12.916Z",
+      "modified_at": "2022-04-08T07:57:12.916Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-tsunami",
+      "title": "Tsunami",
+      "title_en": "Tsunami",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 50,
+    "fields": {
+      "created_at": "2022-04-08T07:57:25.695Z",
+      "modified_at": "2022-04-08T07:57:25.695Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-landslide",
+      "title": "Landslide",
+      "title_en": "Landslide",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 12,
+      "rght": 13,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 51,
+    "fields": {
+      "created_at": "2022-04-08T07:57:37.241Z",
+      "modified_at": "2022-04-08T07:57:37.241Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-erosion",
+      "title": "Erosion",
+      "title_en": "Erosion",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 52,
+    "fields": {
+      "created_at": "2022-04-08T07:57:48.157Z",
+      "modified_at": "2022-04-08T07:57:48.157Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-drought",
+      "title": "Drought",
+      "title_en": "Drought",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 53,
+    "fields": {
+      "created_at": "2022-04-08T07:57:59.567Z",
+      "modified_at": "2022-04-08T07:57:59.567Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-flooding",
+      "title": "Flooding",
+      "title_en": "Flooding",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 3,
+      "level": 1
+    }
+  },
+  {
+    "model": "survey.protectedareacategory",
+    "pk": 54,
+    "fields": {
+      "created_at": "2022-04-08T07:58:14.416Z",
+      "modified_at": "2022-04-08T07:58:14.416Z",
+      "created_by": 1,
+      "updated_by": null,
+      "code": "lg-hazard-vandalism",
+      "title": "Vandalism",
+      "title_en": "Vandalism",
+      "title_ho": null,
+      "description": "",
+      "parent": 43,
+      "lft": 20,
+      "rght": 21,
+      "tree_id": 3,
+      "level": 1
+    }
+  }
+]
