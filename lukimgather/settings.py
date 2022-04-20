@@ -3,7 +3,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import django.conf.locale
 import sentry_sdk
+from django.conf import global_settings
 from django.core.management.utils import get_random_secret_key
 from django.utils.translation import gettext_lazy as _
 from environs import Env
@@ -227,7 +229,30 @@ gettext = lambda s: s
 LANGUAGES = (
     ("en", _("English")),
     ("ho", _("Hiri Motu")),
+    ("tpi", _("Tok Pisin")),
 )
+
+EXTRA_LANG_INFO = {
+    "ho": {
+        "bidi": False,
+        "code": "ho",
+        "name": "Hiri Motu",
+        "name_local": "Hiri Motu",
+    },
+    "tpi": {
+        "bidi": False,
+        "code": "tpi",
+        "name": "Tok Pisin",
+        "name_local": "Tok Pisin",
+    },
+}
+
+# Add extra languages
+django.conf.locale.LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+global_settings.LANGUAGES = global_settings.LANGUAGES + [
+    ("ho", "Hiri Motu"),
+    ("tpi", "Tok Pisin"),
+]
 
 # Model translation
 MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
