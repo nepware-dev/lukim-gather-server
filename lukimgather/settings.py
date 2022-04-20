@@ -79,6 +79,7 @@ INTERNAL_APPS = [
 
 # Third party apps
 THIRD_PARTY_APPS = [
+    "admin_auto_filters",
     "ckeditor",
     "ckeditor_uploader",
     "django_filters",
@@ -86,6 +87,8 @@ THIRD_PARTY_APPS = [
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "mptt",
     "ordered_model",
+    "rest_framework",
+    "rest_framework_gis",
 ]
 
 INSTALLED_APPS = BEFORE_DJANGO_APPS + DJANGO_APPS + INTERNAL_APPS + THIRD_PARTY_APPS
