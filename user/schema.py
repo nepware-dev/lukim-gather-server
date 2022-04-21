@@ -14,6 +14,7 @@ from user.mutations import (
     RegisterUser,
     ResetUserPassword,
     ResetUserPasswordVerify,
+    UpdateUser,
 )
 from user.types import UserType
 
@@ -42,3 +43,4 @@ class UserMutations(graphene.ObjectType):
     email_confirm_verify = EmailConfirmVerify.Field()
     email_change = EmailChange.Field()
     email_change_verify = EmailChangeVerify.Field()
+    update_user = UpdateUser.Field()

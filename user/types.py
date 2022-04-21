@@ -8,6 +8,12 @@ class UserType(DjangoObjectType):
         model = User
         exclude = ("password",)
 
+    def resolve_avatar(self, info):
+        if self.avatar and self.avatar.url:
+            return info.context.build_absolute_uri(self.avatar.url)
+        else:
+            return None
+
 
 class PasswordResetPinType(DjangoObjectType):
     class Meta:

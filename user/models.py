@@ -18,7 +18,7 @@ class User(AbstractUser):
     # Abstract user modification
     username = LowerCharField(
         verbose_name=_("Username"),
-        max_length=20,
+        max_length=40,
         unique=True,
         help_text=_(
             "Required. Length can be between 5 to 20. Letters, digits and ./-/_ only."
@@ -44,6 +44,16 @@ class User(AbstractUser):
         help_text=_(
             "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
         ),
+    )
+    organization = models.CharField(
+        _("organization"), max_length=255, null=True, blank=True, default=None
+    )
+    avatar = models.ImageField(
+        verbose_name=_("Avatar"),
+        upload_to="user/images",
+        null=True,
+        blank=True,
+        default=None,
     )
 
     objects = CustomUserManager()
