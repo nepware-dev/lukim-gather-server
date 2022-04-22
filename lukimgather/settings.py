@@ -82,6 +82,7 @@ INTERNAL_APPS = [
 # Third party apps
 THIRD_PARTY_APPS = [
     "admin_auto_filters",
+    "corsheaders",
     "ckeditor",
     "ckeditor_uploader",
     "django_filters",
@@ -104,6 +105,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -133,6 +135,12 @@ if DEBUG:
     GRAPHENE["MIDDLEWARE"] += [
         "graphene_django.debug.DjangoDebugMiddleware",
     ]
+
+# CORS settings
+CORS_URLS_REGEX = r"^(/graphql).*$"
+CORS_ALLOWED_ORIGIN_REGEXES = env.list(
+    "CORS_ALLOWED_ORIGIN_REGEXES", default=[], subcast=str
+)
 
 
 # Authentication Backends
