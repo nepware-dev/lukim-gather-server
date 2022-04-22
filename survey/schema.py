@@ -2,7 +2,7 @@ import graphene
 from graphql_jwt.decorators import login_required
 
 from survey.models import (
-    LocalEnviromentalSurvey,
+    HappeningSurvey,
     Option,
     ProtectedAreaCategory,
     Question,
@@ -11,7 +11,7 @@ from survey.models import (
     SurveyAnswer,
 )
 from survey.mutations import (
-    CreateLocalEnviromentalSurvey,
+    CreateHappeningSurvey,
     OptionMutation,
     QuestionGroupMutation,
     QuestionMutation,
@@ -19,7 +19,7 @@ from survey.mutations import (
     SurveyMutation,
 )
 from survey.types import (
-    LocalEnviromentalSurveyType,
+    HappeningSurveyType,
     OptionType,
     ProtectedAreaCategoryType,
     QuestionGroupType,
@@ -29,29 +29,14 @@ from survey.types import (
 )
 
 
-class LocalEnviromentalSurveyQueries(graphene.ObjectType):
-    enviromental_surveys = graphene.List(
-        LocalEnviromentalSurveyType, description="Return the local enviromental survey"
+class SurveyQueries(graphene.ObjectType):
+    happening_surveys = graphene.List(
+        HappeningSurveyType, description="Return the happening survey"
     )
+    option = graphene.List(OptionType, description="Return the options")
     protected_area_categories = graphene.List(
         ProtectedAreaCategoryType, description="Return the protected area categories"
     )
-
-    @login_required
-    def resolve_enviromental_surveys(self, info, **kwargs):
-        return LocalEnviromentalSurvey.objects.all()
-
-    @login_required
-    def resolve_enviromental_survey(self, info, enviromental_survey_id):
-        return LocalEnviromentalSurvey.objects.get(id=enviromental_survey_id)
-
-    @login_required
-    def resolve_protected_area_categories(self, info, level=None, **kwargs):
-        return ProtectedAreaCategory.objects.filter(level=0)
-
-
-class SurveyQueries(graphene.ObjectType):
-    option = graphene.List(OptionType, description="Return the options")
     question = graphene.List(QuestionType, description="Return the questions")
     question_group = graphene.List(
         QuestionGroupType, description="Return the question group"
@@ -60,6 +45,18 @@ class SurveyQueries(graphene.ObjectType):
     survey_answer = graphene.List(
         SurveyAnswerType, description="Return the survey answer"
     )
+
+    @login_required
+    def resolve_happening_surveys(self, info, **kwargs):
+        return HappeningSurvey.objects.all()
+
+    @login_required
+    def resolve_happening_survey(self, info, happening_survey_id):
+        return HappeningSurvey.objects.get(id=happening_survey_id)
+
+    @login_required
+    def resolve_protected_area_categories(self, info, level=None, **kwargs):
+        return ProtectedAreaCategory.objects.filter(level=0)
 
     def resolve_question(self, info, **kwargs):
         return Question.objects.all()
@@ -77,11 +74,8 @@ class SurveyQueries(graphene.ObjectType):
         return SurveyAnswer.objects.all()
 
 
-class LocalEnviromentalSurveyMutations(graphene.ObjectType):
-    create_enviromental_survey = CreateLocalEnviromentalSurvey.Field()
-
-
 class SurveyMutations(graphene.ObjectType):
+    create_happening_survey = CreateHappeningSurvey.Field()
     create_option = OptionMutation.Field()
     create_question_group = QuestionGroupMutation.Field()
     create_question = QuestionMutation.Field()

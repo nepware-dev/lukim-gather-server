@@ -7,7 +7,7 @@ from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
 from survey.models import (
-    LocalEnviromentalSurvey,
+    HappeningSurvey,
     Option,
     ProtectedAreaCategory,
     Question,
@@ -119,8 +119,8 @@ class AreaCategoryAdmin(UserStampedModelAdmin, DraggableMPTTAdmin):
     list_display_links = ("indented_title",)
 
 
-@admin.register(LocalEnviromentalSurvey)
-class LocalEnviromentalSurveyAdmin(UserStampedModelAdmin):
+@admin.register(HappeningSurvey)
+class HappeningSurveyAdmin(UserStampedModelAdmin):
     autocomplete_fields = ("attachment",)
     list_display = (
         "title",
