@@ -1,8 +1,12 @@
+import io
+import json
+
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from graphql_jwt.shortcuts import get_token
 from model_bakery import random_gen
+from PIL import Image
 
 from lukimgather.tests import TestBase
 
@@ -20,6 +24,14 @@ class APITest(TestBase):
         )
         cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
 
+    def generate_photo_file(self):
+        file = io.BytesIO()
+        image = Image.new("RGBA", size=(100, 100), color=(155, 0, 0))
+        image.save(file, "png")
+        file.name = "test.png"
+        file.seek(0)
+        return file
+
     def test_me_get(self):
         response = self.query(
             """
@@ -33,6 +45,39 @@ class APITest(TestBase):
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
+
+    def test_user_update(self):
+        avatar = self.generate_photo_file()
+        query = """
+            mutation UpdateUser($data: UserInput!) {
+              updateUser(data: $data) {
+                ok
+                result {
+                  organization
+                }
+                errors
+              }
+            }
+            """
+        response = self.client.post(
+            self.GRAPHQL_URL,
+            data={
+                "operations": json.dumps(
+                    {
+                        "query": query,
+                        "variables": {"data": {"organization": "test", "avatar": None}},
+                    }
+                ),
+                "t_file": avatar,
+                "map": json.dumps(
+                    {
+                        "t_file": ["variables.data.avatar"],
+                    }
+                ),
+            },
+            **self.headers,
+        )
+        self.assertEqual(response.status_code, 200)
 
     def test_user_change_password(self):
         user = self.baker.make(settings.AUTH_USER_MODEL, is_active=True)

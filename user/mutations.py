@@ -7,6 +7,8 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from graphene.types.generic import GenericScalar
+from graphene_file_upload.scalars import Upload
+from graphql_jwt.decorators import login_required
 
 from lukimgather.utils import gen_random_number, gen_random_string
 from user.models import EmailChangePin, EmailConfirmationPin, PasswordResetPin, User
@@ -19,6 +21,11 @@ class CustomObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     @classmethod
     def resolve(cls, root, info, **kwargs):
         return cls(user=info.context.user)
+
+
+class UserInput(graphene.InputObjectType):
+    organization = graphene.String(description=_("Organization"), required=False)
+    avatar = Upload(required=False)
 
 
 class RegisterUserInput(graphene.InputObjectType):
@@ -139,6 +146,27 @@ class ChangePassword(graphene.Mutation):
             ok=True,
             errors=None,
         )
+
+
+class UpdateUser(graphene.Mutation):
+    class Arguments:
+        data = UserInput(required=True)
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = graphene.Field(UserType)
+
+    @login_required
+    def mutate(self, info, data=None):
+        user = info.context.user
+        for key, value in data.items():
+            setattr(user, key, value)
+        try:
+            user.full_clean()
+            user.save()
+            return UpdateUser(result=user, errors=None, ok=True)
+        except ValidationError as e:
+            return UpdateUser(result=user, errors=e, ok=False)
 
 
 class ResetUserPassword(graphene.Mutation):
