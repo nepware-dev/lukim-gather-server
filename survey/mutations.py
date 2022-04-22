@@ -4,7 +4,7 @@ from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphql_jwt.decorators import login_required
 
-from survey.models import LocalEnviromentalSurvey
+from survey.models import HappeningSurvey
 from survey.serializers import (
     OptionSerializer,
     QuestionGroupSerializer,
@@ -13,7 +13,7 @@ from survey.serializers import (
     SurveySerializer,
     WritableSurveyAnswerSerializer,
 )
-from survey.types import LocalEnviromentalSurveyType
+from survey.types import HappeningSurveyType
 
 
 class QuestionGroupMutation(SerializerMutation):
@@ -48,7 +48,7 @@ class WritableSurveyAnswerMutation(SerializerMutation):
         serializer_class = SurveyAnswerSerializer
 
 
-class LocalEnviromentalSurveyInput(graphene.InputObjectType):
+class HappeningSurveyInput(graphene.InputObjectType):
     category_id = graphene.Int(description="category id", required=True)
     title = graphene.String(description="title", required=True)
     description = graphene.String(description="description", required=False)
@@ -58,20 +58,20 @@ class LocalEnviromentalSurveyInput(graphene.InputObjectType):
     boundary = graphql_geojson.Geometry(required=False)
 
 
-class CreateLocalEnviromentalSurvey(graphene.Mutation):
+class CreateHappeningSurvey(graphene.Mutation):
     class Arguments:
-        data = LocalEnviromentalSurveyInput(
-            description="Fields required to create a local enviromental survey.",
+        data = HappeningSurveyInput(
+            description="Fields required to create a happening survey.",
             required=True,
         )
 
     errors = GenericScalar()
-    result = graphene.Field(LocalEnviromentalSurveyType)
+    result = graphene.Field(HappeningSurveyType)
     ok = graphene.Boolean()
 
     @login_required
     def mutate(self, info, data):
-        survey = LocalEnviromentalSurvey.objects.create(
+        survey = HappeningSurvey.objects.create(
             category_id=data.category_id,
             title=data.title,
             description=data.description,
@@ -82,4 +82,4 @@ class CreateLocalEnviromentalSurvey(graphene.Mutation):
         if data.attachment:
             survey.attachment.add(*data.attachment)
             survey.save()
-        return CreateLocalEnviromentalSurvey(result=survey, ok=True, errors=None)
+        return CreateHappeningSurvey(result=survey, ok=True, errors=None)

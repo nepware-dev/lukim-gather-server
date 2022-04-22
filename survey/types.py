@@ -2,7 +2,7 @@ import graphql_geojson
 from graphene_django.types import DjangoObjectType
 
 from survey.models import (
-    LocalEnviromentalSurvey,
+    HappeningSurvey,
     Option,
     ProtectedAreaCategory,
     Question,
@@ -18,9 +18,9 @@ class ProtectedAreaCategoryType(DjangoObjectType):
         fields = "__all__"
 
 
-class LocalEnviromentalSurveyType(DjangoObjectType):
+class HappeningSurveyType(DjangoObjectType):
     class Meta:
-        model = LocalEnviromentalSurvey
+        model = HappeningSurvey
         graphql_geojson.converter = (
             "location",
             "boundary",

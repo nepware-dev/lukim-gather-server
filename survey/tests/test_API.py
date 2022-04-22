@@ -22,7 +22,7 @@ class APITest(TestBase):
         response = self.query(
             """
             query {
-              enviromentalSurveys {
+              happeningSurveys {
                 id
               }
             }

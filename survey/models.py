@@ -137,14 +137,14 @@ class Status(models.TextChoices):
     PENDING = "pending", _("Pending")
 
 
-class LocalEnviromentalSurvey(TimeStampedModel, UserStampedModel):
+class HappeningSurvey(TimeStampedModel, UserStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
         "ProtectedAreaCategory",
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name="local_enviromental_survey",
+        related_name="happening_survey",
     )
     title = models.CharField(
         _("title"), max_length=255, null=True, blank=True, default=None
@@ -161,7 +161,7 @@ class LocalEnviromentalSurvey(TimeStampedModel, UserStampedModel):
         _("Location Boundary"), null=True, blank=True, default=None
     )
     status = models.CharField(
-        verbose_name=_("Survey Answer Status"),
+        verbose_name=_("Happening Survey Answer Status"),
         max_length=11,
         default=Status.PENDING,
         choices=Status.choices,
