@@ -1,11 +1,51 @@
 import graphene
 import graphql_geojson
 from graphene.types.generic import GenericScalar
+from graphene_django.rest_framework.mutation import SerializerMutation
 from graphql_jwt.decorators import login_required
 
-from gallery.models import Gallery
 from survey.models import LocalEnviromentalSurvey
+from survey.serializers import (
+    OptionSerializer,
+    QuestionGroupSerializer,
+    QuestionSerializer,
+    SurveyAnswerSerializer,
+    SurveySerializer,
+    WritableSurveyAnswerSerializer,
+)
 from survey.types import LocalEnviromentalSurveyType
+
+
+class QuestionGroupMutation(SerializerMutation):
+    class Meta:
+        serializer_class = QuestionGroupSerializer
+
+
+class QuestionMutation(SerializerMutation):
+    class Meta:
+        serializer_class = QuestionSerializer
+        convert_choices_to_enum = False
+
+
+class OptionMutation(SerializerMutation):
+    class Meta:
+        serializer_class = OptionSerializer
+
+
+class SurveyMutation(SerializerMutation):
+    class Meta:
+        serializer_class = SurveySerializer
+
+
+class SurveyAnswerMutation(SerializerMutation):
+    class Meta:
+        serializer_class = SurveyAnswerSerializer
+        convert_choices_to_enum = False
+
+
+class WritableSurveyAnswerMutation(SerializerMutation):
+    class Meta:
+        serializer_class = SurveyAnswerSerializer
 
 
 class LocalEnviromentalSurveyInput(graphene.InputObjectType):
