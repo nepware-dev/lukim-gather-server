@@ -2,6 +2,7 @@ import graphene
 from graphql_jwt.decorators import login_required
 
 from survey.models import (
+    Form,
     HappeningSurvey,
     Option,
     ProtectedAreaCategory,
@@ -19,6 +20,7 @@ from survey.mutations import (
     SurveyMutation,
 )
 from survey.types import (
+    FormType,
     HappeningSurveyType,
     OptionType,
     ProtectedAreaCategoryType,
@@ -42,19 +44,17 @@ class SurveyQueries(graphene.ObjectType):
         QuestionGroupType, description="Return the question group"
     )
     survey = graphene.List(SurveyType, description="Return the surveys")
+    survey_form = graphene.List(FormType, description="Return the survey form")
     survey_answer = graphene.List(
         SurveyAnswerType, description="Return the survey answer"
     )
 
-    @login_required
     def resolve_happening_surveys(self, info, **kwargs):
         return HappeningSurvey.objects.all()
 
-    @login_required
     def resolve_happening_survey(self, info, happening_survey_id):
         return HappeningSurvey.objects.get(id=happening_survey_id)
 
-    @login_required
     def resolve_protected_area_categories(self, info, level=None, **kwargs):
         return ProtectedAreaCategory.objects.filter(level=0)
 
@@ -69,6 +69,9 @@ class SurveyQueries(graphene.ObjectType):
 
     def resolve_survey(self, info, **kwargs):
         return Survey.objects.all()
+
+    def resolve_survey_form(self, info, **kwargs):
+        return Form.objects.all()
 
     def resolve_survey_answer(self, info, **kwargs):
         return SurveyAnswer.objects.all()

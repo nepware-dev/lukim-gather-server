@@ -7,6 +7,7 @@ from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
 from survey.models import (
+    Form,
     HappeningSurvey,
     Option,
     ProtectedAreaCategory,
@@ -15,6 +16,22 @@ from survey.models import (
     Survey,
     SurveyAnswer,
 )
+
+
+@admin.register(Form)
+class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
+    list_display = (
+        "code",
+        "title",
+    )
+    search_fields = (
+        "code",
+        "title",
+    )
+
+    class Meta:
+        verbose_name = _("Form")
+        verbose_plural_name = _("Form")
 
 
 @admin.register(QuestionGroup)
