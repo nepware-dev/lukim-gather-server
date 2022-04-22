@@ -10,9 +10,30 @@ from ordered_model.models import OrderedModel
 from lukimgather.models import CodeModel, TimeStampedModel, UserStampedModel
 
 
+class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
+    title = models.CharField(_("title"), max_length=255)
+    description = RichTextUploadingField(
+        _("description"), blank=True, null=True, default=None
+    )
+
+    def __str__(self):
+        return self.code + "-" + self.title
+
+    class Meta(OrderedModel.Meta):
+        pass
+
+
 class QuestionGroup(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
     title = models.CharField(_("title"), max_length=255)
     skip_logic = models.TextField(_("skip logic"), null=True, blank=True, default=None)
+    form = models.ForeignKey(
+        "Form",
+        on_delete=models.CASCADE,
+        related_name="question_group",
+        null=True,
+        blank=True,
+        default=None,
+    )
 
     def __str__(self):
         return self.code + "-" + self.title

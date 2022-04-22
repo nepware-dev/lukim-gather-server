@@ -2,6 +2,7 @@ import graphql_geojson
 from graphene_django.types import DjangoObjectType
 
 from survey.models import (
+    Form,
     HappeningSurvey,
     Option,
     ProtectedAreaCategory,
@@ -25,6 +26,12 @@ class HappeningSurveyType(DjangoObjectType):
             "location",
             "boundary",
         )
+
+
+class FormType(DjangoObjectType):
+    class Meta:
+        model = Form
+        fields = "__all__"
 
 
 class OptionType(DjangoObjectType):

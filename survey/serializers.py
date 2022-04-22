@@ -12,12 +12,19 @@ from lukimgather.serializers import (
 )
 from survey.models import (
     AnswerTypeChoices,
+    Form,
     Option,
     Question,
     QuestionGroup,
     Survey,
     SurveyAnswer,
 )
+
+
+class FormSerializer(UserModelSerializer):
+    class Meta:
+        model = Form
+        field = "__al__"
 
 
 class QuestionGroupSerializer(UserModelSerializer):
