@@ -2,8 +2,10 @@ import graphene
 import graphql_geojson
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
+from graphene_file_upload.scalars import Upload
 from graphql_jwt.decorators import login_required
 
+from gallery.models import Gallery
 from survey.models import HappeningSurvey
 from survey.serializers import (
     OptionSerializer,
@@ -45,7 +47,8 @@ class SurveyAnswerMutation(SerializerMutation):
 
 class WritableSurveyAnswerMutation(SerializerMutation):
     class Meta:
-        serializer_class = SurveyAnswerSerializer
+        serializer_class = WritableSurveyAnswerSerializer
+        convert_choices_to_enum = False
 
 
 class HappeningSurveyInput(graphene.InputObjectType):
@@ -53,7 +56,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
     title = graphene.String(description="title", required=True)
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
-    attachment = graphene.List(graphene.ID, description="attachments", required=False)
+    attachment = graphene.List(Upload, required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
 
@@ -80,6 +83,9 @@ class CreateHappeningSurvey(graphene.Mutation):
             boundary=data.boundary,
         )
         if data.attachment:
-            survey.attachment.add(*data.attachment)
+            for file in data.attachment:
+                gallery = Gallery(media=file, title=file.name, type="image")
+                gallery.save()
+                survey.attachment.add(gallery)
             survey.save()
         return CreateHappeningSurvey(result=survey, ok=True, errors=None)
