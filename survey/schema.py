@@ -18,6 +18,7 @@ from survey.mutations import (
     QuestionMutation,
     SurveyAnswerMutation,
     SurveyMutation,
+    WritableSurveyAnswerMutation,
 )
 from survey.types import (
     FormType,
@@ -84,3 +85,4 @@ class SurveyMutations(graphene.ObjectType):
     create_question = QuestionMutation.Field()
     create_survey = SurveyMutation.Field()
     create_survey_answer = SurveyAnswerMutation.Field()
+    create_writable_survey_answer = WritableSurveyAnswerMutation.Field()
