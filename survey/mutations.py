@@ -1,5 +1,6 @@
 import graphene
 import graphql_geojson
+from django.core.exceptions import ValidationError
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
@@ -52,6 +53,12 @@ class WritableSurveyMutation(SerializerMutation):
         convert_choices_to_enum = False
 
 
+class Status(graphene.Enum):
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    PENDING = "pending"
+
+
 class HappeningSurveyInput(graphene.InputObjectType):
     category_id = graphene.Int(description="category id", required=True)
     title = graphene.String(description="title", required=True)
@@ -90,3 +97,41 @@ class CreateHappeningSurvey(graphene.Mutation):
                 survey.attachment.add(gallery)
             survey.save()
         return CreateHappeningSurvey(result=survey, ok=True, errors=None)
+
+
+class UpdateHappeningSurveyInput(graphene.InputObjectType):
+    category_id = graphene.Int(description="category id", required=False)
+    title = graphene.String(description="title", required=False)
+    description = graphene.String(description="description", required=False)
+    sentiment = graphene.String(description="Sentiment", required=False)
+    attachment = graphene.List(Upload, required=False)
+    location = graphql_geojson.Geometry(required=False)
+    boundary = graphql_geojson.Geometry(required=False)
+    status = Status()
+
+
+class UpdateHappeningSurvey(graphene.Mutation):
+    class Input:
+        id = graphene.UUID(description="UUID", required=True)
+        data = UpdateHappeningSurveyInput(
+            description="Fields required to create a happening survey.",
+            required=True,
+        )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = graphene.Field(HappeningSurveyType)
+
+    @login_required
+    def mutate(self, info, id, data=None):
+        happening_survey_obj = HappeningSurvey.objects.get(id=id)
+        for key, value in data.items():
+            setattr(happening_survey_obj, key, value)
+        try:
+            happening_survey_obj.full_clean()
+            happening_survey_obj.save()
+            return UpdateHappeningSurvey(
+                result=happening_survey_obj, errors=None, ok=True
+            )
+        except ValidationError as e:
+            return UpdateHappeningSurvey(result=None, errors=e, ok=False)
