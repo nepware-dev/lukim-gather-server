@@ -14,6 +14,7 @@ from survey.serializers import (
     SurveyAnswerSerializer,
     SurveySerializer,
     WritableSurveyAnswerSerializer,
+    WritableSurveySerializer,
 )
 from survey.types import HappeningSurveyType
 
@@ -45,9 +46,9 @@ class SurveyAnswerMutation(SerializerMutation):
         convert_choices_to_enum = False
 
 
-class WritableSurveyAnswerMutation(SerializerMutation):
+class WritableSurveyMutation(SerializerMutation):
     class Meta:
-        serializer_class = WritableSurveyAnswerSerializer
+        serializer_class = WritableSurveySerializer
         convert_choices_to_enum = False
 
 

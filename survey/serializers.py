@@ -1,6 +1,6 @@
 from django.contrib.gis.geos import GEOSGeometry
 from django.core.files.storage import default_storage
-from django.forms import ValidationError
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.fields import ImageField
@@ -184,5 +184,30 @@ class WritableSurveyAnswerSerializer(SurveyAnswerSerializer):
 class WritableSurveySerializer(SurveySerializer):
     answers = WritableSurveyAnswerSerializer(many=True)
 
+    def create(self, validated_data):
+        answers = validated_data.pop("answers", [])
+        try:
+            with transaction.atomic():
+                survey = Survey.objects.create(
+                    **validated_data, created_by=self.context["request"].user
+                )
+                for answer in answers:
+                    options = answer.pop("options", None)
+                    survey_answer = SurveyAnswer.objects.create(
+                        **answer, created_by=self.context["request"].user, survey=survey
+                    )
+                    if options:
+                        survey_answer.options.add(*options)
+        except Exception:
+            raise serializers.ValidationError(
+                {
+                    "error": _(
+                        "Failed to create survey or survey answer due to invalid data"
+                    )
+                }
+            )
+        return survey
+
     class Meta:
         model = Survey
+        fields = "__all__"
