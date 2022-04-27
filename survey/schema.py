@@ -18,6 +18,7 @@ from survey.mutations import (
     QuestionMutation,
     SurveyAnswerMutation,
     SurveyMutation,
+    UpdateHappeningSurvey,
     WritableSurveyMutation,
 )
 from survey.types import (
@@ -80,6 +81,7 @@ class SurveyQueries(graphene.ObjectType):
 
 class SurveyMutations(graphene.ObjectType):
     create_happening_survey = CreateHappeningSurvey.Field()
+    update_happening_survey = UpdateHappeningSurvey.Field()
     create_option = OptionMutation.Field()
     create_question_group = QuestionGroupMutation.Field()
     create_question = QuestionMutation.Field()

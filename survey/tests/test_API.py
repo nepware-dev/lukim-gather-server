@@ -7,7 +7,6 @@ from graphql_jwt.shortcuts import get_token
 from PIL import Image
 
 from lukimgather.tests import TestBase
-from survey.models import ProtectedAreaCategory
 
 
 class APITest(TestBase):
@@ -18,7 +17,9 @@ class APITest(TestBase):
         cls.activated_initial_password = get_user_model().objects.make_random_password()
         users[0].set_password(cls.activated_initial_password)
         users[0].save()
-        cls.category = ProtectedAreaCategory.objects.create(title="test")
+        cls.category = cls.baker.make(
+            "survey.ProtectedAreaCategory", title="test", _quantity=1
+        )[0]
         cls.activated_user = authenticate(
             username=users[0].username, password=cls.activated_initial_password
         )
