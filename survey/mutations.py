@@ -1,20 +1,23 @@
+import ast
+
 import graphene
 import graphql_geojson
 from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
 from graphql_jwt.decorators import login_required
 
 from gallery.models import Gallery
-from survey.models import HappeningSurvey
+from survey.models import HappeningSurvey, Option, Question, Survey, SurveyAnswer
 from survey.serializers import (
     OptionSerializer,
     QuestionGroupSerializer,
     QuestionSerializer,
     SurveyAnswerSerializer,
     SurveySerializer,
-    WritableSurveyAnswerSerializer,
     WritableSurveySerializer,
 )
 from survey.types import HappeningSurveyType
@@ -51,6 +54,32 @@ class WritableSurveyMutation(SerializerMutation):
     class Meta:
         serializer_class = WritableSurveySerializer
         convert_choices_to_enum = False
+
+    @classmethod
+    def mutate(cls, root, info, input):
+        answers = input.pop("answers", [])
+        try:
+            with transaction.atomic():
+                survey = Survey.objects.create(**input, created_by=info.context.user)
+                for answer in answers:
+                    options = answer.pop("options", None)
+                    answer["question"] = Question.objects.get(id=answer["question"])
+                    survey_answer = SurveyAnswer.objects.create(
+                        **answer, created_by=info.context.user, survey=survey
+                    )
+                    if options:
+                        options = ast.literal_eval(options)
+                        options = Option.objects.filter(id__in=options)
+                        survey_answer.options.add(*options)
+        except Exception:
+            raise ValidationError(
+                {
+                    "error": _(
+                        "Failed to create survey or survey answer due to invalid data"
+                    )
+                }
+            )
+        return survey
 
 
 class Status(graphene.Enum):
