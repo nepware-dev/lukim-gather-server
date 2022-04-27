@@ -27,3 +27,7 @@ class Gallery(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = _("Gallery")
+        verbose_name_plural = _("Galleries")

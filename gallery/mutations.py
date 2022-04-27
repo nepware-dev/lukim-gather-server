@@ -2,7 +2,6 @@ import graphene
 from graphene.types.generic import GenericScalar
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
-from graphql.execution.base import ResolveInfo
 from graphql_jwt.decorators import login_required
 
 from gallery.models import Gallery
@@ -22,7 +21,7 @@ class MediaUploadMutation(graphene.Mutation):
     ok = graphene.Boolean()
 
     @login_required
-    def mutate(self, info: ResolveInfo, media=None, **kwargs):
+    def mutate(self, info, media=None, **kwargs):
         if media is not None:
             gallery = Gallery(
                 media=media, title=kwargs.get("title"), type=kwargs.get("type")
