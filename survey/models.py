@@ -158,6 +158,12 @@ class Status(models.TextChoices):
     PENDING = "pending", _("Pending")
 
 
+class Improvement(models.TextChoices):
+    INCREASING = "increasing", _("Increasing")
+    SAME = "same", _("Same")
+    DECREASING = "decreasing", _("Decreasing")
+
+
 class HappeningSurvey(TimeStampedModel, UserStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
@@ -187,7 +193,18 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         default=Status.PENDING,
         choices=Status.choices,
     )
+    improvement = models.CharField(
+        verbose_name=_("Happening Survey Improvement Status"),
+        max_length=11,
+        null=True,
+        blank=True,
+        default=None,
+        choices=Improvement.choices,
+    )
     data_dump = models.JSONField(blank=True, default=dict)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-created_at"]
