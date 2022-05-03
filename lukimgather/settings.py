@@ -59,6 +59,8 @@ else:
 # Apps which need to be before django default apps
 BEFORE_DJANGO_APPS = [
     "modeltranslation",
+    "admin_interface",
+    "colorfield",
 ]
 
 # Django apps
@@ -99,6 +101,9 @@ INSTALLED_APPS = BEFORE_DJANGO_APPS + DJANGO_APPS + INTERNAL_APPS + THIRD_PARTY_
 # Add django extensions to installed app?
 if importlib.util.find_spec("django_extensions"):
     INSTALLED_APPS.append("django_extensions")
+
+# X frame options
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # MIDDLEWARES
 MIDDLEWARE = [
