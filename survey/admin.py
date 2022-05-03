@@ -29,10 +29,6 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
         "title",
     )
 
-    class Meta:
-        verbose_name = _("Form")
-        verbose_plural_name = _("Form")
-
 
 @admin.register(QuestionGroup)
 class QuestionGroupAdmin(
@@ -45,10 +41,6 @@ class QuestionGroupAdmin(
         "code",
         "title",
     )
-
-    class Meta:
-        verbose_name = _("question group")
-        verbose_plural_name = _("question groups")
 
 
 class OptionInline(admin.StackedInline):
@@ -83,10 +75,6 @@ class QuestionAdmin(
     )
     inlines = (OptionInline,)
 
-    class Meta:
-        verbose_name = _("question")
-        verbose_plural_name = _("questions")
-
 
 @admin.register(Option)
 class OptionAdmin(
@@ -101,29 +89,17 @@ class OptionAdmin(
         "title",
     )
 
-    class Meta:
-        verbose_name = _("option")
-        verbose_plural_name = _("options")
-
 
 @admin.register(Survey)
 class SurveyAdmin(UserStampedModelAdmin, OrderedModelAdmin):
     list_display = ("title", "move_up_down_links")
     search_fields = ("title",)
 
-    class Meta:
-        verbose_name = _("survey")
-        verbose_plural_name = _("surveys")
-
 
 @admin.register(SurveyAnswer)
 class SurveyAnswerAdmin(UserStampedModelAdmin):
     list_display = ("question", "survey", "answer")
     autocomplete_fields = ("question", "survey", "options")
-
-    class Meta:
-        verbose_name = _("survey answer")
-        verbose_plural_name = _("survey answers")
 
 
 @admin.register(ProtectedAreaCategory)
@@ -144,6 +120,3 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "category",
     )
     list_filter = ("category",)
-
-    class Meta:
-        verbose_name = _("Local Enviromental Survey")

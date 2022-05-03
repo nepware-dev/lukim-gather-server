@@ -122,6 +122,14 @@ GRAPHENE = {
     ],
 }
 
+GRAPHENE_DJANGO_EXTRAS = {
+    "DEFAULT_PAGINATION_CLASS": "graphene_django_extras.paginations.LimitOffsetGraphqlPagination",
+    "DEFAULT_PAGE_SIZE": 100,
+    "MAX_PAGE_SIZE": 200,
+    "CACHE_ACTIVE": True,
+    "CACHE_TIMEOUT": 300,
+}
+
 GRAPHQL_JWT = {
     "JWT_AUTH_HEADER_PREFIX": "Bearer",
     "JWT_VERIFY_EXPIRATION": True,

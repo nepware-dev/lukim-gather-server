@@ -89,7 +89,7 @@ class APITest(TestBase):
                                 "description": "test description",
                                 "categoryId": self.category.id,
                                 "attachment": [None, None],
-                            }
+                            },
                         },
                     }
                 ),
@@ -105,3 +105,36 @@ class APITest(TestBase):
             **self.headers,
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_survey_form_get(self):
+        response = self.query(
+            """
+            query {
+              surveyForm {
+                id
+                code
+                title
+                questionGroup {
+                  id
+                  code
+                  title
+                  questions {
+                    id
+                    code
+                    title
+                    hints
+                    description
+                    answerType
+                    isRequired
+                    options {
+                      id
+                      title
+                    }
+                  }
+                }
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)

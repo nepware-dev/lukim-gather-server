@@ -14,7 +14,6 @@ from survey.serializers import (
     QuestionSerializer,
     SurveyAnswerSerializer,
     SurveySerializer,
-    WritableSurveyAnswerSerializer,
     WritableSurveySerializer,
 )
 from survey.types import HappeningSurveyType
@@ -71,6 +70,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
 
 class CreateHappeningSurvey(graphene.Mutation):
     class Arguments:
+        anonymous = graphene.Boolean(default_value=False, required=True)
         data = HappeningSurveyInput(
             description="Fields required to create a happening survey.",
             required=True,
@@ -81,7 +81,7 @@ class CreateHappeningSurvey(graphene.Mutation):
     ok = graphene.Boolean()
 
     @login_required
-    def mutate(self, info, data):
+    def mutate(self, info, anonymous, data):
         survey = HappeningSurvey.objects.create(
             category_id=data.category_id,
             title=data.title,
@@ -89,14 +89,36 @@ class CreateHappeningSurvey(graphene.Mutation):
             sentiment=data.sentiment,
             location=data.location,
             boundary=data.boundary,
+            created_by=None if anonymous else info.context.user,
         )
         if data.attachment:
             for file in data.attachment:
-                gallery = Gallery(media=file, title=file.name, type="image")
+                gallery = Gallery(
+                    media=file,
+                    title=file.name,
+                    type="image",
+                )
                 gallery.save()
                 survey.attachment.add(gallery)
             survey.save()
         return CreateHappeningSurvey(result=survey, ok=True, errors=None)
+
+
+class DeleteHappeningSurvey(graphene.Mutation):
+    ok = graphene.Boolean()
+    errors = GenericScalar()
+
+    class Arguments:
+        id = graphene.UUID(description="UUID", required=True)
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        try:
+            happening_survey_obj = HappeningSurvey.objects.get(pk=kwargs["id"])
+            happening_survey_obj.delete()
+            return cls(ok=True, errors=None)
+        except Exception as e:
+            return cls(ok=False, errors=e)
 
 
 class UpdateHappeningSurveyInput(graphene.InputObjectType):
@@ -129,6 +151,7 @@ class UpdateHappeningSurvey(graphene.Mutation):
             setattr(happening_survey_obj, key, value)
         try:
             happening_survey_obj.full_clean()
+            happening_survey_obj.updated_by = info.context.user
             happening_survey_obj.save()
             return UpdateHappeningSurvey(
                 result=happening_survey_obj, errors=None, ok=True

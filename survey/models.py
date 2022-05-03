@@ -20,7 +20,8 @@ class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
         return self.code + "-" + self.title
 
     class Meta(OrderedModel.Meta):
-        pass
+        verbose_name = _("Form")
+        verbose_name_plural = _("Forms")
 
 
 class QuestionGroup(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
@@ -39,7 +40,8 @@ class QuestionGroup(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel)
         return self.code + "-" + self.title
 
     class Meta(OrderedModel.Meta):
-        pass
+        verbose_name = _("Question group")
+        verbose_name_plural = _("Question groups")
 
 
 class AnswerTypeChoices(models.TextChoices):
@@ -77,7 +79,8 @@ class Question(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
         return self.code + "-" + self.title
 
     class Meta(OrderedModel.Meta):
-        pass
+        verbose_name = _("Question")
+        verbose_name_plural = _("Questions")
 
 
 class Option(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
@@ -93,7 +96,8 @@ class Option(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
         return self.code + "-" + self.title
 
     class Meta(OrderedModel.Meta):
-        pass
+        verbose_name = _("Option")
+        verbose_name_plural = _("Options")
 
 
 class Survey(UserStampedModel, TimeStampedModel, OrderedModel):
@@ -103,7 +107,8 @@ class Survey(UserStampedModel, TimeStampedModel, OrderedModel):
         return self.title
 
     class Meta(OrderedModel.Meta):
-        pass
+        verbose_name = _("Survey")
+        verbose_name_plural = _("Surveys")
 
 
 class SurveyAnswer(UserStampedModel, TimeStampedModel):
@@ -149,6 +154,7 @@ class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel, CodeM
         order_insertion_by = ["title"]
 
     class Meta:
+        verbose_name = _("Protected area category")
         verbose_name_plural = _("Protected area categories")
 
 
@@ -208,3 +214,5 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = _("Happening survey")
+        verbose_name_plural = _("Happening surveys")

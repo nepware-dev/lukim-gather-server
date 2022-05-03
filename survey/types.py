@@ -1,5 +1,5 @@
-import graphql_geojson
 from graphene_django.types import DjangoObjectType
+from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 
 from survey.models import (
     Form,
@@ -16,22 +16,33 @@ from survey.models import (
 class ProtectedAreaCategoryType(DjangoObjectType):
     class Meta:
         model = ProtectedAreaCategory
+        description = "Type definition for a category"
         fields = "__all__"
+        filter_fields = {
+            "id": ("exact",),
+            "title": ("icontains", "iexact"),
+        }
+        pagination = LimitOffsetGraphqlPagination(default_limit=100, ordering="-title")
 
 
 class HappeningSurveyType(DjangoObjectType):
     class Meta:
         model = HappeningSurvey
-        graphql_geojson.converter = (
-            "location",
-            "boundary",
-        )
+        description = "Type definition for a happening survey"
+        fields = "__all__"
+        pagination = LimitOffsetGraphqlPagination(default_limit=100, ordering="-title")
 
 
 class FormType(DjangoObjectType):
     class Meta:
-        model = Form
+        description = "Type definition for a survey form"
         fields = "__all__"
+        model = Form
+        filter_fields = {
+            "id": ("exact",),
+            "title": ("icontains", "iexact"),
+        }
+        pagination = LimitOffsetGraphqlPagination(default_limit=100, ordering="-title")
 
 
 class OptionType(DjangoObjectType):
