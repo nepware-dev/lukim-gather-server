@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 07:59+0000\n"
+"POT-Creation-Date: 2022-05-03 09:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: gallery/models.py:14 survey/models.py:116
+#: gallery/models.py:14 survey/models.py:142
 msgid "Title"
 msgstr ""
 
@@ -39,6 +39,14 @@ msgstr ""
 
 #: gallery/models.py:22
 msgid "Media File"
+msgstr ""
+
+#: gallery/models.py:32
+msgid "Gallery"
+msgstr ""
+
+#: gallery/models.py:33
+msgid "Galleries"
 msgstr ""
 
 #: lukimgather/auth_validators.py:12
@@ -51,189 +59,271 @@ msgstr ""
 msgid "code"
 msgstr ""
 
-#: lukimgather/settings.py:230
+#: lukimgather/settings.py:252
 msgid "English"
 msgstr ""
 
-#: lukimgather/settings.py:231
+#: lukimgather/settings.py:253
 msgid "Hiri Motu"
 msgstr ""
 
-#: lukimgather/settings.py:232
+#: lukimgather/settings.py:254
 msgid "Tok Pisin"
 msgstr ""
 
-#: survey/admin.py:33 survey/models.py:50
-msgid "question group"
+#: support/admin.py:14
+msgid "legal document"
 msgstr ""
 
-#: survey/admin.py:34
-msgid "question groups"
+#: support/admin.py:15
+msgid "legal documents"
 msgstr ""
 
-#: survey/admin.py:70 survey/models.py:68 survey/models.py:92
-msgid "question"
+#: support/admin.py:23
+msgid "feedback"
 msgstr ""
 
-#: survey/admin.py:71
-msgid "questions"
+#: support/admin.py:24
+msgid "feedbacks"
 msgstr ""
 
-#: survey/admin.py:88
-msgid "option"
+#: support/models.py:9
+msgid "Terms And Conditions"
 msgstr ""
 
-#: survey/admin.py:89 survey/models.py:104
-msgid "options"
+#: support/models.py:10
+msgid "Privacy Policy"
 msgstr ""
 
-#: survey/admin.py:98 survey/models.py:98
-msgid "survey"
+#: support/models.py:11
+msgid "Cookie Policy"
 msgstr ""
 
-#: survey/admin.py:99
-msgid "surveys"
+#: support/models.py:16
+msgid "document type"
 msgstr ""
 
-#: survey/admin.py:108
-msgid "survey answer"
-msgstr ""
-
-#: survey/admin.py:109
-msgid "survey answers"
-msgstr ""
-
-#: survey/admin.py:132
-msgid "Local Enviromental Survey"
-msgstr ""
-
-#: survey/models.py:14 survey/models.py:38 survey/models.py:63
-#: survey/models.py:79 survey/models.py:150
-msgid "title"
-msgstr ""
-
-#: survey/models.py:15 survey/models.py:53
-msgid "skip logic"
-msgstr ""
-
-#: survey/models.py:25
-msgid "Boolean"
-msgstr ""
-
-#: survey/models.py:26
-msgid "Date"
-msgstr ""
-
-#: survey/models.py:27 survey/models.py:118 survey/models.py:153
-msgid "Description"
-msgstr ""
-
-#: survey/models.py:28
-msgid "Single Image"
-msgstr ""
-
-#: survey/models.py:29
-msgid "Multiple Image"
-msgstr ""
-
-#: survey/models.py:30 survey/models.py:159
-msgid "Location"
-msgstr ""
-
-#: survey/models.py:31
-msgid "Number"
-msgstr ""
-
-#: survey/models.py:32
-msgid "Text"
-msgstr ""
-
-#: survey/models.py:33
-msgid "Single Option"
-msgstr ""
-
-#: survey/models.py:34
-msgid "Multiple Option"
-msgstr ""
-
-#: survey/models.py:40
+#: support/models.py:21 support/models.py:49 survey/models.py:16
+#: survey/models.py:63
 msgid "description"
 msgstr ""
 
-#: survey/models.py:42
-msgid "hints"
+#: support/models.py:48 survey/models.py:14 survey/models.py:28
+#: survey/models.py:61 survey/models.py:87 survey/models.py:104
+#: survey/models.py:183
+msgid "title"
 msgstr ""
 
-#: survey/models.py:44 survey/models.py:102
-msgid "answer type"
+#: survey/models.py:23
+msgid "Form"
+msgstr ""
+
+#: survey/models.py:24
+msgid "Forms"
+msgstr ""
+
+#: survey/models.py:29 survey/models.py:76
+msgid "skip logic"
+msgstr ""
+
+#: survey/models.py:43
+msgid "Question group"
+msgstr ""
+
+#: survey/models.py:44
+msgid "Question groups"
+msgstr ""
+
+#: survey/models.py:48
+msgid "Boolean"
+msgstr ""
+
+#: survey/models.py:49
+msgid "Date"
+msgstr ""
+
+#: survey/models.py:50 survey/models.py:144 survey/models.py:186
+msgid "Description"
+msgstr ""
+
+#: survey/models.py:51
+msgid "Single Image"
 msgstr ""
 
 #: survey/models.py:52
+msgid "Multiple Image"
+msgstr ""
+
+#: survey/models.py:53 survey/models.py:192
+msgid "Location"
+msgstr ""
+
+#: survey/models.py:54
+msgid "Number"
+msgstr ""
+
+#: survey/models.py:55
+msgid "Text"
+msgstr ""
+
+#: survey/models.py:56
+msgid "Single Option"
+msgstr ""
+
+#: survey/models.py:57
+msgid "Multiple Option"
+msgstr ""
+
+#: survey/models.py:65
+msgid "hints"
+msgstr ""
+
+#: survey/models.py:67 survey/models.py:128
+msgid "answer type"
+msgstr ""
+
+#: survey/models.py:73
+msgid "question group"
+msgstr ""
+
+#: survey/models.py:75
 msgid "required"
 msgstr ""
 
+#: survey/models.py:82
+msgid "Question"
+msgstr ""
+
+#: survey/models.py:83
+msgid "Questions"
+msgstr ""
+
+#: survey/models.py:92 survey/models.py:118
+msgid "question"
+msgstr ""
+
+#: survey/models.py:99
+msgid "Option"
+msgstr ""
+
 #: survey/models.py:100
+msgid "Options"
+msgstr ""
+
+#: survey/models.py:110
+msgid "Survey"
+msgstr ""
+
+#: survey/models.py:111
+msgid "Surveys"
+msgstr ""
+
+#: survey/models.py:124
+msgid "survey"
+msgstr ""
+
+#: survey/models.py:126
 msgid "answer"
 msgstr ""
 
-#: survey/models.py:131
-msgid "Protected area categories"
-msgstr ""
-
-#: survey/models.py:135
-msgid "Approved"
-msgstr ""
-
-#: survey/models.py:136
-msgid "Rejected"
-msgstr ""
-
-#: survey/models.py:137
-msgid "Pending"
-msgstr ""
-
-#: survey/models.py:155
-msgid "Sentiments"
+#: survey/models.py:130
+msgid "options"
 msgstr ""
 
 #: survey/models.py:157
-msgid "Attachments"
+msgid "Protected area category"
 msgstr ""
 
-#: survey/models.py:161
-msgid "Location Boundary"
+#: survey/models.py:158
+msgid "Protected area categories"
+msgstr ""
+
+#: survey/models.py:162
+msgid "Approved"
+msgstr ""
+
+#: survey/models.py:163
+msgid "Rejected"
 msgstr ""
 
 #: survey/models.py:164
-msgid "Survey Answer Status"
+msgid "Pending"
 msgstr ""
 
-#: survey/serializers.py:80
-msgid "Answer type of question and provided answer_type value doesn't match"
+#: survey/models.py:168
+msgid "Increasing"
+msgstr ""
+
+#: survey/models.py:169
+msgid "Same"
+msgstr ""
+
+#: survey/models.py:170
+msgid "Decreasing"
+msgstr ""
+
+#: survey/models.py:188
+msgid "Sentiments"
+msgstr ""
+
+#: survey/models.py:190
+msgid "Attachments"
+msgstr ""
+
+#: survey/models.py:194
+msgid "Location Boundary"
+msgstr ""
+
+#: survey/models.py:197
+msgid "Happening Survey Answer Status"
+msgstr ""
+
+#: survey/models.py:203
+msgid "Happening Survey Improvement Status"
+msgstr ""
+
+#: survey/models.py:217
+msgid "Happening survey"
+msgstr ""
+
+#: survey/models.py:218
+msgid "Happening surveys"
 msgstr ""
 
 #: survey/serializers.py:87
+msgid "Answer type of question and provided answer_type value doesn't match"
+msgstr ""
+
+#: survey/serializers.py:94
 msgid "answer field cannot be present for provided answer_type"
 msgstr ""
 
-#: survey/serializers.py:95
+#: survey/serializers.py:102
 msgid "options should be present for provided answer_type"
 msgstr ""
 
-#: survey/serializers.py:100
+#: survey/serializers.py:107
 msgid "Invalid option for question"
 msgstr ""
 
-#: survey/serializers.py:109
+#: survey/serializers.py:116
 msgid "Only one option in list form is supported for question"
 msgstr ""
 
-#: survey/serializers.py:121
+#: survey/serializers.py:128
 msgid "Only one image is supported for question"
 msgstr ""
 
-#: user/models.py:20 user/mutations.py:30 user/mutations.py:40
-#: user/mutations.py:51 user/mutations.py:58 user/mutations.py:68
+#: survey/serializers.py:205
+msgid "Failed to create survey or survey answer due to invalid data"
+msgstr ""
+
+#: user/admin.py:9
+msgid "Additional Fields"
+msgstr ""
+
+#: user/models.py:20 user/mutations.py:37 user/mutations.py:47
+#: user/mutations.py:58 user/mutations.py:65 user/mutations.py:75
 msgid "Username"
 msgstr ""
 
@@ -264,77 +354,90 @@ msgid ""
 "instead of deleting accounts."
 msgstr ""
 
-#: user/models.py:87 user/models.py:104 user/models.py:120 user/mutations.py:42
-#: user/mutations.py:60 user/mutations.py:70
+#: user/models.py:49
+msgid "organization"
+msgstr ""
+
+#: user/models.py:52
+msgid "Avatar"
+msgstr ""
+
+#: user/models.py:97 user/models.py:114 user/models.py:130 user/mutations.py:49
+#: user/mutations.py:67 user/mutations.py:77
 msgid "No Of Incorrect Attempts"
 msgstr ""
 
-#: user/models.py:90 user/models.py:107 user/models.py:123 user/mutations.py:44
-#: user/mutations.py:62 user/mutations.py:72 user/mutations.py:83
+#: user/models.py:100 user/models.py:117 user/models.py:133
+#: user/mutations.py:51 user/mutations.py:69 user/mutations.py:79
+#: user/mutations.py:90
 msgid "Pin"
 msgstr ""
 
-#: user/models.py:92 user/models.py:109 user/models.py:125 user/mutations.py:45
-#: user/mutations.py:63
+#: user/models.py:102 user/models.py:119 user/models.py:135
+#: user/mutations.py:52 user/mutations.py:70
 msgid "Pin Expiry Time"
 msgstr ""
 
-#: user/models.py:93 user/models.py:110 user/models.py:127 user/mutations.py:46
-#: user/mutations.py:64 user/mutations.py:74
+#: user/models.py:103 user/models.py:120 user/models.py:137
+#: user/mutations.py:53 user/mutations.py:71 user/mutations.py:81
 msgid "Is Active"
 msgstr ""
 
-#: user/models.py:94 user/mutations.py:47 user/mutations.py:54
+#: user/models.py:104 user/mutations.py:54 user/mutations.py:61
 msgid "Identifier"
 msgstr ""
 
-#: user/mutations.py:25
+#: user/mutations.py:27
+msgid "Organization"
+msgstr ""
+
+#: user/mutations.py:32
 msgid "First Name"
 msgstr ""
 
-#: user/mutations.py:26
+#: user/mutations.py:33
 msgid "Last Name"
 msgstr ""
 
-#: user/mutations.py:27
+#: user/mutations.py:34
 msgid "Email"
 msgstr ""
 
-#: user/mutations.py:28 user/mutations.py:34 user/mutations.py:52
-#: user/mutations.py:79
+#: user/mutations.py:35 user/mutations.py:41 user/mutations.py:59
+#: user/mutations.py:86
 msgid "Password"
 msgstr ""
 
-#: user/mutations.py:29 user/mutations.py:36 user/mutations.py:53
+#: user/mutations.py:36 user/mutations.py:43 user/mutations.py:60
 msgid "Retype Password"
 msgstr ""
 
-#: user/mutations.py:35
+#: user/mutations.py:42
 msgid "New Password"
 msgstr ""
 
-#: user/mutations.py:73 user/mutations.py:78
+#: user/mutations.py:80 user/mutations.py:85
 msgid "New Email"
 msgstr ""
 
-#: user/mutations.py:89
+#: user/mutations.py:96
 msgid "Fields required to create a user."
 msgstr ""
 
-#: user/mutations.py:116
+#: user/mutations.py:123
 msgid "Fields required to change password."
 msgstr ""
 
-#: user/mutations.py:147 user/mutations.py:192 user/mutations.py:270
-#: user/mutations.py:366 user/mutations.py:419 user/mutations.py:496
-#: user/mutations.py:543
+#: user/mutations.py:175 user/mutations.py:220 user/mutations.py:298
+#: user/mutations.py:394 user/mutations.py:447 user/mutations.py:524
+#: user/mutations.py:571
 msgid "Fields required to reset password."
 msgstr ""
 
-#: user/mutations.py:528
+#: user/mutations.py:556
 msgid "Email change mail"
 msgstr ""
 
-#: user/schema.py:23
+#: user/schema.py:24
 msgid "Return the currently authenticated user."
 msgstr ""
