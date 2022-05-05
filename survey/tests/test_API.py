@@ -114,24 +114,7 @@ class APITest(TestBase):
                 id
                 code
                 title
-                questionGroup {
-                  id
-                  code
-                  title
-                  questions {
-                    id
-                    code
-                    title
-                    hints
-                    description
-                    answerType
-                    isRequired
-                    options {
-                      id
-                      title
-                    }
-                  }
-                }
+                xform
               }
             }
             """,

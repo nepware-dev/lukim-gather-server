@@ -8,48 +8,13 @@ from graphql_jwt.decorators import login_required
 
 from gallery.models import Gallery
 from survey.models import HappeningSurvey
-from survey.serializers import (
-    OptionSerializer,
-    QuestionGroupSerializer,
-    QuestionSerializer,
-    SurveyAnswerSerializer,
-    SurveySerializer,
-    WritableSurveySerializer,
-)
+from survey.serializers import WritableSurveyAnswerSerializer
 from survey.types import HappeningSurveyType
-
-
-class QuestionGroupMutation(SerializerMutation):
-    class Meta:
-        serializer_class = QuestionGroupSerializer
-
-
-class QuestionMutation(SerializerMutation):
-    class Meta:
-        serializer_class = QuestionSerializer
-        convert_choices_to_enum = False
-
-
-class OptionMutation(SerializerMutation):
-    class Meta:
-        serializer_class = OptionSerializer
-
-
-class SurveyMutation(SerializerMutation):
-    class Meta:
-        serializer_class = SurveySerializer
-
-
-class SurveyAnswerMutation(SerializerMutation):
-    class Meta:
-        serializer_class = SurveyAnswerSerializer
-        convert_choices_to_enum = False
 
 
 class WritableSurveyMutation(SerializerMutation):
     class Meta:
-        serializer_class = WritableSurveySerializer
-        convert_choices_to_enum = False
+        serializer_class = WritableSurveyAnswerSerializer
 
 
 class Status(graphene.Enum):

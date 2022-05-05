@@ -15,6 +15,7 @@ class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
     description = RichTextUploadingField(
         _("description"), blank=True, null=True, default=None
     )
+    xform = models.JSONField(_("XForms"), blank=True, default=dict)
 
     def __str__(self):
         return self.code + "-" + self.title
@@ -22,82 +23,6 @@ class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
     class Meta(OrderedModel.Meta):
         verbose_name = _("Form")
         verbose_name_plural = _("Forms")
-
-
-class QuestionGroup(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
-    title = models.CharField(_("title"), max_length=255)
-    skip_logic = models.TextField(_("skip logic"), null=True, blank=True, default=None)
-    form = models.ForeignKey(
-        "Form",
-        on_delete=models.CASCADE,
-        related_name="question_group",
-        null=True,
-        blank=True,
-        default=None,
-    )
-
-    def __str__(self):
-        return self.code + "-" + self.title
-
-    class Meta(OrderedModel.Meta):
-        verbose_name = _("Question group")
-        verbose_name_plural = _("Question groups")
-
-
-class AnswerTypeChoices(models.TextChoices):
-    BOOLEAN = "boolean", _("Boolean")
-    DATE = "date", _("Date")
-    DESCRIPTION = "description", _("Description")
-    SINGLE_IMAGE = "single_image", _("Single Image")
-    MULTIPLE_IMAGE = "multiple_image", _("Multiple Image")
-    LOCATION = "location", _("Location")
-    NUMBER = "number", _("Number")
-    TEXT = "text", _("Text")
-    SINGLE_OPTION = "single_option", _("Single Option")
-    MULTIPLE_OPTION = "multiple_option", _("Multiple Option")
-
-
-class Question(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
-    title = models.TextField(_("title"))
-    description = RichTextUploadingField(
-        _("description"), blank=True, null=True, default=None
-    )
-    hints = models.TextField(_("hints"), blank=True, null=True, default=None)
-    answer_type = models.CharField(
-        _("answer type"), max_length=15, choices=AnswerTypeChoices.choices
-    )
-    group = models.ForeignKey(
-        "QuestionGroup",
-        on_delete=models.CASCADE,
-        related_name="questions",
-        verbose_name=_("question group"),
-    )
-    is_required = models.BooleanField(_("required"), default=True)
-    skip_logic = models.TextField(_("skip logic"), null=True, blank=True, default=None)
-
-    def __str__(self):
-        return self.code + "-" + self.title
-
-    class Meta(OrderedModel.Meta):
-        verbose_name = _("Question")
-        verbose_name_plural = _("Questions")
-
-
-class Option(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
-    title = models.TextField(_("title"))
-    question = models.ForeignKey(
-        "Question",
-        on_delete=models.CASCADE,
-        related_name="options",
-        verbose_name=_("question"),
-    )
-
-    def __str__(self):
-        return self.code + "-" + self.title
-
-    class Meta(OrderedModel.Meta):
-        verbose_name = _("Option")
-        verbose_name_plural = _("Options")
 
 
 class Survey(UserStampedModel, TimeStampedModel, OrderedModel):
@@ -112,30 +37,17 @@ class Survey(UserStampedModel, TimeStampedModel, OrderedModel):
 
 
 class SurveyAnswer(UserStampedModel, TimeStampedModel):
-    question = models.ForeignKey(
-        "Question",
-        on_delete=models.CASCADE,
-        verbose_name=_("question"),
-    )
     survey = models.ForeignKey(
         "Survey",
         on_delete=models.CASCADE,
         related_name="answers",
         verbose_name=_("survey"),
     )
-    answer = models.TextField(_("answer"), null=True, blank=True, default=None)
-    answer_type = models.CharField(
-        _("answer type"), max_length=15, choices=AnswerTypeChoices.choices
-    )
-    options = models.ManyToManyField("Option", blank=True, verbose_name=_("options"))
+    answer = models.JSONField(_("Survey answer"), blank=True, default=dict)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["question", "survey"],
-                name="unique_survey_question",
-            ),
-        ]
+        verbose_name = _("Survey answer")
+        verbose_name_plural = _("Survey answers")
 
 
 class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel, CodeModel):

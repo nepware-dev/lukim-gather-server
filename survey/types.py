@@ -4,10 +4,7 @@ from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 from survey.models import (
     Form,
     HappeningSurvey,
-    Option,
     ProtectedAreaCategory,
-    Question,
-    QuestionGroup,
     Survey,
     SurveyAnswer,
 )
@@ -43,21 +40,6 @@ class FormType(DjangoObjectType):
             "title": ("icontains", "iexact"),
         }
         pagination = LimitOffsetGraphqlPagination(default_limit=100, ordering="-title")
-
-
-class OptionType(DjangoObjectType):
-    class Meta:
-        model = Option
-
-
-class QuestionGroupType(DjangoObjectType):
-    class Meta:
-        model = QuestionGroup
-
-
-class QuestionType(DjangoObjectType):
-    class Meta:
-        model = Question
 
 
 class SurveyType(DjangoObjectType):

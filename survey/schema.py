@@ -5,8 +5,6 @@ from survey.filters import HappeningSurveyFilter
 from survey.mutations import (
     CreateHappeningSurvey,
     DeleteHappeningSurvey,
-    SurveyAnswerMutation,
-    SurveyMutation,
     UpdateHappeningSurvey,
     WritableSurveyMutation,
 )
@@ -37,6 +35,4 @@ class SurveyMutations(graphene.ObjectType):
     create_happening_survey = CreateHappeningSurvey.Field()
     delete_happening_survey = DeleteHappeningSurvey.Field()
     update_happening_survey = UpdateHappeningSurvey.Field()
-    create_survey = SurveyMutation.Field()
-    create_survey_answer = SurveyAnswerMutation.Field()
     create_writable_survey = WritableSurveyMutation.Field()
