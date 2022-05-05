@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "django_filters",
+    "django_json_widget",
     "graphene_django",
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "mptt",

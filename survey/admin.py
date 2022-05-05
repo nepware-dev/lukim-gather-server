@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+from django_json_widget.widgets import JSONEditorWidget
 from mptt.admin import DraggableMPTTAdmin
 from ordered_model.admin import OrderedModelAdmin
 
@@ -22,6 +24,9 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
         "code",
         "title",
     )
+    formfield_overrides = {
+        models.JSONField: {"widget": JSONEditorWidget},
+    }
 
 
 @admin.register(Survey)

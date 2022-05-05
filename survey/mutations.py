@@ -23,6 +23,12 @@ class Status(graphene.Enum):
     PENDING = "pending"
 
 
+class Improvement(graphene.Enum):
+    INCREASING = "increasing"
+    SAME = "same"
+    DECREASING = "decreasing"
+
+
 class HappeningSurveyInput(graphene.InputObjectType):
     category_id = graphene.Int(description="category id", required=True)
     title = graphene.String(description="title", required=True)
@@ -95,6 +101,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     status = Status()
+    improvement = Improvement()
 
 
 class UpdateHappeningSurvey(graphene.Mutation):
@@ -111,11 +118,17 @@ class UpdateHappeningSurvey(graphene.Mutation):
 
     @login_required
     def mutate(self, info, id, data=None):
+        attachments = data.pop("attachment")
         happening_survey_obj = HappeningSurvey.objects.get(id=id)
         for key, value in data.items():
+            try:
+                value = value.value
+            except AttributeError:
+                pass
             setattr(happening_survey_obj, key, value)
         try:
             happening_survey_obj.full_clean()
+            happening_survey_obj.attachment.set(attachments)
             happening_survey_obj.updated_by = info.context.user
             happening_survey_obj.save()
             return UpdateHappeningSurvey(
