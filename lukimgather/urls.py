@@ -6,6 +6,8 @@ from django.urls import include, path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_file_upload.django import FileUploadGraphQLView
 
+from user.views import UserInfoView
+
 from .schema import schema
 
 urlpatterns = i18n_patterns(
@@ -23,6 +25,8 @@ urlpatterns += [
         name="api",
     ),
     path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
+    path("api/user", UserInfoView.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
