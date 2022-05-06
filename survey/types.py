@@ -1,3 +1,4 @@
+from graphene.types.generic import GenericScalar
 from graphene_django.types import DjangoObjectType
 from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 
@@ -31,6 +32,8 @@ class HappeningSurveyType(DjangoObjectType):
 
 
 class FormType(DjangoObjectType):
+    xform = GenericScalar()
+
     class Meta:
         description = "Type definition for a survey form"
         fields = "__all__"

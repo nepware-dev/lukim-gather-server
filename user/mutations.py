@@ -24,6 +24,8 @@ class CustomObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
 
 
 class UserInput(graphene.InputObjectType):
+    first_name = graphene.String(description=_("First name"))
+    last_name = graphene.String(description=_("Last name"))
     organization = graphene.String(description=_("Organization"), required=False)
     avatar = Upload(required=False)
 
