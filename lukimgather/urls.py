@@ -27,6 +27,7 @@ urlpatterns += [
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path("api/user", UserInfoView.as_view()),
+    path("accounts/", include("allauth.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
