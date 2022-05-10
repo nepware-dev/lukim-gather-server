@@ -2,13 +2,7 @@ from graphene.types.generic import GenericScalar
 from graphene_django.types import DjangoObjectType
 from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 
-from survey.models import (
-    Form,
-    HappeningSurvey,
-    ProtectedAreaCategory,
-    Survey,
-    SurveyAnswer,
-)
+from survey.models import Form, HappeningSurvey, ProtectedAreaCategory, Survey
 
 
 class ProtectedAreaCategoryType(DjangoObjectType):
@@ -46,10 +40,9 @@ class FormType(DjangoObjectType):
 
 
 class SurveyType(DjangoObjectType):
+    answer = GenericScalar()
+
     class Meta:
         model = Survey
-
-
-class SurveyAnswerType(DjangoObjectType):
-    class Meta:
-        model = SurveyAnswer
+        fields = "__all__"
+        pagination = LimitOffsetGraphqlPagination(default_limit=100, ordering="-title")

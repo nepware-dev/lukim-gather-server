@@ -8,13 +8,14 @@ from graphql_jwt.decorators import login_required
 
 from gallery.models import Gallery
 from survey.models import HappeningSurvey
-from survey.serializers import WritableSurveyAnswerSerializer
+from survey.serializers import SurveySerializer
 from survey.types import HappeningSurveyType
 
 
 class WritableSurveyMutation(SerializerMutation):
     class Meta:
-        serializer_class = WritableSurveyAnswerSerializer
+        serializer_class = SurveySerializer
+        fields = "__all__"
 
 
 class Status(graphene.Enum):
@@ -37,6 +38,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
     attachment = graphene.List(Upload, required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
+    improvement = Improvement(required=False)
 
 
 class CreateHappeningSurvey(graphene.Mutation):
@@ -58,6 +60,7 @@ class CreateHappeningSurvey(graphene.Mutation):
             title=data.title,
             description=data.description,
             sentiment=data.sentiment,
+            improvement=None if not data.improvement else data.improvement.value,
             location=data.location,
             boundary=data.boundary,
             created_by=None if anonymous else info.context.user,
@@ -101,7 +104,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     status = Status()
-    improvement = Improvement()
+    improvement = Improvement(required=False)
 
 
 class UpdateHappeningSurvey(graphene.Mutation):
@@ -118,7 +121,7 @@ class UpdateHappeningSurvey(graphene.Mutation):
 
     @login_required
     def mutate(self, info, id, data=None):
-        attachments = data.pop("attachment")
+        attachments = data.pop("attachment", [])
         happening_survey_obj = HappeningSurvey.objects.get(id=id)
         for key, value in data.items():
             try:
@@ -128,7 +131,8 @@ class UpdateHappeningSurvey(graphene.Mutation):
             setattr(happening_survey_obj, key, value)
         try:
             happening_survey_obj.full_clean()
-            happening_survey_obj.attachment.set(attachments)
+            if attachments:
+                happening_survey_obj.attachment.set(attachments)
             happening_survey_obj.updated_by = info.context.user
             happening_survey_obj.save()
             return UpdateHappeningSurvey(

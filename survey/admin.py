@@ -5,13 +5,7 @@ from mptt.admin import DraggableMPTTAdmin
 from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
-from survey.models import (
-    Form,
-    HappeningSurvey,
-    ProtectedAreaCategory,
-    Survey,
-    SurveyAnswer,
-)
+from survey.models import Form, HappeningSurvey, ProtectedAreaCategory, Survey
 
 
 @admin.register(Form)
@@ -33,12 +27,6 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
 class SurveyAdmin(UserStampedModelAdmin, OrderedModelAdmin):
     list_display = ("title", "move_up_down_links")
     search_fields = ("title",)
-
-
-@admin.register(SurveyAnswer)
-class SurveyAnswerAdmin(UserStampedModelAdmin):
-    list_display = ("survey", "answer")
-    autocomplete_fields = ("survey",)
 
 
 @admin.register(ProtectedAreaCategory)

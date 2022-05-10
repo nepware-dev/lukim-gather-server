@@ -25,29 +25,16 @@ class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
         verbose_name_plural = _("Forms")
 
 
-class Survey(UserStampedModel, TimeStampedModel, OrderedModel):
+class Survey(UserStampedModel, TimeStampedModel):
     title = models.CharField(_("title"), max_length=255)
+    answer = models.JSONField(_("answer"), blank=True, default=dict)
 
     def __str__(self):
         return self.title
 
-    class Meta(OrderedModel.Meta):
+    class Meta:
         verbose_name = _("Survey")
         verbose_name_plural = _("Surveys")
-
-
-class SurveyAnswer(UserStampedModel, TimeStampedModel):
-    survey = models.ForeignKey(
-        "Survey",
-        on_delete=models.CASCADE,
-        related_name="answers",
-        verbose_name=_("survey"),
-    )
-    answer = models.JSONField(_("Survey answer"), blank=True, default=dict)
-
-    class Meta:
-        verbose_name = _("Survey answer")
-        verbose_name_plural = _("Survey answers")
 
 
 class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel, CodeModel):
