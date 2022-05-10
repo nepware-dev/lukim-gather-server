@@ -72,6 +72,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
+    "django.contrib.sites",
 ]
 
 # Internal apps
@@ -97,6 +98,9 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_gis",
     "oauth2_provider",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
 
 INSTALLED_APPS = BEFORE_DJANGO_APPS + DJANGO_APPS + INTERNAL_APPS + THIRD_PARTY_APPS
@@ -164,6 +168,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = env.list(
 AUTHENTICATION_BACKENDS = [
     "graphql_jwt.backends.JSONWebTokenBackend",
     "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 ROOT_URLCONF = "lukimgather.urls"
@@ -341,4 +346,5 @@ if ENABLE_SENTRY:
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-LOGIN_URL = "/admin/login/"
+SITE_ID = 1
+LOGIN_URL = "/accounts/login/"
