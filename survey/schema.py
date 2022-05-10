@@ -1,7 +1,7 @@
 import graphene
 from graphene_django_extras import DjangoFilterPaginateListField
 
-from survey.filters import HappeningSurveyFilter
+from survey.filters import HappeningSurveyFilter, SurveyFilter
 from survey.mutations import (
     CreateHappeningSurvey,
     DeleteHappeningSurvey,
@@ -23,9 +23,13 @@ class SurveyQueries(graphene.ObjectType):
         filterset_class=HappeningSurveyFilter,
     )
     protected_area_categories = DjangoFilterPaginateListField(
-        ProtectedAreaCategoryType, description="All Category"
+        ProtectedAreaCategoryType, description="Return all protected area category"
     )
-    survey = DjangoFilterPaginateListField(SurveyType, description="Return the surveys")
+    survey = DjangoFilterPaginateListField(
+        SurveyType,
+        description="Return the surveys",
+        filterset_class=SurveyFilter,
+    )
     survey_form = DjangoFilterPaginateListField(
         FormType, description="Return the survey form"
     )
