@@ -106,6 +106,13 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         default=None,
         choices=Improvement.choices,
     )
+    region = models.ForeignKey(
+        "region.Region",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="happening_survey",
+    )
     data_dump = models.JSONField(blank=True, default=dict)
 
     def __str__(self):
