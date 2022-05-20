@@ -9,6 +9,8 @@ class HappeningSurveyFilter(django_filters.FilterSet):
         fields = {
             "id": ["exact"],
             "title": ["exact", "contains"],
+            "category__title": ["exact", "icontains"],
+            "region__name": ["exact", "icontains"],
         }
 
 
