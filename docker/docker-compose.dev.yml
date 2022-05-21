@@ -1,8 +1,8 @@
-version: "3.9"
+version: "3.7"
 
 services:
   server:
-    container_name: "${PROJECT_NAME}-server"
+    container_name: "${PROJECT_NAME}_server"
     env_file: .env
     build:
       context: .
@@ -16,7 +16,7 @@ services:
       - default
       - external-services
   celery_worker:
-    container_name: "${PROJECT_NAME}-celery-worker"
+    container_name: "${PROJECT_NAME}_celery_worker"
     env_file: .env
     environment:
       CELERY_WORKER: "true"

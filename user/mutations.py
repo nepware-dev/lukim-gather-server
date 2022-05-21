@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from graphene.types.generic import GenericScalar
 from graphene_file_upload.scalars import Upload
+from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from lukimgather.utils import gen_random_number, gen_random_string
@@ -105,17 +106,16 @@ class RegisterUser(graphene.Mutation):
     def mutate(self, info, data):
         user_exists = User.objects.filter_by_username(data.username).exists()
         if user_exists:
-            return RegisterUser(
-                errors={"error": "User with username/email already exists"},
-                ok=False,
-            )
+            raise GraphQLError("User with username/email already exists")
         user_password = data.pop("re_password")
         try:
             validate_password(password=user_password)
         except ValidationError as e:
             errors = list(e.messages)
-            return RegisterUser(errors={"errors": errors}, ok=False)
+            raise GraphQLError(errors)
         user = User.objects.create_user(**data)
+        user.is_active = True  # Note:- Temporary fix to remove 2 step verification
+        user.save()
         return RegisterUser(result=user, ok=True, errors=None)
 
 
@@ -129,18 +129,22 @@ class ChangePassword(graphene.Mutation):
     ok = graphene.Boolean()
     result = GenericScalar()
 
+    @login_required
     def mutate(self, info, data):
+        if not info.context.user.check_password(data.password):
+            raise GraphQLError("Invalid password for user")
         user = User.objects.filter_by_username(
             info.context.user.username, is_active=True
         ).first()
         new_password = data.new_password
         re_new_password = data.re_password
         if re_new_password != new_password:
-            return ChangePassword(
-                errors={"error": "New password and re new password doesn't match"},
-                result=None,
-                ok=False,
-            )
+            raise GraphQLError("New password and re new password doesn't match")
+        try:
+            validate_password(password=new_password, user=user)
+        except ValidationError as e:
+            errors = list(e.messages)
+            raise GraphQLError(errors)
         user.set_password(new_password)
         user.save()
         return ChangePassword(
@@ -168,7 +172,7 @@ class UpdateUser(graphene.Mutation):
             user.save()
             return UpdateUser(result=user, errors=None, ok=True)
         except ValidationError as e:
-            return UpdateUser(result=user, errors=e, ok=False)
+            raise GraphQLError(e)
 
 
 class ResetUserPassword(graphene.Mutation):
@@ -185,12 +189,8 @@ class ResetUserPassword(graphene.Mutation):
         username = data.username
         user = User.objects.filter_by_username(username, is_active=True).first()
         if not user:
-            return ResetUserPassword(
-                errors={
-                    "error": "No active user present for username/email your account may be blocked"
-                },
-                result=None,
-                ok=False,
+            raise GraphQLError(
+                "No active user present for username/email your account may be blocked"
             )
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
@@ -230,11 +230,7 @@ class ResetUserPasswordVerify(graphene.Mutation):
         username = data.username
         user = User.objects.filter_by_username(username, is_active=True).first()
         if not user:
-            return ResetUserPasswordVerify(
-                errors={"error": "No active user present for username/email"},
-                result=None,
-                ok=False,
-            )
+            raise GraphQLError("No active user present for username/email")
         pin = data.pin
         current_time = timezone.now()
         password_reset_pin_object = PasswordResetPin.objects.filter(
@@ -252,38 +248,16 @@ class ResetUserPasswordVerify(graphene.Mutation):
                 user_only_password_reset_object.no_of_incorrect_attempts += 1
                 user_only_password_reset_object.save()
                 if not user.is_active:
-                    return ResetUserPasswordVerify(
-                        errors={"error": "User is inactive"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("User is inactive")
                 elif user_only_password_reset_object.no_of_incorrect_attempts >= 5:
                     user.is_active = False
                     user.save()
-                    return ResetUserPasswordVerify(
-                        errors={
-                            "error": "User is now inactive for trying too many times"
-                        },
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("User is now inactive for trying too many times")
                 elif user_only_password_reset_object.pin != pin:
-                    return ResetUserPasswordVerify(
-                        error={"error": "Password reset pin is incorrect"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("Password reset pin is incorrect")
                 else:
-                    return ResetUserPasswordVerify(
-                        errors={"error": "Password reset pin has expired"},
-                        result=None,
-                        ok=False,
-                    )
-            return ResetUserPasswordVerify(
-                errors={"error": "No matching active user pin found"},
-                result=None,
-                ok=False,
-            )
+                    raise GraphQLError("Password reset pin has expired")
+            raise GraphQLError("No matching active user pin found")
         else:
             password_reset_pin_object.no_of_incorrect_attempts = 0
             password_reset_pin_object.save()
@@ -308,20 +282,12 @@ class PasswordResetChange(graphene.Mutation):
         username = data.username
         user = User.objects.filter_by_username(username, is_active=True).first()
         if not user:
-            return PasswordResetChange(
-                errors={"error": "No active user present for username/email"},
-                result=None,
-                ok=False,
-            )
+            raise GraphQLError("No active user present for username/email")
         identifier = data.identifier
         password = data.password
         re_password = data.re_password
         if re_password != password:
-            return PasswordResetChange(
-                errors={"error": "Password and re_password doesn't match"},
-                result=None,
-                ok=False,
-            )
+            raise GraphQLError("Password and re_password doesn't match")
         current_time = timezone.now()
         password_reset_pin_object = PasswordResetPin.objects.filter(
             user=user,
@@ -338,38 +304,16 @@ class PasswordResetChange(graphene.Mutation):
                 user_only_password_reset_object.no_of_incorrect_attempts += 1
                 user_only_password_reset_object.save()
                 if not user.is_active:
-                    return PasswordResetChange(
-                        errors={"error": "User is inactive"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("User is inactive")
                 elif user_only_password_reset_object.no_of_incorrect_attempts >= 5:
                     user.is_active = False
                     user.save()
-                    return PasswordResetChange(
-                        errors={
-                            "error": "User is now inactive for trying too many times"
-                        },
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("User is now inactive for trying too many times")
                 elif user_only_password_reset_object.identifier != identifier:
-                    return PasswordResetChange(
-                        errors={"error": "Password reset identifier is incorrect"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("Password reset identifier is incorrect")
                 else:
-                    return PasswordResetChange(
-                        errors={"error": "Password reset pin has expired"},
-                        resut=None,
-                        ok=False,
-                    )
-            return PasswordResetChange(
-                errors={"error": "No matching active user pin found"},
-                result=None,
-                ok=False,
-            )
+                    raise GraphQLError("Password reset pin has expired")
+            raise GraphQLError("No matching active user pin found")
         else:
             password_reset_pin_object.no_of_incorrect_attempts = 0
             password_reset_pin_object.is_active = False
@@ -378,9 +322,7 @@ class PasswordResetChange(graphene.Mutation):
                 validate_password(password=password, user=user)
             except ValidationError as e:
                 errors = list(e.messages)
-                return PasswordResetChange(
-                    errors={"errors": errors}, result=None, ok=False
-                )
+                raise GraphQLError(errors)
             user.set_password(password)
             user.save()
             return PasswordResetChange(
@@ -403,25 +345,13 @@ class EmailConfirm(graphene.Mutation):
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username).first()
         if not user:
-            return EmailConfirm(
-                errors={"error": "No user present with given email address/username"},
-                result=None,
-                ok=True,
-            )
+            raise GraphQLError("No user present with given email address/username")
         email_confirm_pin = EmailConfirmationPin.objects.filter(user=user).first()
         if email_confirm_pin:
             if email_confirm_pin.no_of_incorrect_attempts >= 5:
-                return EmailConfirm(
-                    errors={"error": "User is inactive for trying too many times"},
-                    result=None,
-                    ok=False,
-                )
+                raise GraphQLError("User is inactive for trying too many times")
             if not email_confirm_pin.is_active:
-                return EmailConfirm(
-                    errors={"error": "Email address has already been confirmed"},
-                    result=None,
-                    ok=False,
-                )
+                raise GraphQLError("Email address has already been confirmed")
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
         email_confirm_pin_object, _obj = EmailConfirmationPin.objects.update_or_create(
@@ -456,11 +386,7 @@ class EmailConfirmVerify(graphene.Mutation):
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username, is_active=False).first()
         if not user:
-            return EmailConfirmVerify(
-                errors={"error": "No inactive user present for username"},
-                result=None,
-                ok=False,
-            )
+            raise GraphQLError("No inactive user present for username")
         pin = data.pin
         current_time = timezone.now()
         email_confirmation_mail_object = EmailConfirmationPin.objects.filter(
@@ -475,38 +401,16 @@ class EmailConfirmVerify(graphene.Mutation):
             ).first()
             if user_only_email_confirm_mail_object:
                 if not user_only_email_confirm_mail_object.is_active:
-                    return EmailConfirmVerify(
-                        errors={"error": "Email is already confirmed for user"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("Email is already confirmed for user")
                 user_only_email_confirm_mail_object.no_of_incorrect_attempts += 1
                 user_only_email_confirm_mail_object.save()
                 if user_only_email_confirm_mail_object.no_of_incorrect_attempts >= 5:
-                    return EmailConfirmVerify(
-                        errors={
-                            "error": "User is now inactive for trying too many times"
-                        },
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("User is now inactive for trying too many times")
                 elif user_only_email_confirm_mail_object.pin != pin:
-                    return EmailConfirmVerify(
-                        errors={"error": "Email confirmation pin is incorrect"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("Email confirmation pin is incorrect")
                 else:
-                    return EmailConfirmVerify(
-                        errors={"error": "Email confirmation pin has expired"},
-                        result=None,
-                        ok=False,
-                    )
-            return EmailConfirmVerify(
-                errors={"error": "No matching active username/email found"},
-                result=None,
-                ok=False,
-            )
+                    raise GraphQLError("Email confirmation pin has expired")
+            raise GraphQLError("No matching active username/email found")
         else:
             email_confirmation_mail_object.no_of_incorrect_attempts = 0
             email_confirmation_mail_object.is_active = False
@@ -535,11 +439,7 @@ class EmailChange(graphene.Mutation):
         email_change_pin = EmailChangePin.objects.filter(user=user).first()
         if email_change_pin:
             if email_change_pin.no_of_incorrect_attempts >= 5:
-                return EmailChange(
-                    errors={"error": "User is inactive for trying too many times"},
-                    result=None,
-                    ok=False,
-                )
+                raise GraphQLError("User is inactive for trying too many times")
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
         email_change_pin_object, _obj = EmailChangePin.objects.update_or_create(
@@ -593,48 +493,22 @@ class EmailChangeVerify(graphene.Mutation):
             ).first()
             if user_only_email_change_mail_object:
                 if not user_only_email_change_mail_object.is_active:
-                    return EmailChangeVerify(
-                        errors={"error": "Email is already changed for user"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("Email is already changed for user")
                 user_only_email_change_mail_object.no_of_incorrect_attempts += 1
                 user_only_email_change_mail_object.save()
                 if user_only_email_change_mail_object.no_of_incorrect_attempts >= 5:
-                    return EmailChangeVerify(
-                        errors={
-                            "error": "User is now inactive for trying too many times"
-                        },
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("User is now inactive for trying too many times")
                 elif user_only_email_change_mail_object.pin != pin:
-                    return EmailChangeVerify(
-                        errors={"error": "Email change pin is incorrect"},
-                        result=None,
-                        ok=False,
-                    )
+                    raise GraphQLError("Email change pin is incorrect")
                 else:
-                    return EmailChangeVerify(
-                        errors={"error": "Email change pin has expired"},
-                        result=None,
-                        ok=False,
-                    )
-            return EmailChangeVerify(
-                errors={"error": "No matching active change change request found"},
-                result=None,
-                ok=False,
-            )
+                    raise GraphQLError("Email change pin has expired")
+            raise GraphQLError("No matching active email change request found")
         else:
             email_change_mail_object.no_of_incorrect_attempts = 0
             email_change_mail_object.is_active = False
             email_change_mail_object.save()
             if User.objects.filter(email=email_change_mail_object.new_email).exists():
-                return EmailChangeVerify(
-                    errors={"error": "email already used for account creation"},
-                    result=None,
-                    ok=False,
-                )
+                raise GraphQLError("email already used for account creation")
             user.email = email_change_mail_object.new_email
             user.save()
             return EmailChangeVerify(
