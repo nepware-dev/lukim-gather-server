@@ -1,12 +1,15 @@
 import graphene
 import graphql_geojson
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
+from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from gallery.models import Gallery
+from region.models import Region
 from survey.models import HappeningSurvey
 from survey.serializers import SurveySerializer
 from survey.types import HappeningSurveyType
@@ -55,26 +58,39 @@ class CreateHappeningSurvey(graphene.Mutation):
 
     @login_required
     def mutate(self, info, anonymous, data):
-        survey = HappeningSurvey.objects.create(
-            category_id=data.category_id,
-            title=data.title,
-            description=data.description,
-            sentiment=data.sentiment,
-            improvement=None if not data.improvement else data.improvement.value,
-            location=data.location,
-            boundary=data.boundary,
-            created_by=None if anonymous else info.context.user,
-        )
-        if data.attachment:
-            for file in data.attachment:
-                gallery = Gallery(
-                    media=file,
-                    title=file.name,
-                    type="image",
+        try:
+            with transaction.atomic():
+                region_geo = data.location if data.location else data.boundary
+                survey_region = (
+                    Region.objects.filter(boundary__bbcontains=region_geo).first()
+                    if region_geo
+                    else None
                 )
-                gallery.save()
-                survey.attachment.add(gallery)
-            survey.save()
+                survey = HappeningSurvey.objects.create(
+                    category_id=data.category_id,
+                    title=data.title,
+                    description=data.description,
+                    sentiment=data.sentiment,
+                    improvement=None
+                    if not data.improvement
+                    else data.improvement.value,
+                    location=data.location,
+                    boundary=data.boundary,
+                    region=survey_region,
+                    created_by=None if anonymous else info.context.user,
+                )
+                if data.attachment:
+                    for file in data.attachment:
+                        gallery = Gallery(
+                            media=file,
+                            title=file.name,
+                            type="image",
+                        )
+                        gallery.save()
+                        survey.attachment.add(gallery)
+                survey.save()
+        except Exception:
+            raise GraphQLError("Failed to create happening survey")
         return CreateHappeningSurvey(result=survey, ok=True, errors=None)
 
 
@@ -121,22 +137,32 @@ class UpdateHappeningSurvey(graphene.Mutation):
 
     @login_required
     def mutate(self, info, id, data=None):
-        attachments = data.pop("attachment", [])
-        happening_survey_obj = HappeningSurvey.objects.get(id=id)
-        for key, value in data.items():
-            try:
-                value = value.value
-            except AttributeError:
-                pass
-            setattr(happening_survey_obj, key, value)
         try:
-            happening_survey_obj.full_clean()
-            if attachments:
-                happening_survey_obj.attachment.set(attachments)
-            happening_survey_obj.updated_by = info.context.user
-            happening_survey_obj.save()
-            return UpdateHappeningSurvey(
-                result=happening_survey_obj, errors=None, ok=True
-            )
-        except ValidationError as e:
-            return UpdateHappeningSurvey(result=None, errors=e, ok=False)
+            with transaction.atomic():
+                attachments = data.pop("attachment", [])
+                region_geo = data.location if data.location else data.boundary
+                happening_survey_obj = HappeningSurvey.objects.get(id=id)
+                survey_region = (
+                    Region.objects.filter(boundary__bbcontains=region_geo).first()
+                    if region_geo
+                    else None
+                )
+                for key, value in data.items():
+                    try:
+                        value = value.value
+                    except AttributeError:
+                        pass
+                    setattr(happening_survey_obj, key, value)
+                try:
+                    happening_survey_obj.full_clean()
+                    if attachments:
+                        happening_survey_obj.attachment.set(attachments)
+                    if happening_survey_obj.region != survey_region:
+                        happening_survey_obj.region = survey_region
+                    happening_survey_obj.updated_by = info.context.user
+                    happening_survey_obj.save()
+                except ValidationError as e:
+                    return UpdateHappeningSurvey(result=None, errors=e, ok=False)
+        except Exception:
+            raise GraphQLError("Failed to update happening survey")
+        return UpdateHappeningSurvey(result=happening_survey_obj, errors=None, ok=True)

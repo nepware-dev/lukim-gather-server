@@ -40,8 +40,6 @@ class FormType(DjangoObjectType):
 
 
 class SurveyType(DjangoObjectType):
-    answer = GenericScalar()
-
     class Meta:
         model = Survey
         fields = "__all__"

@@ -3,6 +3,7 @@ import json
 
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.gis import geos
 from graphql_jwt.shortcuts import get_token
 from PIL import Image
 
@@ -87,6 +88,9 @@ class APITest(TestBase):
                             "data": {
                                 "title": "test title",
                                 "description": "test description",
+                                "sentiment": "\U0001f600",
+                                "improvement": "INCREASING",
+                                "location": str(geos.Point(1, 0)),
                                 "categoryId": self.category.id,
                                 "attachment": [None, None],
                             },

@@ -7,6 +7,6 @@ from .models import Region
 
 @admin.register(Region)
 class RegionAdmin(DraggableMPTTAdmin):
-    list_display = ("tree_actions", "indented_title", "name", "parent")
+    list_display = ("tree_actions", "indented_title", "code", "name", "parent")
     autocomplete_fields = ("parent",)
     search_fields = ("name",)

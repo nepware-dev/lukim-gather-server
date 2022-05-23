@@ -5,6 +5,7 @@ from mptt.admin import DraggableMPTTAdmin
 from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
+from region.models import Region
 from survey.models import Form, HappeningSurvey, ProtectedAreaCategory, Survey
 
 
@@ -47,3 +48,14 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "category",
     )
     list_filter = ("category",)
+
+    def save_model(self, request, obj, form, change):
+        region_geo = obj.location if obj.location else obj.boundary
+        survey_region = (
+            Region.objects.filter(boundary__bbcontains=region_geo).first()
+            if region_geo
+            else None
+        )
+        if obj.region != survey_region:
+            obj.region = survey_region
+        super().save_model(request, obj, form, change)
