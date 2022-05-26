@@ -5,6 +5,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 class Region(MPTTModel):
     name = models.TextField(_("name"))
+    code = models.CharField(max_length=25, null=True, blank=True, default=None)
     boundary = models.MultiPolygonField(
         _("boundary"), null=True, blank=True, default=None
     )

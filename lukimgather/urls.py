@@ -9,6 +9,7 @@ from graphene_file_upload.django import FileUploadGraphQLView
 from user.views import UserInfoView
 
 from .schema import schema
+from .views import generate_204
 
 urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls), prefix_default_language=False
@@ -28,6 +29,7 @@ urlpatterns += [
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path("api/user", UserInfoView.as_view()),
     path("accounts/", include("allauth.urls")),
+    path("generate_204/", generate_204, name="generate-204"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
