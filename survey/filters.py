@@ -11,6 +11,9 @@ class HappeningSurveyFilter(django_filters.FilterSet):
             "title": ["exact", "contains"],
             "category__title": ["exact", "icontains"],
             "region__name": ["exact", "icontains"],
+            "is_public": [
+                "exact",
+            ],
         }
 
 

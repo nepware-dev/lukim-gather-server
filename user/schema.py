@@ -1,8 +1,10 @@
 import graphene
 import graphql_jwt
 from django.utils.translation import gettext_lazy as _
+from graphene_django_extras import DjangoFilterPaginateListField
 from graphql_jwt.decorators import login_required
 
+from user.filters import GrantFilter
 from user.mutations import (
     ChangePassword,
     CustomObtainJSONWebToken,
@@ -10,18 +12,24 @@ from user.mutations import (
     EmailChangeVerify,
     EmailConfirm,
     EmailConfirmVerify,
+    GrantMutation,
     PasswordResetChange,
     RegisterUser,
     ResetUserPassword,
     ResetUserPasswordVerify,
     UpdateUser,
 )
-from user.types import UserType
+from user.types import GrantType, UserType
 
 
 class UserQueries(graphene.ObjectType):
     me = graphene.Field(
         UserType, description=_("Return the currently authenticated user.")
+    )
+    grant = DjangoFilterPaginateListField(
+        GrantType,
+        description="Return the user grant",
+        filterset_class=GrantFilter,
     )
 
     @login_required
@@ -44,3 +52,4 @@ class UserMutations(graphene.ObjectType):
     email_change = EmailChange.Field()
     email_change_verify = EmailChangeVerify.Field()
     update_user = UpdateUser.Field()
+    create_grant = GrantMutation.Field()

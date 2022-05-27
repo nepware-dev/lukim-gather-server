@@ -113,6 +113,7 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         on_delete=models.SET_NULL,
         related_name="happening_survey",
     )
+    is_public = models.BooleanField(default=True)
     data_dump = models.JSONField(blank=True, default=dict)
 
     def __str__(self):

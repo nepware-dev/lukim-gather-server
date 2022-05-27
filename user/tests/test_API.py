@@ -267,3 +267,43 @@ class APITest(TestBase):
         self.assertEqual(email_change_verify_response.status_code, 200)
         user = get_user_model().objects.get(pk=self.activated_user.pk)
         self.assertEqual(new_email, user.email)
+
+    def test_user_grant_get(self):
+        response = self.query(
+            """
+            query {
+              grant {
+                id
+                title
+                user {
+                    id
+                    username
+                }
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_create_user_grant(self):
+        response = self.query(
+            """
+            mutation Mutation($input: GrantMutationInput!) {
+              createGrant(input: $input) {
+                id
+                title
+                errors {
+                  field
+                  messages
+                }
+              }
+            }
+            """,
+            input_data={
+                "title": "test title",
+                "description": "test description",
+                "user": self.activated_user.username,
+            },
+        )
+        self.assertResponseNoErrors(response)
