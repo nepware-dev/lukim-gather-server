@@ -92,6 +92,7 @@ class APITest(TestBase):
                                 "improvement": "INCREASING",
                                 "location": str(geos.Point(1, 0)),
                                 "categoryId": self.category.id,
+                                "isPublic": False,
                                 "attachment": [None, None],
                             },
                         },

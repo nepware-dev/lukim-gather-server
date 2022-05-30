@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxLengthValidator, MinLengthValidator
@@ -7,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from lukimgather.auth_validators import CustomASCIIUsernameValidator
 from lukimgather.fields import LowerCharField, LowerEmailField
 from lukimgather.managers import CustomUserManager
-from lukimgather.models import TimeStampedModel
+from lukimgather.models import TimeStampedModel, UserStampedModel
 
 from .tasks import send_user_mail
 
@@ -135,3 +136,16 @@ class EmailChangePin(TimeStampedModel):
     pin_expiry_time = models.DateTimeField(verbose_name=_("Pin Expiry Time"))
     new_email = LowerEmailField()
     is_active = models.BooleanField(verbose_name=_("Is Active"), default=True)
+
+
+class Grant(UserStampedModel, TimeStampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="grant",
+    )
+    title = models.CharField(_("title"), max_length=255)
+    description = RichTextField(_("description"), null=True, blank=True, default=None)
+
+    def __str__(self):
+        return self.title

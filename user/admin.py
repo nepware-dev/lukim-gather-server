@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import User
+from lukimgather.admin import UserStampedModelAdmin
+
+from .models import Grant, User
 
 ADDITIONAL_USER_FIELDS = (
     (
@@ -33,6 +35,16 @@ class CustomUserAdmin(UserAdmin):
                 ),
             },
         ),
+    )
+
+
+@admin.register(Grant)
+class GrantAdmin(UserStampedModelAdmin):
+    search_fields = ("title",)
+    autocomplete_fields = ("user",)
+    list_display = (
+        "title",
+        "user",
     )
 
 

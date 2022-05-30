@@ -7,12 +7,14 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from graphene.types.generic import GenericScalar
+from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from lukimgather.utils import gen_random_number, gen_random_string
 from user.models import EmailChangePin, EmailConfirmationPin, PasswordResetPin, User
+from user.serializers import GrantSerializer
 from user.types import PasswordResetPinType, UserType
 
 
@@ -516,3 +518,9 @@ class EmailChangeVerify(graphene.Mutation):
                 errors=None,
                 ok=True,
             )
+
+
+class GrantMutation(SerializerMutation):
+    class Meta:
+        serializer_class = GrantSerializer
+        fields = "__all__"

@@ -1,6 +1,7 @@
 from graphene_django.types import DjangoObjectType
 
-from user.models import PasswordResetPin, User
+from lukimgather.resolvers import staff_resolver
+from user.models import Grant, PasswordResetPin, User
 
 
 class UserType(DjangoObjectType):
@@ -19,3 +20,10 @@ class PasswordResetPinType(DjangoObjectType):
     class Meta:
         model = PasswordResetPin
         fields = ("identifier",)
+
+
+class GrantType(DjangoObjectType):
+    class Meta:
+        model = Grant
+        fields = "__all__"
+        default_resolver = staff_resolver

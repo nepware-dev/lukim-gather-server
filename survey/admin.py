@@ -47,7 +47,10 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "title",
         "category",
     )
-    list_filter = ("category",)
+    list_filter = (
+        "category",
+        "is_public",
+    )
 
     def save_model(self, request, obj, form, change):
         region_geo = obj.location if obj.location else obj.boundary
