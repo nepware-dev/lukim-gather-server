@@ -119,6 +119,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
     attachment = graphene.List(Upload, required=False)
+    attachment_link = graphene.List(graphene.Int, required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     status = Status()
@@ -141,6 +142,7 @@ class UpdateHappeningSurvey(graphene.Mutation):
     def mutate(self, info, id, data=None):
         try:
             with transaction.atomic():
+                attachment_links = data.pop("attachment_link", None)
                 attachments = data.pop("attachment", [])
                 region_geo = data.location if data.location else data.boundary
                 happening_survey_obj = HappeningSurvey.objects.get(id=id)
@@ -157,12 +159,20 @@ class UpdateHappeningSurvey(graphene.Mutation):
                     setattr(happening_survey_obj, key, value)
                 try:
                     happening_survey_obj.full_clean()
-                    if attachments:
-                        happening_survey_obj.attachment.set(attachments)
+                    if attachment_links is not None:
+                        happening_survey_obj.attachment.set(attachment_links)
                     if happening_survey_obj.region != survey_region:
                         happening_survey_obj.region = survey_region
                     happening_survey_obj.updated_by = info.context.user
                     happening_survey_obj.save()
+                    if attachments:
+                        for attachment in attachments:
+                            new_attachment = happening_survey_obj.attachment.create(
+                                media=attachment,
+                                title=attachment.name,
+                                type="image",
+                            )
+                            happening_survey_obj.attachment.add(new_attachment)
                 except ValidationError as e:
                     return UpdateHappeningSurvey(result=None, errors=e, ok=False)
         except Exception:
