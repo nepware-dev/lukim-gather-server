@@ -317,14 +317,14 @@ class PasswordResetChange(graphene.Mutation):
                     raise GraphQLError("Password reset pin has expired")
             raise GraphQLError("No matching active user pin found")
         else:
-            password_reset_pin_object.no_of_incorrect_attempts = 0
-            password_reset_pin_object.is_active = False
-            password_reset_pin_object.save()
             try:
                 validate_password(password=password, user=user)
             except ValidationError as e:
                 errors = list(e.messages)
                 raise GraphQLError(errors)
+            password_reset_pin_object.no_of_incorrect_attempts = 0
+            password_reset_pin_object.is_active = False
+            password_reset_pin_object.save()
             user.set_password(password)
             user.save()
             return PasswordResetChange(
@@ -506,11 +506,11 @@ class EmailChangeVerify(graphene.Mutation):
                     raise GraphQLError("Email change pin has expired")
             raise GraphQLError("No matching active email change request found")
         else:
+            if User.objects.filter(email=email_change_mail_object.new_email).exists():
+                raise GraphQLError("email already used for account creation")
             email_change_mail_object.no_of_incorrect_attempts = 0
             email_change_mail_object.is_active = False
             email_change_mail_object.save()
-            if User.objects.filter(email=email_change_mail_object.new_email).exists():
-                raise GraphQLError("email already used for account creation")
             user.email = email_change_mail_object.new_email
             user.save()
             return EmailChangeVerify(
