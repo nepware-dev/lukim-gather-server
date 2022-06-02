@@ -93,6 +93,7 @@ class APITest(TestBase):
                                 "location": str(geos.Point(1, 0)),
                                 "categoryId": self.category.id,
                                 "isPublic": False,
+                                "isTest": True,
                                 "attachment": [None, None],
                             },
                         },

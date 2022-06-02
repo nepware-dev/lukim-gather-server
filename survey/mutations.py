@@ -42,7 +42,8 @@ class HappeningSurveyInput(graphene.InputObjectType):
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     improvement = Improvement(required=False)
-    is_public = graphene.Boolean(default=True)
+    is_public = graphene.Boolean(default=True, required=False)
+    is_test = graphene.Boolean(default=False, required=False)
 
 
 class CreateHappeningSurvey(graphene.Mutation):
@@ -79,6 +80,7 @@ class CreateHappeningSurvey(graphene.Mutation):
                     boundary=data.boundary,
                     region=survey_region,
                     is_public=data.get("is_public", True),
+                    is_test=data.get("is_test", False),
                     created_by=None if anonymous else info.context.user,
                 )
                 if data.attachment:
