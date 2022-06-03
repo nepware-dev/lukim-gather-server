@@ -1,5 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.db import models
+from django.template import Context, Template
 from django.utils.translation import gettext_lazy as _
 
 from lukimgather.models import TimeStampedModel, UserStampedModel
@@ -51,3 +52,20 @@ class Feedback(UserStampedModel, TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class EmailTemplate(models.Model):
+    identifier = models.CharField(_("identifier"), max_length=50, unique=True)
+    subject = models.CharField(_("subject"), max_length=255)
+    html_message = RichTextField(_("html message"))
+    text_message = models.TextField(_("text message"))
+
+    def __str__(self):
+        return self.identifier
+
+    def get_email_contents(self, context):
+        html_template = Template(self.html_message)
+        text_template = Template(self.text_message)
+        html_message = html_template.render(Context(context))
+        text_message = text_template.render(Context(context))
+        return self.subject, html_message, text_message

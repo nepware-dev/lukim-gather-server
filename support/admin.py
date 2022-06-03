@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
-from support.models import Feedback, LegalDocument
+from support.models import EmailTemplate, Feedback, LegalDocument
 
 
 @admin.register(LegalDocument)
@@ -22,3 +22,18 @@ class FeedbackAdmin(UserStampedModelAdmin):
     class Meta:
         verbose_name = _("feedback")
         verbose_plural_name = _("feedbacks")
+
+
+@admin.register(EmailTemplate)
+class EmailTemplateAdmin(admin.ModelAdmin):
+    list_display = ("identifier",)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    class Meta:
+        verbose_name = _("email template")
+        verbose_plural_name = _("email templates")

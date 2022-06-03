@@ -13,6 +13,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from lukimgather.utils import gen_random_number, gen_random_string
+from support.models import EmailTemplate
 from user.models import EmailChangePin, EmailConfirmationPin, PasswordResetPin, User
 from user.serializers import GrantSerializer
 from user.types import PasswordResetPinType, UserType
@@ -206,11 +207,12 @@ class ResetUserPassword(graphene.Mutation):
                 "identifier": identifier,
             },
         )
-        template = get_template("mail/password_reset.txt")
-        message = template.render(
-            {"user": user, "password_reset_object": password_reset_pin_object}
+        subject, html_message, text_message = EmailTemplate.objects.get(
+            identifier="password_reset"
+        ).get_email_contents(
+            context={"user": user, "password_reset_object": password_reset_pin_object}
         )
-        user.email_user("Password reset pin", message)
+        user.email_user(subject, text_message, html_message=html_message)
         return ResetUserPassword(
             result={"detail": "Password reset email successfully send"},
             errors=None,
@@ -308,6 +310,13 @@ class PasswordResetChange(graphene.Mutation):
                 if not user.is_active:
                     raise GraphQLError("User is inactive")
                 elif user_only_password_reset_object.no_of_incorrect_attempts >= 5:
+                    if user.is_active:
+                        subject, html_message, text_message = EmailTemplate.objects.get(
+                            identifier="account_blocked"
+                        ).get_email_contents({"user": user})
+                        user.email_user(
+                            subject, text_message, html_message=html_message
+                        )
                     user.is_active = False
                     user.save()
                     raise GraphQLError("User is now inactive for trying too many times")
@@ -364,10 +373,12 @@ class EmailConfirm(graphene.Mutation):
                 "is_active": True,
             },
         )
-        template = get_template("mail/email_confirm.txt")
-        context = {"user": user, "email_confirm_object": email_confirm_pin_object}
-        message = template.render(context)
-        user.email_user("Email confirmation mail", message)
+        subject, html_message, text_message = EmailTemplate.objects.get(
+            identifier="email_confirm"
+        ).get_email_contents(
+            {"user": user, "email_confirm_object": email_confirm_pin_object}
+        )
+        user.email_user(subject, text_message, html_message=html_message)
         return EmailConfirm(
             result={"detail": "Email confirmation mail successfully send"},
             errors=None,
@@ -453,14 +464,15 @@ class EmailChange(graphene.Mutation):
                 "new_email": data["new_email"],
             },
         )
-        email_template = get_template("mail/email_change.txt")
-        context = {"email_change_object": email_change_pin_object}
-        message = email_template.render(context)
+        subject, html_message, text_message = EmailTemplate.objects.get(
+            identifier="email_change"
+        ).get_email_contents({"email_change_object": email_change_pin_object})
         send_mail(
-            _("Email change mail"),
-            message,
+            subject,
+            text_message,
             from_email=None,
             recipient_list=[email_change_pin_object.new_email],
+            html_message=html_message,
         )
         return EmailChange(
             result={"detail": "Email change mail successfully send"},

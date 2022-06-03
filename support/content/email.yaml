@@ -1,0 +1,70 @@
+# Special type of fixture files which is imported initially by using custom management command import_default_email_template.
+# Since fixture override content of model we need some way to handle old email template and also import new email template
+- model: support.EmailTemplate
+  pk: 1
+  fields:
+    identifier: email_change
+    subject: Email change mail
+    html_message: &email_change_content |
+      Dear {{ email_change_object.user.username }},
+
+      Recently you have requested to change your email address.
+      We have send this email to verify your email address.
+
+      If you haven't requested recently to change email address to this mail you can safely ignore this email.
+
+      Your email change request confirmation pin is {{ email_change_object.pin }}
+      Your pin will expire in 1 hour at {{email_change_object.pin_expiry_time }} UTC
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *email_change_content
+- model: support.EmailTemplate
+  pk: 2
+  fields:
+    identifier: email_confirm
+    subject: Email confirmation mail
+    html_message: &email_confirm_content |
+      Dear {{ user.username }}
+      Welcome to Lukim Gather,
+      Recently you have created new account with us.
+      We have send this email to verify your email address.
+
+      If you haven't sign up recently you can safely ignore this email. Your email address will not be used by anyone without verification.
+
+      Your email confirmation pin is {{ email_confirm_object.pin }}
+      Your pin will expire in 1 hour at {{email_confirm_object.pin_expiry_time }} UTC
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *email_confirm_content
+- model: support.EmailTemplate
+  pk: 3
+  fields:
+    identifier: password_reset
+    subject: Password reset pin mail
+    html_message: &password_reset_content |
+      Dear {{ user.username }}
+      You have recently requested for password reset email
+      If you have not requested password reset email you can safely ignore this email.
+
+      Your password reset pin is {{ password_reset_object.pin }}
+      Your pin will expire in 1 hour at {{password_reset_object.pin_expiry_time }} UTC
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *password_reset_content
+- model: support.EmailTemplate
+  pk: 4
+  fields:
+    identifier: account_blocked
+    subject: Account blocked mail
+    html_message: &account_blocked_content |
+      Dear {{ user.username }}
+      Your Account on Lukim Gather has been blocked.
+
+      To get support, please contact us at support@lukimgather.org.
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *account_blocked_content
