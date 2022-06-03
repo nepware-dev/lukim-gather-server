@@ -1,5 +1,6 @@
 import io
 import json
+from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
@@ -78,24 +79,37 @@ class APITest(TestBase):
                 }
             }
         """
-        response = self.client.post(
+        data_with_id = {
+            "id": str(uuid4()),
+            "title": "test title",
+            "description": "test description",
+            "sentiment": "\U0001f600",
+            "improvement": "INCREASING",
+            "location": str(geos.Point(1, 0)),
+            "categoryId": self.category.id,
+            "isPublic": False,
+            "isTest": True,
+            "attachment": [None, None],
+        }
+        data_without_id = {
+            "title": "test title",
+            "description": "test description",
+            "sentiment": "\U0001f600",
+            "improvement": "INCREASING",
+            "location": str(geos.Point(1, 0)),
+            "categoryId": self.category.id,
+            "isPublic": False,
+            "isTest": True,
+            "attachment": [None, None],
+        }
+        response_with_id = self.client.post(
             self.GRAPHQL_URL,
             data={
                 "operations": json.dumps(
                     {
                         "query": mutation,
                         "variables": {
-                            "data": {
-                                "title": "test title",
-                                "description": "test description",
-                                "sentiment": "\U0001f600",
-                                "improvement": "INCREASING",
-                                "location": str(geos.Point(1, 0)),
-                                "categoryId": self.category.id,
-                                "isPublic": False,
-                                "isTest": True,
-                                "attachment": [None, None],
-                            },
+                            "data": data_with_id,
                         },
                     }
                 ),
@@ -110,7 +124,30 @@ class APITest(TestBase):
             },
             **self.headers,
         )
-        self.assertEqual(response.status_code, 200)
+        response_without_id = self.client.post(
+            self.GRAPHQL_URL,
+            data={
+                "operations": json.dumps(
+                    {
+                        "query": mutation,
+                        "variables": {
+                            "data": data_without_id,
+                        },
+                    }
+                ),
+                "0": self.generate_photo_file(),
+                "1": self.generate_photo_file(),
+                "map": json.dumps(
+                    {
+                        "0": ["variables.data.attachment.0"],
+                        "1": ["variables.data.attachment.1"],
+                    }
+                ),
+            },
+            **self.headers,
+        )
+        self.assertResponseNoErrors(response_with_id)
+        self.assertResponseNoErrors(response_without_id)
 
     def test_survey_form_get(self):
         response = self.query(
