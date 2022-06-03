@@ -114,6 +114,7 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         related_name="happening_survey",
     )
     is_public = models.BooleanField(default=True)
+    is_test = models.BooleanField(default=False)
     data_dump = models.JSONField(blank=True, default=dict)
 
     def __str__(self):

@@ -6,6 +6,7 @@ from lukimgather.models import TimeStampedModel, UserStampedModel
 
 
 class LegalDocumentTypeChoice(models.TextChoices):
+    ABOUT = "about", _("About")
     TERMS_AND_CONDITIONS = "terms-and-conditions", _("Terms And Conditions")
     PRIVACY_POLICY = "privacy-policy", _("Privacy Policy")
     COOKIE_POLICY = "cookie-policy", _("Cookie Policy")

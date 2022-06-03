@@ -15,9 +15,11 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
         "code",
         "title",
     )
+    list_filter = ("created_at",)
     search_fields = (
         "code",
         "title",
+        "description",
     )
     formfield_overrides = {
         models.JSONField: {"widget": JSONEditorWidget},
@@ -27,6 +29,7 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
 @admin.register(Survey)
 class SurveyAdmin(UserStampedModelAdmin, OrderedModelAdmin):
     list_display = ("title", "move_up_down_links")
+    list_filter = ("created_at",)
     search_fields = ("title",)
 
 
@@ -49,7 +52,11 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     )
     list_filter = (
         "category",
+        "created_at",
+        "improvement",
         "is_public",
+        "is_test",
+        "status",
     )
 
     def save_model(self, request, obj, form, change):

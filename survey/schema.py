@@ -1,7 +1,9 @@
 import graphene
+from django.db.models import Q
 from graphene_django_extras import DjangoFilterPaginateListField
 
 from survey.filters import HappeningSurveyFilter, SurveyFilter
+from survey.models import HappeningSurvey
 from survey.mutations import (
     CreateHappeningSurvey,
     DeleteHappeningSurvey,
@@ -33,6 +35,16 @@ class SurveyQueries(graphene.ObjectType):
     survey_form = DjangoFilterPaginateListField(
         FormType, description="Return the survey form"
     )
+
+    @staticmethod
+    def resolve_happening_surveys(root, info, **kwargs):
+        if info.context.user.is_staff:
+            return HappeningSurvey.objects.all()
+        if info.context.user.is_authenticated:
+            return HappeningSurvey.objects.exclude(
+                ~Q(created_by=info.context.user), is_public=False
+            )
+        return HappeningSurvey.objects.filter(is_public=True)
 
 
 class SurveyMutations(graphene.ObjectType):
