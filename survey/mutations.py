@@ -34,6 +34,7 @@ class Improvement(graphene.Enum):
 
 
 class HappeningSurveyInput(graphene.InputObjectType):
+    id = graphene.UUID(description="uuid", require=False)
     category_id = graphene.Int(description="category id", required=True)
     title = graphene.String(description="title", required=True)
     description = graphene.String(description="description", required=False)
@@ -62,28 +63,34 @@ class CreateHappeningSurvey(graphene.Mutation):
     def mutate(self, info, anonymous, data):
         try:
             with transaction.atomic():
+                id = data.get("id", None)
                 region_geo = data.location if data.location else data.boundary
                 survey_region = (
                     Region.objects.filter(boundary__bbcontains=region_geo).first()
                     if region_geo
                     else None
                 )
-                survey = HappeningSurvey.objects.create(
-                    category_id=data.category_id,
-                    title=data.title,
-                    description=data.description,
-                    sentiment=data.sentiment,
-                    improvement=None
-                    if not data.improvement
-                    else data.improvement.value,
-                    location=data.location,
-                    boundary=data.boundary,
-                    region=survey_region,
-                    is_public=data.get("is_public", True),
-                    is_test=data.get("is_test", False),
-                    created_by=None if anonymous else info.context.user,
+                if id:
+                    survey_obj = HappeningSurvey.objects.create(
+                        id=id, category_id=data.get("category_id")
+                    )
+                else:
+                    survey_obj = HappeningSurvey.objects.create(
+                        category_id=data.get("category_id")
+                    )
+                survey_obj.title = data.get("title")
+                survey_obj.description = data.get("description")
+                survey_obj.sentiment = data.get("sentiment")
+                survey_obj.improvement = (
+                    None if not data.get("improvement") else data.improvement.value
                 )
-                if data.attachment:
+                survey_obj.location = data.get("location")
+                survey_obj.boundary = data.get("boundary")
+                survey_obj.region = survey_region
+                survey_obj.is_public = data.get("is_public", True)
+                survey_obj.is_test = data.get("is_test", False)
+                survey_obj.created_by = None if anonymous else info.context.user
+                if data.get("attachment"):
                     for file in data.attachment:
                         gallery = Gallery(
                             media=file,
@@ -91,11 +98,11 @@ class CreateHappeningSurvey(graphene.Mutation):
                             type="image",
                         )
                         gallery.save()
-                        survey.attachment.add(gallery)
-                survey.save()
+                        survey_obj.attachment.add(gallery)
+                survey_obj.save()
         except Exception:
             raise GraphQLError("Failed to create happening survey")
-        return CreateHappeningSurvey(result=survey, ok=True, errors=None)
+        return CreateHappeningSurvey(result=survey_obj, ok=True, errors=None)
 
 
 class DeleteHappeningSurvey(graphene.Mutation):
