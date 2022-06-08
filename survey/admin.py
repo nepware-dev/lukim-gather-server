@@ -14,6 +14,7 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
     list_display = (
         "code",
         "title",
+        "description",
     )
     list_filter = ("created_at",)
     search_fields = (
@@ -49,6 +50,12 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     list_display = (
         "title",
         "category",
+        "sentiment",
+        "improvement",
+        "status",
+        "is_public",
+        "is_test",
+        "created_at",
     )
     list_filter = (
         "category",
@@ -57,6 +64,14 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "is_public",
         "is_test",
         "status",
+    )
+    search_fields = (
+        "title",
+        "category__title",
+        "description",
+        "location",
+        "boundary",
+        "region__name",
     )
 
     def save_model(self, request, obj, form, change):
