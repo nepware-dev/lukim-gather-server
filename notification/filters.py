@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import Notification
+from .models import Notice, Notification
 
 
 class NotificationFilter(django_filters.FilterSet):
@@ -21,3 +21,13 @@ class NotificationFilter(django_filters.FilterSet):
         if self.request.user.is_anonymous:
             return parent.none()
         return parent.filter(recipient=self.request.user)
+
+
+class NoticeFilter(django_filters.FilterSet):
+    class Meta:
+        model = Notice
+        fields = {
+            "title": ["contains"],
+            "description": ["contains"],
+            "notice_type": ["exact"],
+        }

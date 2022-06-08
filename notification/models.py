@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -5,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from lukimgather.models import TimeStampedModel
+from lukimgather.models import TimeStampedModel, UserStampedModel
 
 
 class Notification(TimeStampedModel):
@@ -73,3 +74,22 @@ class Notification(TimeStampedModel):
     class Meta:
         ordering = ("-created_at",)
         index_together = ("recipient", "has_read")
+
+
+class Notice(UserStampedModel, TimeStampedModel):
+    class NoticeTypeChoice(models.TextChoices):
+        USER = "user", _("User")
+        PUBLIC = "public", _("Public")
+
+    title = models.CharField(_("title"), max_length=255)
+    description = RichTextField(_("description"), blank=True, null=True, default=None)
+    notice_type = models.CharField(
+        _("notice type"),
+        max_length=6,
+        default="public",
+        choices=NoticeTypeChoice.choices,
+    )
+    is_active = models.BooleanField(_("active"), default=True)
+
+    def __str__(self):
+        return self.title

@@ -3,7 +3,7 @@ from django.conf import settings
 from graphene_django.debug import DjangoDebug
 
 from gallery.schema import UploadFileMutation
-from notification.schema import NotificationQueries
+from notification.schema import NoticeQueries, NotificationQueries
 from region.schema import RegionQueries
 from support.schema import SupportMutations, SupportQueries
 from survey.schema import SurveyMutations, SurveyQueries
@@ -12,6 +12,7 @@ from user.schema import UserMutations, UserQueries
 
 class Query(
     NotificationQueries,
+    NoticeQueries,
     SupportQueries,
     SurveyQueries,
     RegionQueries,

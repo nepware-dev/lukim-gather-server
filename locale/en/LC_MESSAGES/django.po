@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-21 05:51+0000\n"
+"POT-Creation-Date: 2022-06-08 10:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,127 +18,426 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: gallery/models.py:8
+msgid "Video"
+msgstr ""
+
+#: gallery/models.py:9
+msgid "Image"
+msgstr ""
+
+#: gallery/models.py:10
+msgid "Other"
+msgstr ""
+
+#: gallery/models.py:14 survey/models.py:41
+msgid "Title"
+msgstr ""
+
+#: gallery/models.py:16
+msgid "Media Type"
+msgstr ""
+
+#: gallery/models.py:22
+msgid "Media File"
+msgstr ""
+
+#: gallery/models.py:32
+msgid "Gallery"
+msgstr ""
+
+#: gallery/models.py:33
+msgid "Galleries"
+msgstr ""
+
 #: lukimgather/auth_validators.py:12
 msgid ""
 "Enter a valid username. This value may contain only English letters, "
 "numbers, and ./-/_ characters."
 msgstr ""
 
-#: lukimgather/settings.py:206
+#: lukimgather/models.py:39
+msgid "code"
+msgstr ""
+
+#: lukimgather/settings.py:262
 msgid "English"
 msgstr ""
 
-#: lukimgather/settings.py:207
+#: lukimgather/settings.py:263
 msgid "Hiri Motu"
 msgstr ""
 
-#: lukimgather/settings.py:208
+#: lukimgather/settings.py:264
 msgid "Tok Pisin"
 msgstr ""
 
-#: user/models.py:20 user/mutations.py:21 user/mutations.py:31
-#: user/mutations.py:42 user/mutations.py:49 user/mutations.py:59
+#: notification/admin.py:26 notification/apps.py:8
+msgid "notification"
+msgstr ""
+
+#: notification/admin.py:27
+msgid "notifications"
+msgstr ""
+
+#: notification/models.py:18
+msgid "recipient"
+msgstr ""
+
+#: notification/models.py:21
+msgid "read"
+msgstr ""
+
+#: notification/models.py:29
+msgid "actor content type"
+msgstr ""
+
+#: notification/models.py:32
+msgid "actor object id"
+msgstr ""
+
+#: notification/models.py:37
+msgid "verb"
+msgstr ""
+
+#: notification/models.py:38 notification/models.py:85 support/models.py:23
+#: support/models.py:51 survey/models.py:16 user/models.py:192
+msgid "description"
+msgstr ""
+
+#: notification/models.py:40
+msgid "notification type"
+msgstr ""
+
+#: notification/models.py:42
+msgid "timestamp"
+msgstr ""
+
+#: notification/models.py:51
+msgid "action object content type"
+msgstr ""
+
+#: notification/models.py:54
+msgid "action object object id"
+msgstr ""
+
+#: notification/models.py:67
+msgid "target content type"
+msgstr ""
+
+#: notification/models.py:70
+msgid "target object id"
+msgstr ""
+
+#: notification/models.py:81
+msgid "User"
+msgstr ""
+
+#: notification/models.py:82
+msgid "Public"
+msgstr ""
+
+#: notification/models.py:84 support/models.py:50 survey/models.py:14
+#: survey/models.py:29 survey/models.py:82 user/models.py:191
+msgid "title"
+msgstr ""
+
+#: notification/models.py:87
+msgid "notice type"
+msgstr ""
+
+#: notification/models.py:92
+msgid "active"
+msgstr ""
+
+#: region/models.py:7
+msgid "name"
+msgstr ""
+
+#: region/models.py:10
+msgid "boundary"
+msgstr ""
+
+#: region/models.py:16
+msgid "parent region"
+msgstr ""
+
+#: support/admin.py:14
+msgid "legal document"
+msgstr ""
+
+#: support/admin.py:15
+msgid "legal documents"
+msgstr ""
+
+#: support/admin.py:23
+msgid "feedback"
+msgstr ""
+
+#: support/admin.py:24
+msgid "feedbacks"
+msgstr ""
+
+#: support/admin.py:38
+msgid "email template"
+msgstr ""
+
+#: support/admin.py:39
+msgid "email templates"
+msgstr ""
+
+#: support/models.py:10
+msgid "About"
+msgstr ""
+
+#: support/models.py:11
+msgid "Terms And Conditions"
+msgstr ""
+
+#: support/models.py:12
+msgid "Privacy Policy"
+msgstr ""
+
+#: support/models.py:13
+msgid "Cookie Policy"
+msgstr ""
+
+#: support/models.py:18
+msgid "document type"
+msgstr ""
+
+#: support/models.py:58
+msgid "identifier"
+msgstr ""
+
+#: support/models.py:59
+msgid "subject"
+msgstr ""
+
+#: support/models.py:60
+msgid "html message"
+msgstr ""
+
+#: support/models.py:61
+msgid "text message"
+msgstr ""
+
+#: survey/models.py:18
+msgid "XForms"
+msgstr ""
+
+#: survey/models.py:24
+msgid "Form"
+msgstr ""
+
+#: survey/models.py:25
+msgid "Forms"
+msgstr ""
+
+#: survey/models.py:30
+msgid "answer"
+msgstr ""
+
+#: survey/models.py:36
+msgid "Survey"
+msgstr ""
+
+#: survey/models.py:37
+msgid "Surveys"
+msgstr ""
+
+#: survey/models.py:43 survey/models.py:85
+msgid "Description"
+msgstr ""
+
+#: survey/models.py:56
+msgid "Protected area category"
+msgstr ""
+
+#: survey/models.py:57
+msgid "Protected area categories"
+msgstr ""
+
+#: survey/models.py:61
+msgid "Approved"
+msgstr ""
+
+#: survey/models.py:62
+msgid "Rejected"
+msgstr ""
+
+#: survey/models.py:63
+msgid "Pending"
+msgstr ""
+
+#: survey/models.py:67
+msgid "Increasing"
+msgstr ""
+
+#: survey/models.py:68
+msgid "Same"
+msgstr ""
+
+#: survey/models.py:69
+msgid "Decreasing"
+msgstr ""
+
+#: survey/models.py:87
+msgid "Sentiments"
+msgstr ""
+
+#: survey/models.py:89
+msgid "Attachments"
+msgstr ""
+
+#: survey/models.py:91
+msgid "Location"
+msgstr ""
+
+#: survey/models.py:93
+msgid "Location Boundary"
+msgstr ""
+
+#: survey/models.py:96
+msgid "Happening Survey Answer Status"
+msgstr ""
+
+#: survey/models.py:102
+msgid "Happening Survey Improvement Status"
+msgstr ""
+
+#: survey/models.py:125
+msgid "Happening survey"
+msgstr ""
+
+#: survey/models.py:126
+msgid "Happening surveys"
+msgstr ""
+
+#: user/admin.py:11
+msgid "Additional Fields"
+msgstr ""
+
+#: user/models.py:23 user/mutations.py:43 user/mutations.py:53
+#: user/mutations.py:64 user/mutations.py:71 user/mutations.py:81
 msgid "Username"
 msgstr ""
 
-#: user/models.py:24
+#: user/models.py:27
 msgid ""
 "Required. Length can be between 5 to 20. Letters, digits and ./-/_ only."
 msgstr ""
 
-#: user/models.py:31
+#: user/models.py:34
 msgid "A user with that username already exists."
 msgstr ""
 
-#: user/models.py:35
+#: user/models.py:38
 msgid "Email Address"
 msgstr ""
 
-#: user/models.py:38
+#: user/models.py:41
 msgid "A user with that email already exists."
 msgstr ""
 
-#: user/models.py:42
+#: user/models.py:45
 msgid "Active"
 msgstr ""
 
-#: user/models.py:45
+#: user/models.py:48
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: user/models.py:87 user/models.py:104 user/models.py:120 user/mutations.py:33
-#: user/mutations.py:51 user/mutations.py:61
+#: user/models.py:52
+msgid "organization"
+msgstr ""
+
+#: user/models.py:55
+msgid "Avatar"
+msgstr ""
+
+#: user/models.py:142 user/models.py:159 user/models.py:175
+#: user/mutations.py:55 user/mutations.py:73 user/mutations.py:83
 msgid "No Of Incorrect Attempts"
 msgstr ""
 
-#: user/models.py:90 user/models.py:107 user/models.py:123 user/mutations.py:35
-#: user/mutations.py:53 user/mutations.py:63 user/mutations.py:74
+#: user/models.py:145 user/models.py:162 user/models.py:178
+#: user/mutations.py:57 user/mutations.py:75 user/mutations.py:85
+#: user/mutations.py:96
 msgid "Pin"
 msgstr ""
 
-#: user/models.py:92 user/models.py:109 user/models.py:125 user/mutations.py:36
-#: user/mutations.py:54
+#: user/models.py:147 user/models.py:164 user/models.py:180
+#: user/mutations.py:58 user/mutations.py:76
 msgid "Pin Expiry Time"
 msgstr ""
 
-#: user/models.py:93 user/models.py:110 user/models.py:127 user/mutations.py:37
-#: user/mutations.py:55 user/mutations.py:65
+#: user/models.py:148 user/models.py:165 user/models.py:182
+#: user/mutations.py:59 user/mutations.py:77 user/mutations.py:87
 msgid "Is Active"
 msgstr ""
 
-#: user/models.py:94 user/mutations.py:38 user/mutations.py:45
+#: user/models.py:149 user/mutations.py:60 user/mutations.py:67
 msgid "Identifier"
 msgstr ""
 
-#: user/mutations.py:16
+#: user/mutations.py:31
+msgid "First name"
+msgstr ""
+
+#: user/mutations.py:32
+msgid "Last name"
+msgstr ""
+
+#: user/mutations.py:33
+msgid "Organization"
+msgstr ""
+
+#: user/mutations.py:38
 msgid "First Name"
 msgstr ""
 
-#: user/mutations.py:17
+#: user/mutations.py:39
 msgid "Last Name"
 msgstr ""
 
-#: user/mutations.py:18
+#: user/mutations.py:40
 msgid "Email"
 msgstr ""
 
-#: user/mutations.py:19 user/mutations.py:25 user/mutations.py:43
-#: user/mutations.py:70
+#: user/mutations.py:41 user/mutations.py:47 user/mutations.py:65
+#: user/mutations.py:92
 msgid "Password"
 msgstr ""
 
-#: user/mutations.py:20 user/mutations.py:27 user/mutations.py:44
+#: user/mutations.py:42 user/mutations.py:49 user/mutations.py:66
 msgid "Retype Password"
 msgstr ""
 
-#: user/mutations.py:26
+#: user/mutations.py:48
 msgid "New Password"
 msgstr ""
 
-#: user/mutations.py:64 user/mutations.py:69
+#: user/mutations.py:86 user/mutations.py:91
 msgid "New Email"
 msgstr ""
 
-#: user/mutations.py:80
+#: user/mutations.py:102
 msgid "Fields required to create a user."
 msgstr ""
 
-#: user/mutations.py:107
+#: user/mutations.py:128
 msgid "Fields required to change password."
 msgstr ""
 
-#: user/mutations.py:138 user/mutations.py:183 user/mutations.py:261
-#: user/mutations.py:357 user/mutations.py:410 user/mutations.py:487
-#: user/mutations.py:534
+#: user/mutations.py:184 user/mutations.py:226 user/mutations.py:278
+#: user/mutations.py:349 user/mutations.py:392 user/mutations.py:443
+#: user/mutations.py:487
 msgid "Fields required to reset password."
 msgstr ""
 
-#: user/mutations.py:519
-msgid "Email change mail"
-msgstr ""
-
-#: user/schema.py:21
+#: user/schema.py:27
 msgid "Return the currently authenticated user."
 msgstr ""

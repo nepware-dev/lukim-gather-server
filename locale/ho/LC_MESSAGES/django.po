@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 07:46+0000\n"
+"POT-Creation-Date: 2022-06-08 10:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,16 +59,106 @@ msgstr ""
 msgid "code"
 msgstr ""
 
-#: lukimgather/settings.py:255
+#: lukimgather/settings.py:262
 msgid "English"
 msgstr ""
 
-#: lukimgather/settings.py:256
+#: lukimgather/settings.py:263
 msgid "Hiri Motu"
 msgstr ""
 
-#: lukimgather/settings.py:257
+#: lukimgather/settings.py:264
 msgid "Tok Pisin"
+msgstr ""
+
+#: notification/admin.py:26 notification/apps.py:8
+msgid "notification"
+msgstr ""
+
+#: notification/admin.py:27
+msgid "notifications"
+msgstr ""
+
+#: notification/models.py:18
+msgid "recipient"
+msgstr ""
+
+#: notification/models.py:21
+msgid "read"
+msgstr ""
+
+#: notification/models.py:29
+msgid "actor content type"
+msgstr ""
+
+#: notification/models.py:32
+msgid "actor object id"
+msgstr ""
+
+#: notification/models.py:37
+msgid "verb"
+msgstr ""
+
+#: notification/models.py:38 notification/models.py:85 support/models.py:23
+#: support/models.py:51 survey/models.py:16 user/models.py:192
+msgid "description"
+msgstr ""
+
+#: notification/models.py:40
+msgid "notification type"
+msgstr ""
+
+#: notification/models.py:42
+msgid "timestamp"
+msgstr ""
+
+#: notification/models.py:51
+msgid "action object content type"
+msgstr ""
+
+#: notification/models.py:54
+msgid "action object object id"
+msgstr ""
+
+#: notification/models.py:67
+msgid "target content type"
+msgstr ""
+
+#: notification/models.py:70
+msgid "target object id"
+msgstr ""
+
+#: notification/models.py:81
+msgid "User"
+msgstr ""
+
+#: notification/models.py:82
+msgid "Public"
+msgstr ""
+
+#: notification/models.py:84 support/models.py:50 survey/models.py:14
+#: survey/models.py:29 survey/models.py:82 user/models.py:191
+msgid "title"
+msgstr ""
+
+#: notification/models.py:87
+msgid "notice type"
+msgstr ""
+
+#: notification/models.py:92
+msgid "active"
+msgstr ""
+
+#: region/models.py:7
+msgid "name"
+msgstr ""
+
+#: region/models.py:10
+msgid "boundary"
+msgstr ""
+
+#: region/models.py:16
+msgid "parent region"
 msgstr ""
 
 #: support/admin.py:14
@@ -87,29 +177,48 @@ msgstr ""
 msgid "feedbacks"
 msgstr ""
 
-#: support/models.py:9
-msgid "Terms And Conditions"
+#: support/admin.py:38
+msgid "email template"
+msgstr ""
+
+#: support/admin.py:39
+msgid "email templates"
 msgstr ""
 
 #: support/models.py:10
-msgid "Privacy Policy"
+msgid "About"
 msgstr ""
 
 #: support/models.py:11
+msgid "Terms And Conditions"
+msgstr ""
+
+#: support/models.py:12
+msgid "Privacy Policy"
+msgstr ""
+
+#: support/models.py:13
 msgid "Cookie Policy"
 msgstr ""
 
-#: support/models.py:16
+#: support/models.py:18
 msgid "document type"
 msgstr ""
 
-#: support/models.py:21 support/models.py:49 survey/models.py:16
-msgid "description"
+#: support/models.py:58
+msgid "identifier"
 msgstr ""
 
-#: support/models.py:48 survey/models.py:14 survey/models.py:29
-#: survey/models.py:82
-msgid "title"
+#: support/models.py:59
+msgid "subject"
+msgstr ""
+
+#: support/models.py:60
+msgid "html message"
+msgstr ""
+
+#: support/models.py:61
+msgid "text message"
 msgstr ""
 
 #: survey/models.py:18
@@ -196,142 +305,138 @@ msgstr ""
 msgid "Happening Survey Improvement Status"
 msgstr ""
 
-#: survey/models.py:116
+#: survey/models.py:125
 msgid "Happening survey"
 msgstr ""
 
-#: survey/models.py:117
+#: survey/models.py:126
 msgid "Happening surveys"
 msgstr ""
 
-#: user/admin.py:9
+#: user/admin.py:11
 msgid "Additional Fields"
 msgstr ""
 
-#: user/models.py:20 user/mutations.py:39 user/mutations.py:49
-#: user/mutations.py:60 user/mutations.py:67 user/mutations.py:77
+#: user/models.py:23 user/mutations.py:43 user/mutations.py:53
+#: user/mutations.py:64 user/mutations.py:71 user/mutations.py:81
 msgid "Username"
 msgstr ""
 
-#: user/models.py:24
+#: user/models.py:27
 msgid ""
 "Required. Length can be between 5 to 20. Letters, digits and ./-/_ only."
 msgstr ""
 
-#: user/models.py:31
+#: user/models.py:34
 msgid "A user with that username already exists."
 msgstr ""
 
-#: user/models.py:35
+#: user/models.py:38
 msgid "Email Address"
 msgstr ""
 
-#: user/models.py:38
+#: user/models.py:41
 msgid "A user with that email already exists."
 msgstr ""
 
-#: user/models.py:42
+#: user/models.py:45
 msgid "Active"
 msgstr ""
 
-#: user/models.py:45
+#: user/models.py:48
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: user/models.py:49
+#: user/models.py:52
 msgid "organization"
 msgstr ""
 
-#: user/models.py:52
+#: user/models.py:55
 msgid "Avatar"
 msgstr ""
 
-#: user/models.py:97 user/models.py:114 user/models.py:130 user/mutations.py:51
-#: user/mutations.py:69 user/mutations.py:79
+#: user/models.py:142 user/models.py:159 user/models.py:175
+#: user/mutations.py:55 user/mutations.py:73 user/mutations.py:83
 msgid "No Of Incorrect Attempts"
 msgstr ""
 
-#: user/models.py:100 user/models.py:117 user/models.py:133
-#: user/mutations.py:53 user/mutations.py:71 user/mutations.py:81
-#: user/mutations.py:92
+#: user/models.py:145 user/models.py:162 user/models.py:178
+#: user/mutations.py:57 user/mutations.py:75 user/mutations.py:85
+#: user/mutations.py:96
 msgid "Pin"
 msgstr ""
 
-#: user/models.py:102 user/models.py:119 user/models.py:135
-#: user/mutations.py:54 user/mutations.py:72
+#: user/models.py:147 user/models.py:164 user/models.py:180
+#: user/mutations.py:58 user/mutations.py:76
 msgid "Pin Expiry Time"
 msgstr ""
 
-#: user/models.py:103 user/models.py:120 user/models.py:137
-#: user/mutations.py:55 user/mutations.py:73 user/mutations.py:83
+#: user/models.py:148 user/models.py:165 user/models.py:182
+#: user/mutations.py:59 user/mutations.py:77 user/mutations.py:87
 msgid "Is Active"
 msgstr ""
 
-#: user/models.py:104 user/mutations.py:56 user/mutations.py:63
+#: user/models.py:149 user/mutations.py:60 user/mutations.py:67
 msgid "Identifier"
 msgstr ""
 
-#: user/mutations.py:27
+#: user/mutations.py:31
 msgid "First name"
 msgstr ""
 
-#: user/mutations.py:28
+#: user/mutations.py:32
 msgid "Last name"
 msgstr ""
 
-#: user/mutations.py:29
+#: user/mutations.py:33
 msgid "Organization"
 msgstr ""
 
-#: user/mutations.py:34
+#: user/mutations.py:38
 msgid "First Name"
 msgstr ""
 
-#: user/mutations.py:35
+#: user/mutations.py:39
 msgid "Last Name"
 msgstr ""
 
-#: user/mutations.py:36
+#: user/mutations.py:40
 msgid "Email"
 msgstr ""
 
-#: user/mutations.py:37 user/mutations.py:43 user/mutations.py:61
-#: user/mutations.py:88
+#: user/mutations.py:41 user/mutations.py:47 user/mutations.py:65
+#: user/mutations.py:92
 msgid "Password"
 msgstr ""
 
-#: user/mutations.py:38 user/mutations.py:45 user/mutations.py:62
+#: user/mutations.py:42 user/mutations.py:49 user/mutations.py:66
 msgid "Retype Password"
 msgstr ""
 
-#: user/mutations.py:44
+#: user/mutations.py:48
 msgid "New Password"
 msgstr ""
 
-#: user/mutations.py:82 user/mutations.py:87
+#: user/mutations.py:86 user/mutations.py:91
 msgid "New Email"
 msgstr ""
 
-#: user/mutations.py:98
+#: user/mutations.py:102
 msgid "Fields required to create a user."
 msgstr ""
 
-#: user/mutations.py:125
+#: user/mutations.py:128
 msgid "Fields required to change password."
 msgstr ""
 
-#: user/mutations.py:177 user/mutations.py:222 user/mutations.py:300
-#: user/mutations.py:396 user/mutations.py:449 user/mutations.py:526
-#: user/mutations.py:573
+#: user/mutations.py:184 user/mutations.py:226 user/mutations.py:278
+#: user/mutations.py:349 user/mutations.py:392 user/mutations.py:443
+#: user/mutations.py:487
 msgid "Fields required to reset password."
 msgstr ""
 
-#: user/mutations.py:558
-msgid "Email change mail"
-msgstr ""
-
-#: user/schema.py:24
+#: user/schema.py:27
 msgid "Return the currently authenticated user."
 msgstr ""

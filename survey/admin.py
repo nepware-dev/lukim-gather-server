@@ -15,6 +15,9 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
         "code",
         "title",
         "description",
+        "created_at",
+        "created_by",
+        "updated_by",
     )
     list_filter = ("created_at",)
     search_fields = (
@@ -29,7 +32,13 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
 
 @admin.register(Survey)
 class SurveyAdmin(UserStampedModelAdmin, OrderedModelAdmin):
-    list_display = ("title", "move_up_down_links")
+    list_display = (
+        "title",
+        "move_up_down_links",
+        "created_at",
+        "created_by",
+        "updated_by",
+    )
     list_filter = ("created_at",)
     search_fields = ("title",)
 
@@ -56,6 +65,8 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "is_public",
         "is_test",
         "created_at",
+        "created_by",
+        "updated_by",
     )
     list_filter = (
         "category",
