@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from lukimgather.admin import UserStampedModelAdmin
 
-from .models import Notification
+from .models import Notice, Notification
 
 
 @admin.register(Notification)
@@ -25,3 +25,26 @@ class NotificationAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = _("notification")
         verbose_plural_name = _("notifications")
+
+
+@admin.register(Notice)
+class NoticeAdmin(UserStampedModelAdmin):
+    list_display = (
+        "title",
+        "notice_type",
+        "is_active",
+        "created_by",
+        "updated_by",
+        "created_at",
+        "modified_at",
+    )
+    search_fields = (
+        "title",
+        "description",
+    )
+    list_filter = (
+        "notice_type",
+        "is_active",
+        "created_at",
+        "modified_at",
+    )
