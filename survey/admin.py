@@ -31,10 +31,9 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
 
 
 @admin.register(Survey)
-class SurveyAdmin(UserStampedModelAdmin, OrderedModelAdmin):
+class SurveyAdmin(UserStampedModelAdmin):
     list_display = (
         "title",
-        "move_up_down_links",
         "created_at",
         "created_by",
         "updated_by",
@@ -59,6 +58,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     list_display = (
         "title",
         "category",
+        "region",
         "sentiment",
         "improvement",
         "status",
@@ -70,6 +70,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     )
     list_filter = (
         "category",
+        "region",
         "created_at",
         "improvement",
         "is_public",
