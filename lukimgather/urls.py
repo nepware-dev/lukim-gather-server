@@ -6,6 +6,7 @@ from django.urls import include, path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_file_upload.django import FileUploadGraphQLView
 
+from survey.views import TileView
 from user.views import UserInfoView
 
 from .schema import schema
@@ -30,6 +31,11 @@ urlpatterns += [
     path("api/user", UserInfoView.as_view()),
     path("accounts/", include("allauth.urls")),
     path("generate_204/", generate_204, name="generate-204"),
+    path(
+        "tiles/<int:z>/<int:x>/<int:y>",
+        TileView.as_view(),
+        name="happening-surveys-tile",
+    ),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
