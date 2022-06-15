@@ -190,6 +190,9 @@ class Grant(UserStampedModel, TimeStampedModel):
     )
     title = models.CharField(_("title"), max_length=255)
     description = RichTextField(_("description"), null=True, blank=True, default=None)
+    organization = models.ManyToManyField(
+        "organization.Organization", blank=True, verbose_name=_("Organizations")
+    )
 
     def __str__(self):
         return self.title

@@ -79,6 +79,7 @@ DJANGO_APPS = [
 INTERNAL_APPS = [
     "gallery",
     "notification",
+    "organization",
     "region",
     "survey",
     "support",
