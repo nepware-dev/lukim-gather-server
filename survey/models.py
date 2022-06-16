@@ -2,6 +2,7 @@ import uuid
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.gis.db.models import MultiPolygonField, PointField
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
@@ -119,6 +120,27 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            cls = self.__class__
+            try:
+                old = cls.objects.get(pk=self.pk)
+            except ObjectDoesNotExist:
+                old = None
+            changed_fields = []
+            for field in cls._meta.get_fields():
+                field_name = field.name
+                try:
+                    old_val = getattr(old, field_name)
+                    new_val = getattr(self, field_name)
+                    if old_val != new_val:
+                        changed_fields.append(field_name)
+                except Exception:
+                    pass
+            if changed_fields:
+                kwargs["update_fields"] = changed_fields
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["-created_at"]

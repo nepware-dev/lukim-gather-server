@@ -28,8 +28,11 @@ class Notification(TimeStampedModel):
         on_delete=models.CASCADE,
         verbose_name=_("actor content type"),
     )
-    actor_object_id = models.PositiveIntegerField(
-        _("actor object id"), null=True, blank=True
+    actor_object_id = models.CharField(
+        _("actor object id"),
+        null=True,
+        blank=True,
+        max_length=36,
     )
     actor = GenericForeignKey("actor_content_type", "actor_object_id")
 
@@ -50,8 +53,11 @@ class Notification(TimeStampedModel):
         on_delete=models.CASCADE,
         verbose_name=_("action object content type"),
     )
-    action_object_object_id = models.PositiveIntegerField(
-        _("action object object id"), null=True, blank=True
+    action_object_object_id = models.CharField(
+        _("action object object id"),
+        null=True,
+        blank=True,
+        max_length=36,
     )
     action_object = GenericForeignKey(
         "action_object_content_type", "action_object_object_id"
@@ -66,8 +72,11 @@ class Notification(TimeStampedModel):
         on_delete=models.CASCADE,
         verbose_name=_("target content type"),
     )
-    target_object_id = models.PositiveIntegerField(
-        _("target object id"), null=True, blank=True
+    target_object_id = models.CharField(
+        _("target object id"),
+        null=True,
+        blank=True,
+        max_length=36,
     )
     target = GenericForeignKey("target_content_type", "target_object_id")
 
