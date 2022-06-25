@@ -120,7 +120,7 @@ class User(AbstractUser):
             notification_type=notification_type,
             timestamp=timestamp,
             action_object=action_object,
-            target_content_object=target,
+            target=target,
         )
 
     def celery_email_user(self, subject, message, from_email=None, **kwargs):

@@ -14,6 +14,10 @@ class APITest(TestBase):
         users[0].set_password(cls.activated_initial_password)
         users[0].save()
         cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
+        notifications = cls.baker.make(
+            "notification.Notification", recipient=users[0], _quantity=5
+        )
+        cls.notification = notifications.pop()
 
     def test_get_notice(self):
         response = self.query(
@@ -27,6 +31,45 @@ class APITest(TestBase):
                 }
             }
             """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_get_notification_unread_count(self):
+        response = self.query(
+            """
+                query {
+                    notificationUnreadCount
+                }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_get_notification_mark_as_read(self):
+        response = self.query(
+            """
+                mutation {
+                    markAsRead(all:true) {
+                        detail
+                    }
+                }
+            """,
+            input_data={"pk": self.notification.pk},
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_notification_mark_all_as_read(self):
+        response = self.query(
+            """
+                mutation {
+                    markAsRead(all:true) {
+                        detail
+                    }
+                }
+            """,
+            input_data={"all": "true"},
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
