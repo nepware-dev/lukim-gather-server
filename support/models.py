@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import gettext_lazy as _
+from ordered_model.models import OrderedModel
 
 from lukimgather.models import TimeStampedModel, UserStampedModel
 
@@ -52,6 +53,50 @@ class Feedback(UserStampedModel, TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class FrequentlyAskedQuestion(UserStampedModel, TimeStampedModel, OrderedModel):
+    question = models.TextField(_("question"))
+    answer = RichTextField(_("answer"))
+
+    def __str__(self):
+        return self.question
+
+    class Meta(OrderedModel.Meta):
+        pass
+
+
+class ResourceTag(UserStampedModel, TimeStampedModel, OrderedModel):
+    title = models.CharField(_("title"), max_length=50)
+
+    def __str__(self):
+        return self.title
+
+    class Meta(OrderedModel.Meta):
+        pass
+
+
+class Resource(UserStampedModel, TimeStampedModel, OrderedModel):
+    class ResourceTypeChoices(models.TextChoices):
+        ATTACHMENT = "attachment", _("Attachment")
+        VIDEO = "video", _("Video")
+
+    title = models.TextField(_("title"), max_length=255)
+    description = RichTextField(_("description"))
+    resource_type = models.CharField(
+        _("resource type"), max_length=10, choices=ResourceTypeChoices.choices
+    )
+    video_url = models.URLField(_("video url"), null=True, blank=True, default=None)
+    attachment = models.FileField(_("attachment"), null=True, blank=True, default=None)
+    tags = models.ManyToManyField(
+        "ResourceTag", related_name="resources", verbose_name=_("resource tags")
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta(OrderedModel.Meta):
+        pass
 
 
 class EmailTemplate(models.Model):
