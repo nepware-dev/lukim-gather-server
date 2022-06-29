@@ -42,3 +42,50 @@ class APITest(TestBase):
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
+
+    def test_frequently_asked_question_get(self):
+        response = self.query(
+            """
+            query {
+              frequentlyAskedQuestion {
+                id
+                question
+                answer
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_resource_tag_get(self):
+        response = self.query(
+            """
+            query {
+              resourceTag {
+                id
+                title
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_resource_get(self):
+        response = self.query(
+            """
+            query {
+              resource {
+                id
+                title
+                description
+                resourceType
+                attachment
+                videoUrl
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)

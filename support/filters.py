@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import LegalDocument, LegalDocumentTypeChoice
+from .models import LegalDocument, LegalDocumentTypeChoice, Resource
 
 
 class LegalDocumentFilter(django_filters.FilterSet):
@@ -12,3 +12,12 @@ class LegalDocumentFilter(django_filters.FilterSet):
             "id",
             "document_type",
         ]
+
+
+class ResourceFilter(django_filters.FilterSet):
+    class Meta:
+        model = Resource
+        fields = {
+            "resource_type": ["exact"],
+            "tags": ["exact"],
+        }

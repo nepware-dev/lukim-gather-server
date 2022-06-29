@@ -1,9 +1,17 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
+from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
-from support.models import EmailTemplate, Feedback, LegalDocument
+from support.models import (
+    EmailTemplate,
+    Feedback,
+    FrequentlyAskedQuestion,
+    LegalDocument,
+    Resource,
+    ResourceTag,
+)
 
 
 @admin.register(LegalDocument)
@@ -22,6 +30,43 @@ class FeedbackAdmin(UserStampedModelAdmin):
     class Meta:
         verbose_name = _("feedback")
         verbose_plural_name = _("feedbacks")
+
+
+@admin.register(FrequentlyAskedQuestion)
+class FrequentlyAskedQuestionAdmin(
+    UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin
+):
+    list_display = ("question", "move_up_down_links")
+
+    class Meta:
+        verbose_name = _("frequently asked question")
+        verbose_plural_name = _("frequently asked questions")
+
+
+@admin.register(ResourceTag)
+class ResourceTagAdmin(UserStampedModelAdmin, OrderedModelAdmin):
+    list_display = ("title", "move_up_down_links")
+    search_fields = ("title",)
+
+    class Meta:
+        verbose_name = _("resource")
+        verbose_plural_name = _("resource tags")
+
+
+@admin.register(Resource)
+class ResourceAdmin(UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin):
+    list_display = (
+        "title",
+        "resource_type",
+        "video_url",
+        "attachment",
+        "move_up_down_links",
+    )
+    autocomplete_fields = ("tags",)
+
+    class Meta:
+        verbose_name = _("resource")
+        verbose_plural_name = _("resources")
 
 
 @admin.register(EmailTemplate)
