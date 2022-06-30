@@ -23,6 +23,12 @@ class ResourceType(DjangoObjectType):
         description = "Type defination for a resource"
         fields = "__all__"
 
+    def resolve_attachment(self, info):
+        if self.attachment and self.attachment.url:
+            return info.context.build_absolute_uri(self.attachment.url)
+        else:
+            return None
+
 
 class FrequentlyAskedQuestionType(DjangoObjectType):
     class Meta:

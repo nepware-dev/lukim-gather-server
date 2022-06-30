@@ -128,7 +128,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
     attachment = graphene.List(Upload, required=False)
-    attachment_link = graphene.List(graphene.Int, required=False)
+    attachment_link = graphene.List(graphene.UUID, required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     status = Status()

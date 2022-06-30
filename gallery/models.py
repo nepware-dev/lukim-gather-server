@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -11,6 +13,7 @@ class MediaType(models.TextChoices):
 
 
 class Gallery(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(_("Title"), max_length=255)
     type = models.CharField(
         _("Media Type"),

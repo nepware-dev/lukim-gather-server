@@ -22,6 +22,9 @@ class APITest(TestBase):
         cls.category = cls.baker.make(
             "survey.ProtectedAreaCategory", title="test", _quantity=1
         )[0]
+        cls.happening_survey = cls.baker.make(
+            "survey.HappeningSurvey", title="test", _quantity=1
+        )[0]
         cls.activated_user = authenticate(
             username=users[0].username, password=cls.activated_initial_password
         )
@@ -162,5 +165,63 @@ class APITest(TestBase):
             }
             """,
             headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_update_happening_survey(self):
+        mutation = """
+            mutation UpdateHappeningSurvey($data: UpdateHappeningSurveyInput!, $id: UUID!) {
+                  updateHappeningSurvey(data: $data, id: $id) {
+                    ok
+                    result {
+                        id
+                        title
+                        description
+                        sentiment
+                        improvement
+                        location {
+                          type
+                          coordinates
+                        }
+                        category {
+                          id
+                        }
+                        attachment {
+                          id
+                        }
+                    }
+                    errors
+                  }
+            }
+        """
+        data = {
+            "title": "test title",
+            "description": "test description",
+            "sentiment": "\U0001f600",
+            "improvement": "INCREASING",
+            "location": str(geos.Point(1, 0)),
+            "categoryId": self.category.id,
+            "attachment": [None],
+        }
+        response = self.client.post(
+            self.GRAPHQL_URL,
+            data={
+                "operations": json.dumps(
+                    {
+                        "query": mutation,
+                        "variables": {
+                            "data": data,
+                            "id": str(self.happening_survey.id),
+                        },
+                    }
+                ),
+                "0": self.generate_photo_file(),
+                "map": json.dumps(
+                    {
+                        "0": ["variables.data.attachment.0"],
+                    }
+                ),
+            },
+            **self.headers,
         )
         self.assertResponseNoErrors(response)
