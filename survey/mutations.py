@@ -64,12 +64,6 @@ class CreateHappeningSurvey(graphene.Mutation):
         try:
             with transaction.atomic():
                 id = data.get("id", None)
-                region_geo = data.location if data.location else data.boundary
-                survey_region = (
-                    Region.objects.filter(boundary__bbcontains=region_geo).first()
-                    if region_geo
-                    else None
-                )
                 if id:
                     survey_obj = HappeningSurvey.objects.create(
                         id=id, category_id=data.get("category_id")
@@ -86,7 +80,6 @@ class CreateHappeningSurvey(graphene.Mutation):
                 )
                 survey_obj.location = data.get("location")
                 survey_obj.boundary = data.get("boundary")
-                survey_obj.region = survey_region
                 survey_obj.is_public = data.get("is_public", True)
                 survey_obj.is_test = data.get("is_test", False)
                 survey_obj.created_by = None if anonymous else info.context.user
@@ -153,13 +146,7 @@ class UpdateHappeningSurvey(graphene.Mutation):
             with transaction.atomic():
                 attachment_links = data.pop("attachment_link", None)
                 attachments = data.pop("attachment", [])
-                region_geo = data.location if data.location else data.boundary
                 happening_survey_obj = HappeningSurvey.objects.get(id=id)
-                survey_region = (
-                    Region.objects.filter(boundary__bbcontains=region_geo).first()
-                    if region_geo
-                    else None
-                )
                 for key, value in data.items():
                     try:
                         value = value.value
@@ -170,8 +157,6 @@ class UpdateHappeningSurvey(graphene.Mutation):
                     happening_survey_obj.full_clean()
                     if attachment_links is not None:
                         happening_survey_obj.attachment.set(attachment_links)
-                    if happening_survey_obj.region != survey_region:
-                        happening_survey_obj.region = survey_region
                     happening_survey_obj.updated_by = info.context.user
                     happening_survey_obj.save()
                     if attachments:
