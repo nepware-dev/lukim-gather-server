@@ -114,6 +114,13 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         on_delete=models.SET_NULL,
         related_name="happening_survey",
     )
+    protected_area = models.ForeignKey(
+        "region.ProtectedArea",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="happening_survey",
+    )
     is_public = models.BooleanField(default=True)
     is_test = models.BooleanField(default=False)
     data_dump = models.JSONField(blank=True, default=dict)
