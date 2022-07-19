@@ -114,8 +114,7 @@ class RegisterUser(graphene.Mutation):
         try:
             validate_password(password=user_password)
         except ValidationError as e:
-            errors = list(e.messages)
-            raise GraphQLError(errors)
+            raise GraphQLError(e.message[0])
         user = User.objects.create_user(**data)
         user.is_active = True  # Note:- Temporary fix to remove 2 step verification
         user.save()

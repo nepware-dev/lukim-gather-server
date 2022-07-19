@@ -3,8 +3,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from graphql_jwt.decorators import login_required
 
-from notification.dispatch import notification
-
 from .models import Notification
 
 
@@ -24,7 +22,7 @@ class MarkNotification(graphene.Mutation):
                 notification_obj.update(has_read=True, modified_at=timezone.now())
                 message = _("Successfully marked all notification as read")
             if pk:
-                notification_obj.filter(pk=id).update(
+                notification_obj.filter(pk=pk).update(
                     has_read=True, modified_at=timezone.now()
                 )
                 message = _("Successfully marked as read")
