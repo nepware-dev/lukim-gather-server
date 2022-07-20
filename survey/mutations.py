@@ -9,6 +9,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 
 from gallery.models import Gallery
+from lukimgather.utils import is_valid_uuid
 from region.models import Region
 from survey.models import HappeningSurvey
 from survey.serializers import SurveySerializer
@@ -85,11 +86,19 @@ class CreateHappeningSurvey(graphene.Mutation):
                 survey_obj.created_by = None if anonymous else info.context.user
                 if data.get("attachment"):
                     for file in data.attachment:
-                        gallery = Gallery(
-                            media=file,
-                            title=file.name,
-                            type="image",
-                        )
+                        if is_valid_uuid(file.name):
+                            gallery = Gallery(
+                                id=file.name,
+                                media=file,
+                                title=file.name,
+                                type="image",
+                            )
+                        else:
+                            gallery = Gallery(
+                                media=file,
+                                title=file.name,
+                                type="image",
+                            )
                         gallery.save()
                         survey_obj.attachment.add(gallery)
                 survey_obj.save()
@@ -161,11 +170,19 @@ class UpdateHappeningSurvey(graphene.Mutation):
                     happening_survey_obj.save()
                     if attachments:
                         for attachment in attachments:
-                            new_attachment = happening_survey_obj.attachment.create(
-                                media=attachment,
-                                title=attachment.name,
-                                type="image",
-                            )
+                            if is_valid_uuid(attachment.name):
+                                new_attachment = happening_survey_obj.attachment.create(
+                                    id=attachment.name,
+                                    media=attachment,
+                                    title=attachment.name,
+                                    type="image",
+                                )
+                            else:
+                                new_attachment = happening_survey_obj.attachment.create(
+                                    media=attachment,
+                                    title=attachment.name,
+                                    type="image",
+                                )
                             happening_survey_obj.attachment.add(new_attachment)
                 except ValidationError as e:
                     return UpdateHappeningSurvey(result=None, errors=e, ok=False)

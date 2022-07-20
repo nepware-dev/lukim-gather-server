@@ -20,7 +20,9 @@ class NotificationQueries(graphene.ObjectType):
 
     @login_required
     def resolve_notification_unread_count(root, info):
-        return Notification.objects.filter(recipient=info.context.user).count()
+        return Notification.objects.filter(
+            recipient=info.context.user, has_read=False
+        ).count()
 
 
 class NoticeQueries(graphene.ObjectType):

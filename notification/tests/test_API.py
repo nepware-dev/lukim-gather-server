@@ -46,16 +46,16 @@ class APITest(TestBase):
         )
         self.assertResponseNoErrors(response)
 
-    def test_get_notification_mark_as_read(self):
+    def test_notification_mark_as_read(self):
         response = self.query(
             """
-                mutation {
-                    markAsRead(all:true) {
+                mutation MarkAsRead($id: Int){
+                    markAsRead(pk: $id) {
                         detail
                     }
                 }
             """,
-            input_data={"pk": self.notification.pk},
+            input_data={"id": self.notification.pk},
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)

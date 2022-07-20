@@ -1,5 +1,6 @@
 import secrets
 import string
+import uuid
 
 RANDOM_STRING_CHARS = string.ascii_letters + string.digits
 
@@ -12,3 +13,11 @@ def gen_random_number(length):
 
 def gen_random_string(length, allowed_chars=RANDOM_STRING_CHARS):
     return "".join(secrets.choice(allowed_chars) for _ in range(length))
+
+
+def is_valid_uuid(val):
+    try:
+        uuid.UUID(str(val))
+        return True
+    except ValueError:
+        return False
