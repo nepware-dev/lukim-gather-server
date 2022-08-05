@@ -14,6 +14,8 @@ from user.mutations import (
     EmailConfirmVerify,
     GrantMutation,
     PasswordResetChange,
+    PhoneNumberConfirm,
+    PhoneNumberConfirmVerify,
     RegisterUser,
     ResetUserPassword,
     ResetUserPasswordVerify,
@@ -49,6 +51,8 @@ class UserMutations(graphene.ObjectType):
     password_reset_change = PasswordResetChange.Field()
     email_confirm = EmailConfirm.Field()
     email_confirm_verify = EmailConfirmVerify.Field()
+    phone_number_confirm = PhoneNumberConfirm.Field()
+    phone_number_verify = PhoneNumberConfirmVerify.Field()
     email_change = EmailChange.Field()
     email_change_verify = EmailChangeVerify.Field()
     update_user = UpdateUser.Field()

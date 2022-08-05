@@ -3,6 +3,7 @@ import graphql_jwt
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.core.validators import validate_email
 from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -11,10 +12,19 @@ from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
+from graphql_jwt.refresh_token.shortcuts import create_refresh_token
+from graphql_jwt.shortcuts import get_token
+from phonenumber_field.validators import validate_international_phonenumber
 
 from lukimgather.utils import gen_random_number, gen_random_string
 from support.models import EmailTemplate
-from user.models import EmailChangePin, EmailConfirmationPin, PasswordResetPin, User
+from user.models import (
+    EmailChangePin,
+    EmailConfirmationPin,
+    PasswordResetPin,
+    PhoneNumberConfirmationPin,
+    User,
+)
 from user.serializers import GrantSerializer
 from user.types import PasswordResetPinType, UserType
 
@@ -37,9 +47,10 @@ class UserInput(graphene.InputObjectType):
 class RegisterUserInput(graphene.InputObjectType):
     first_name = graphene.String(description=_("First Name"), required=True)
     last_name = graphene.String(description=_("Last Name"), required=True)
-    email = graphene.String(description=_("Email"), required=True)
-    password = graphene.String(description=_("Password"), required=True)
-    re_password = graphene.String(description=_("Retype Password"), required=True)
+    email = graphene.String(description=_("Email"))
+    phone_number = graphene.String(description=_("Phone Number"))
+    password = graphene.String(description=_("Password"), required=False)
+    re_password = graphene.String(description=_("Retype Password"), required=False)
     username = graphene.String(description=_("Username"), required=True)
 
 
@@ -68,6 +79,16 @@ class PasswordResetChangeInput(graphene.InputObjectType):
 
 
 class EmailConfirmInput(graphene.InputObjectType):
+    username = graphene.String(description=_("Username"), required=True)
+    no_of_incorrect_attempts = graphene.Int(
+        description=_("No Of Incorrect Attempts"), default_value=0
+    )
+    pin = graphene.Int(description=_("Pin"))
+    pin_expiry_time = graphene.DateTime(description=_("Pin Expiry Time"))
+    is_active = graphene.Boolean(description=_("Is Active"))
+
+
+class PhoneNumberConfirmInput(graphene.InputObjectType):
     username = graphene.String(description=_("Username"), required=True)
     no_of_incorrect_attempts = graphene.Int(
         description=_("No Of Incorrect Attempts"), default_value=0
@@ -110,11 +131,23 @@ class RegisterUser(graphene.Mutation):
         user_exists = User.objects.filter_by_username(data.username).exists()
         if user_exists:
             raise GraphQLError("User with username/email already exists")
-        user_password = data.pop("re_password")
+        user_password = None
+        if "re_password" in data:
+            user_password = data.pop("re_password")
+        user_email = data.get("email")
+        user_phone_number = data.get("phone_number")
         try:
-            validate_password(password=user_password)
+            if user_email:
+                validate_email(user_email)
+            elif user_phone_number:
+                validate_international_phonenumber(user_phone_number)
         except ValidationError as e:
-            raise GraphQLError(e.message[0])
+            raise GraphQLError(e.message)
+        if user_password:
+            try:
+                validate_password(password=user_password)
+            except ValidationError as e:
+                raise GraphQLError(e.message[0])
         user = User.objects.create_user(**data)
         user.is_active = True  # Note:- Temporary fix to remove 2 step verification
         user.save()
@@ -535,3 +568,102 @@ class GrantMutation(SerializerMutation):
     class Meta:
         serializer_class = GrantSerializer
         fields = "__all__"
+
+
+class PhoneNumberConfirm(graphene.Mutation):
+    class Arguments:
+        data = PhoneNumberConfirmInput(
+            description=_("Fields required to confirm phone number."), required=True
+        )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
+    def mutate(self, info, data):
+        user = User.objects.filter_by_username(data.username).first()
+        if not user:
+            raise GraphQLError("No user present with given phone number/username")
+        active_for_five_minutes = timezone.now() + timezone.timedelta(minutes=5)
+        phone_number_confirm_pin = PhoneNumberConfirmationPin.objects.filter(
+            user=user, is_active=True, pin_expiry_time__lte=active_for_five_minutes
+        ).first()
+        if phone_number_confirm_pin:
+            if phone_number_confirm_pin.no_of_incorrect_attempts >= 5:
+                raise GraphQLError("User is inactive for trying too many times")
+            raise GraphQLError("Confirmation SMS has already been sent")
+        random_6_digit_pin = gen_random_number(6)
+        (
+            phone_number_confirm_pin_object,
+            _obj,
+        ) = PhoneNumberConfirmationPin.objects.update_or_create(
+            user=user,
+            defaults={
+                "pin": random_6_digit_pin,
+                "pin_expiry_time": active_for_five_minutes,
+                "is_active": True,
+            },
+        )
+        user.celery_sms_user(
+            to=user.username,
+            message=f"Your OTP is {random_6_digit_pin} for Lukim Gather, It will expire in next 5 minutes.",
+        )
+        return PhoneNumberConfirm(
+            result={"detail": "Phone number confirmation SMS successfully send"},
+            errors=None,
+            ok=True,
+        )
+
+
+class PhoneNumberConfirmVerify(graphene.Mutation):
+    class Arguments:
+        data = PhoneNumberConfirmInput(
+            description=_("Fields required to reset password."), required=True
+        )
+
+    user = graphene.Field(UserType)
+    token = graphene.String()
+    refresh_token = graphene.String()
+
+    def mutate(self, info, data):
+        user = User.objects.filter_by_username(data.username).first()
+        if not user:
+            raise GraphQLError("No inactive user present for username")
+        pin = data.pin
+        current_time = timezone.now()
+        phone_number_confirmation_sms_object = (
+            PhoneNumberConfirmationPin.objects.filter(
+                user=user,
+                pin=pin,
+                is_active=True,
+                pin_expiry_time__gte=current_time,
+            ).first()
+        )
+        if not phone_number_confirmation_sms_object:
+            user_only_phone_number_confirm_sms_object = (
+                PhoneNumberConfirmationPin.objects.filter(user=user).first()
+            )
+            if user_only_phone_number_confirm_sms_object:
+                if not user_only_phone_number_confirm_sms_object.is_active:
+                    raise GraphQLError("Phone number is already confirmed for user")
+                user_only_phone_number_confirm_sms_object.no_of_incorrect_attempts += 1
+                user_only_phone_number_confirm_sms_object.save()
+                if (
+                    user_only_phone_number_confirm_sms_object.no_of_incorrect_attempts
+                    >= 5
+                ):
+                    raise GraphQLError("User is now inactive for trying too many times")
+                elif user_only_phone_number_confirm_sms_object.pin != pin:
+                    raise GraphQLError("Phone number confirmation pin is incorrect")
+                else:
+                    raise GraphQLError("Phone number confirmation pin has expired")
+            raise GraphQLError("No matching active username/phone number found")
+        else:
+            phone_number_confirmation_sms_object.no_of_incorrect_attempts = 0
+            phone_number_confirmation_sms_object.is_active = False
+            phone_number_confirmation_sms_object.save()
+            return PhoneNumberConfirmVerify(
+                token=get_token(user),
+                refresh_token=create_refresh_token(user).token,
+                user=user,
+            )

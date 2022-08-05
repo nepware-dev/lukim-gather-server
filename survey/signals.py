@@ -9,6 +9,15 @@ from .models import HappeningSurvey
 @receiver(post_save, sender=HappeningSurvey)
 def send_survey_approval_notification(sender, instance, created, **kwargs):
     update_fields = kwargs.get("update_fields")
+    if update_fields and "is_public" in update_fields:
+        if instance.is_public == False:
+            if instance.updated_by:
+                instance.created_by.notify(
+                    instance.updated_by,
+                    "have made the project private",
+                    action_object=instance,
+                    notification_type=f"happening_survey_private",
+                )
     if update_fields and "status" in update_fields:
         if instance.status == "pending":
             return

@@ -6,13 +6,14 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 from lukimgather.auth_validators import CustomASCIIUsernameValidator
 from lukimgather.fields import LowerCharField, LowerEmailField
 from lukimgather.managers import CustomUserManager
 from lukimgather.models import TimeStampedModel, UserStampedModel
 
-from .tasks import send_user_mail
+from .tasks import send_user_mail, send_user_sms
 
 
 class User(AbstractUser):
@@ -36,10 +37,11 @@ class User(AbstractUser):
     )
     email = LowerEmailField(
         verbose_name=_("Email Address"),
-        unique=True,
         error_messages={
             "unique": _("A user with that email already exists."),
         },
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(
         verbose_name=_("Active"),
@@ -58,6 +60,7 @@ class User(AbstractUser):
         blank=True,
         default=None,
     )
+    phone_number = PhoneNumberField(blank=True, null=True)
 
     objects = CustomUserManager()
 
@@ -131,6 +134,10 @@ class User(AbstractUser):
         else:
             self.email_user(subject, message, from_email=from_email, **kwargs)
 
+    def celery_sms_user(self, to, message, **kwargs):
+        if settings.ENABLE_SNS:
+            send_user_sms.delay(to=to, message=message)
+
 
 class PasswordResetPin(TimeStampedModel):
     user = models.OneToOneField(
@@ -170,6 +177,39 @@ class EmailChangePin(TimeStampedModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="email_change_pin",
+    )
+    no_of_incorrect_attempts = models.PositiveIntegerField(
+        verbose_name=_("No Of Incorrect Attempts"), default=0
+    )
+    pin = models.PositiveIntegerField(
+        verbose_name=_("Pin"), validators=[MinLengthValidator(6), MaxLengthValidator(6)]
+    )
+    pin_expiry_time = models.DateTimeField(verbose_name=_("Pin Expiry Time"))
+    new_email = LowerEmailField()
+    is_active = models.BooleanField(verbose_name=_("Is Active"), default=True)
+
+
+class PhoneNumberConfirmationPin(TimeStampedModel):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="phone_number_confirm_pin",
+    )
+    no_of_incorrect_attempts = models.PositiveIntegerField(
+        verbose_name=_("No Of Incorrect Attempts"), default=0
+    )
+    pin = models.PositiveIntegerField(
+        verbose_name=_("Pin"), validators=[MinLengthValidator(6), MaxLengthValidator(6)]
+    )
+    pin_expiry_time = models.DateTimeField(verbose_name=_("Pin Expiry Time"))
+    is_active = models.BooleanField(verbose_name=_("Is Active"), default=True)
+
+
+class PhoneNumberChangePin(TimeStampedModel):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="phone_number_change_pin",
     )
     no_of_incorrect_attempts = models.PositiveIntegerField(
         verbose_name=_("No Of Incorrect Attempts"), default=0

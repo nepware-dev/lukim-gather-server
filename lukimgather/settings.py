@@ -98,6 +98,7 @@ THIRD_PARTY_APPS = [
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "mptt",
     "ordered_model",
+    "phonenumber_field",
     "rest_framework",
     "rest_framework_gis",
     "oauth2_provider",
@@ -242,6 +243,13 @@ if "SERVER_EMAIL" in email_config:
     SERVER_EMAIL = email_config["SERVER_EMAIL"]
 if "DEFAULT_FROM_EMAIL" in email_config:
     DEFAULT_FROM_EMAIL = email_config["DEFAULT_FROM_EMAIL"]
+
+# Amazon Simple Notification Service (SNS)
+ENABLE_SNS = env.bool("ENABLE_SNS", default=False)
+if ENABLE_SNS:
+    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+    AWS_SNS_REGION_NAME = env.str("AWS_SNS_REGION_NAME")
 
 # Internationalization
 

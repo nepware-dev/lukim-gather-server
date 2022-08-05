@@ -11,7 +11,7 @@ class LowerCharField(models.CharField):
 
 class LowerEmailField(models.EmailField):
     def get_prep_value(self, value):
-        return super().get_prep_value(value).lower()
+        return super().get_prep_value(value).lower() if value else None
 
     def is_custom_lower_field(self):
         return True
