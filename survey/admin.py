@@ -80,6 +80,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     list_filter = (
         "category",
         "region",
+        "protected_area",
         "created_at",
         "improvement",
         "is_public",
