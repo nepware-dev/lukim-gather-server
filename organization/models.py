@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from lukimgather import settings
 from lukimgather.models import TimeStampedModel, UserStampedModel
 
 
@@ -17,6 +18,12 @@ class Organization(UserStampedModel, TimeStampedModel):
         null=True,
         blank=True,
         default=None,
+    )
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="member_organizations",
+        blank=True,
+        verbose_name=_("members"),
     )
 
     def __str__(self):

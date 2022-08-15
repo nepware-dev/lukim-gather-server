@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from lukimgather.admin import UserStampedModelAdmin
 
-from .models import Notice, Notification
+from .models import Announcement, Notice, Notification
 
 
 @admin.register(Notification)
@@ -45,6 +45,30 @@ class NoticeAdmin(UserStampedModelAdmin):
     list_filter = (
         "notice_type",
         "is_active",
+        "created_at",
+        "modified_at",
+    )
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(UserStampedModelAdmin):
+    autocomplete_fields = (
+        "organization",
+        "user",
+    )
+    list_display = (
+        "title",
+        "created_by",
+        "updated_by",
+        "created_at",
+        "modified_at",
+    )
+    search_fields = (
+        "title",
+        "description",
+    )
+    list_filter = (
+        "organization",
         "created_at",
         "modified_at",
     )
