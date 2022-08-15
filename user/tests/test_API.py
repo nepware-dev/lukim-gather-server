@@ -154,7 +154,7 @@ class APITest(TestBase):
             """
             mutation Mutation($input: EmailConfirmInput!) {
               emailConfirm(data: $input) {
-                message
+                result
               }
             }
             """,
@@ -305,5 +305,66 @@ class APITest(TestBase):
                 "description": "test description",
                 "user": self.activated_user.username,
             },
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_user_phone_number_verify(self):
+        non_activated_user_pass = get_user_model().objects.make_random_password()
+        non_activated_user_username = random_gen.gen_string(15)
+        user_data = {
+            "firstName": random_gen.gen_string(150),
+            "lastName": random_gen.gen_string(150),
+            "phoneNumber": "+33612345678",
+            "username": non_activated_user_username,
+        }
+        response = self.query(
+            """
+            mutation Mutation($input: RegisterUserInput!) {
+              registerUser(data: $input) {
+                result {
+                    username
+                }
+                errors
+                ok
+              }
+            }
+            """,
+            input_data=user_data,
+        )
+        self.assertEqual(response.status_code, 200)
+        non_activated_user = get_user_model().objects.get(
+            username=non_activated_user_username
+        )
+        user = authenticate(
+            username=non_activated_user.username, password=non_activated_user_pass
+        )
+        self.assertIsNone(user)
+        phone_number_verify_pin = (
+            apps.get_model("user", "PhoneNumberConfirmationPin")
+            .objects.get(user=non_activated_user)
+            .pin
+        )
+        data = {
+            "username": non_activated_user.username,
+            "pin": phone_number_verify_pin,
+        }
+        response = self.query(
+            """
+            mutation Mutation($input: PhoneNumberConfirmInput!) {
+              phoneNumberVerify(data: $input) {
+                token
+                refreshToken
+                user {
+                    id
+                    firstName
+                    lastName
+                    email
+                    organization
+                    avatar
+                }
+              }
+            }
+            """,
+            input_data=data,
         )
         self.assertResponseNoErrors(response)

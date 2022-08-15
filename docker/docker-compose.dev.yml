@@ -3,6 +3,7 @@ version: "3.7"
 services:
   server:
     container_name: "${PROJECT_NAME}_server"
+    restart: always
     env_file: .env
     build:
       context: .

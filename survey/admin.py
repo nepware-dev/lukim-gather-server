@@ -81,6 +81,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "category",
         "region",
         "protected_area",
+        "protected_area",
         "created_at",
         "improvement",
         "is_public",
