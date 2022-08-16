@@ -112,8 +112,8 @@ class User(AbstractUser):
                 extra_content += f" {action_object}"
             if target:
                 extra_content += f" on {target}"
+            description = f"{actor} {verb}{extra_content}"
 
-        description = f"{actor} {verb}{extra_content}"
         NotificationModel = apps.get_model("notification", "Notification")
         NotificationModel.objects.create(
             recipient=self,

@@ -9,6 +9,19 @@ from django.utils.translation import gettext_lazy as _
 from lukimgather.models import TimeStampedModel, UserStampedModel
 
 
+class Announcement(UserStampedModel, TimeStampedModel):
+    title = models.CharField(_("title"), max_length=255)
+    description = RichTextField(_("description"), blank=True, null=True, default=None)
+    organization = models.ManyToManyField(
+        "organization.Organization", blank=True, verbose_name=_("Organizations")
+    )
+    user = models.ManyToManyField("user.User", blank=True, verbose_name=_("Users"))
+    notify_all = models.BooleanField(default=False, verbose_name=_("Notify all"))
+
+    def __str__(self):
+        return self.title
+
+
 class Notification(TimeStampedModel):
     # recipient
     recipient = models.ForeignKey(
