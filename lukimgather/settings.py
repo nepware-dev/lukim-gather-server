@@ -3,6 +3,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import boto3
 import django.conf.locale
 import sentry_sdk
 from django.conf import global_settings
@@ -10,6 +11,7 @@ from django.core.management.utils import get_random_secret_key
 from django.utils.translation import gettext_lazy as _
 from environs import Env
 from marshmallow.validate import OneOf
+from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 
 # Read .env file for environment variable
@@ -148,7 +150,7 @@ GRAPHENE_DJANGO_EXTRAS = {
 
 GRAPHQL_JWT = {
     "JWT_AUTH_HEADER_PREFIX": "Bearer",
-    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_VERIFY_EXPIRATION": False,
     "JWT_EXPIRATION_DELTA": timedelta(days=30),
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(weeks=27),
@@ -299,6 +301,50 @@ global_settings.LANGUAGES = global_settings.LANGUAGES + [
 MODELTRANSLATION_PREPOPULATE_LANGUAGE = "en"
 MODELTRANSLATION_AUTO_POPULATE = True
 
+# Cloudwatch based logging
+ENABLE_WATCHTOWER = env.bool("ENABLE_WATCHTOWER", default=False)
+
+if ENABLE_WATCHTOWER:
+    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+
+    AWS_CLOUDWATCH_REGION_NAME = env.str("AWS_CLOUDWATCH_REGION_NAME")
+    AWS_LOG_GROUP_NAME = env.str("AWS_LOG_GROUP_NAME")
+
+    logger_boto3_client = boto3.client(
+        "logs",
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_CLOUDWATCH_REGION_NAME,
+    )
+
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "root": {
+            "level": "DEBUG",
+            "handlers": ["watchtower", "console"],
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+            },
+            "watchtower": {
+                "class": "watchtower.CloudWatchLogHandler",
+                "boto3_client": logger_boto3_client,
+                "log_group_name": AWS_LOG_GROUP_NAME,
+                "level": "INFO",
+            },
+        },
+        "loggers": {
+            "django": {
+                "level": "DEBUG",
+                "handlers": ["console"],
+                "propagate": IS_SERVER_SECURE,
+            }
+        },
+    }
+
 
 # Static files (CSS, JavaScript, Images)
 STATIC_LOCATION = "static"
@@ -349,7 +395,7 @@ ENABLE_SENTRY = env.bool("ENABLE_SENTRY", default=False)
 if ENABLE_SENTRY:
     sentry_sdk.init(
         dsn=env.url("SENTRY_DSN"),
-        integrations=[DjangoIntegration()],
+        integrations=[DjangoIntegration(), CeleryIntegration()],
         traces_sample_rate=1.0,
         send_default_pii=True,
         environment=SERVER_ENVIRONMENT,
