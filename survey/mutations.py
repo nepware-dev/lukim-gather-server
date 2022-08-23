@@ -135,6 +135,8 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     boundary = graphql_geojson.Geometry(required=False)
     status = Status()
     improvement = Improvement(required=False)
+    is_public = graphene.Boolean(default=True, required=False)
+    is_test = graphene.Boolean(default=False, required=False)
 
 
 class UpdateHappeningSurvey(graphene.Mutation):
