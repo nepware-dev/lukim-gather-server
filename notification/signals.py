@@ -19,7 +19,7 @@ def send_announcement(sender, instance, **kwargs):
             for user in members:
                 user.notify(
                     user,
-                    instance.description,
+                    instance.title,
                     action_object=instance,
                     notification_type="announcement",
                     description=instance.description,
@@ -29,7 +29,7 @@ def send_announcement(sender, instance, **kwargs):
         for user in users:
             user.notify(
                 user,
-                instance.description,
+                instance.title,
                 action_object=instance,
                 notification_type="announcement",
                 description=instance.description,

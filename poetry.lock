@@ -1391,6 +1391,20 @@ python-versions = ">=3.7"
 anyio = ">=3.0.0,<4"
 
 [[package]]
+name = "watchtower"
+version = "3.0.0"
+description = "Python CloudWatch Logging"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+boto3 = ">=1.9.253,<2"
+
+[package.extras]
+tests = ["mypy", "wheel", "build", "coverage", "flake8 (>=4.0.1,<5)", "pyyaml (>=5.3.1,<6)"]
+
+[[package]]
 name = "wcwidth"
 version = "0.2.5"
 description = "Measures the displayed width of unicode strings in a terminal"
@@ -1431,7 +1445,7 @@ asgi = ["uvicorn", "gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "25a2177a73ac4364fc92dfe33061ca915d765e8a8806918b719228a8bf3cafee"
+content-hash = "fcdc4f96acc5dc55aeb6e2f8f544e8512f1a8e0d9d72c22b140c79f4177caafa"
 
 [metadata.files]
 amqp = [
@@ -2093,6 +2107,7 @@ watchgod = [
     {file = "watchgod-0.8.2-py3-none-any.whl", hash = "sha256:2f3e8137d98f493ff58af54ea00f4d1433a6afe2ed08ab331a657df468c6bfce"},
     {file = "watchgod-0.8.2.tar.gz", hash = "sha256:cb11ff66657befba94d828e3b622d5fb76f22fbda1376f355f3e6e51e97d9450"},
 ]
+watchtower = []
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
