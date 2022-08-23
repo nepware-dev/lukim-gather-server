@@ -7,6 +7,7 @@ class OrganizationFilter(django_filters.FilterSet):
     class Meta:
         model = Organization
         fields = {
+            "id": ["exact"],
             "title": ["contains"],
             "acronym": ["contains"],
             "description": ["contains"],
