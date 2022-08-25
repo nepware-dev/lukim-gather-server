@@ -31,15 +31,16 @@ def send_confiramtion_pin(sender, instance, created, **kwargs):
             )
             # instance.celery_email_user(subject, text_message, html_message=html_message) # Note:- skip email verification
         if instance.phone_number:
+            active_for_five_minutes = timezone.now() + timezone.timedelta(minutes=5)
             PhoneNumberConfirmationPin.objects.update_or_create(
                 user=instance,
                 defaults={
                     "pin": six_digit_pin,
-                    "pin_expiry_time": active_for_one_hour,
+                    "pin_expiry_time": active_for_five_minutes,
                     "is_active": True,
                 },
             )
             instance.celery_sms_user(
                 to=instance.username,
-                message=f"Your OTP is {six_digit_pin} for Lukim Gather, It will expire in next 60 minutes.",
+                message=f"Your OTP is {six_digit_pin} for Lukim Gather, It will expire in next 5 minutes.",
             )
