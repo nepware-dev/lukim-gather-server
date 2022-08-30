@@ -1,6 +1,20 @@
 from graphene_django.types import DjangoObjectType
 
-from support.models import FrequentlyAskedQuestion, LegalDocument, Resource, ResourceTag
+from support.models import (
+    Category,
+    FrequentlyAskedQuestion,
+    LegalDocument,
+    Resource,
+    ResourceTag,
+    Tutorial,
+)
+
+
+class CategoryType(DjangoObjectType):
+    class Meta:
+        model = Category
+        description = "Type defination for a category"
+        fields = "__all__"
 
 
 class LegalDocumentType(DjangoObjectType):
@@ -34,4 +48,11 @@ class FrequentlyAskedQuestionType(DjangoObjectType):
     class Meta:
         model = FrequentlyAskedQuestion
         description = "Type defination for a frequently asked question"
+        fields = "__all__"
+
+
+class TutorialType(DjangoObjectType):
+    class Meta:
+        model = Tutorial
+        description = "Type defination for a tutorials"
         fields = "__all__"
