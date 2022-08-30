@@ -17,6 +17,7 @@ class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
         _("description"), blank=True, null=True, default=None
     )
     xform = models.JSONField(_("XForms"), blank=True, default=dict)
+    question_mapping = models.JSONField(_("Question mapping"), blank=True, default=dict)
 
     def __str__(self):
         return self.code + "-" + self.title
