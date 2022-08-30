@@ -1,17 +1,30 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
+from mptt.admin import DraggableMPTTAdmin
 from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
 from support.models import (
+    Category,
     EmailTemplate,
     Feedback,
     FrequentlyAskedQuestion,
     LegalDocument,
     Resource,
     ResourceTag,
+    Tutorial,
 )
+
+
+@admin.register(Category)
+class CategoryAdmin(DraggableMPTTAdmin):
+    mptt_indent_field = "title"
+    list_display = (
+        "tree_actions",
+        "indented_title",
+    )
+    list_display_links = ("indented_title",)
 
 
 @admin.register(LegalDocument)
@@ -41,6 +54,15 @@ class FrequentlyAskedQuestionAdmin(
     class Meta:
         verbose_name = _("frequently asked question")
         verbose_plural_name = _("frequently asked questions")
+
+
+@admin.register(Tutorial)
+class TutorialAdmin(UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin):
+    list_display = ("question", "move_up_down_links")
+
+    class Meta:
+        verbose_name = _("tutorial")
+        verbose_plural_name = _("tutorials")
 
 
 @admin.register(ResourceTag)

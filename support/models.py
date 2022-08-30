@@ -2,6 +2,8 @@ from ckeditor.fields import RichTextField
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import gettext_lazy as _
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 from ordered_model.models import OrderedModel
 
 from lukimgather.models import TimeStampedModel, UserStampedModel
@@ -55,9 +57,42 @@ class Feedback(UserStampedModel, TimeStampedModel):
         return self.title
 
 
+class Category(MPTTModel):
+    title = models.TextField(_("title"), max_length=255)
+    parent = TreeForeignKey(
+        "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = _("categories")
+
+
 class FrequentlyAskedQuestion(UserStampedModel, TimeStampedModel, OrderedModel):
     question = models.TextField(_("question"))
     answer = RichTextField(_("answer"))
+    category = models.ForeignKey(
+        "Category",
+        null=True,
+        related_name="frequentlyaskedquestions",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.question
+
+    class Meta(OrderedModel.Meta):
+        pass
+
+
+class Tutorial(UserStampedModel, TimeStampedModel, OrderedModel):
+    question = models.TextField(_("question"))
+    answer = RichTextField(_("answer"))
+    category = models.ForeignKey(
+        "Category", null=True, related_name="tutorials", on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.question

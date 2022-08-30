@@ -1,6 +1,6 @@
 from modeltranslation import translator
 
-from support.models import FrequentlyAskedQuestion, LegalDocument, Resource
+from support.models import FrequentlyAskedQuestion, LegalDocument, Resource, Tutorial
 
 
 @translator.register(LegalDocument)
@@ -16,3 +16,8 @@ class FrequentlyAskedQuestionTranslationOptions(translator.TranslationOptions):
 @translator.register(Resource)
 class ResourceTranslationOptions(translator.TranslationOptions):
     fields = ("title", "description")
+
+
+@translator.register(Tutorial)
+class TutorialTranslationOptions(translator.TranslationOptions):
+    fields = ("question", "answer")

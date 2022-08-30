@@ -1,17 +1,24 @@
 import graphene
 from graphene_django_extras import DjangoFilterPaginateListField
 
-from .filters import LegalDocumentFilter, ResourceFilter
+from .filters import CategoryFilter, LegalDocumentFilter, ResourceFilter
 from .mutations import FeedbackMutation
 from .types import (
+    CategoryType,
     FrequentlyAskedQuestionType,
     LegalDocumentType,
     ResourceTagType,
     ResourceType,
+    TutorialType,
 )
 
 
 class SupportQueries(graphene.ObjectType):
+    support_category = DjangoFilterPaginateListField(
+        CategoryType,
+        description="Return the categories",
+        filterset_class=CategoryFilter,
+    )
     legal_document = DjangoFilterPaginateListField(
         LegalDocumentType,
         description="Return the legal documents",
@@ -20,6 +27,10 @@ class SupportQueries(graphene.ObjectType):
     frequently_asked_question = DjangoFilterPaginateListField(
         FrequentlyAskedQuestionType,
         description="Return the frequently asked questions",
+    )
+    tutorial = DjangoFilterPaginateListField(
+        TutorialType,
+        description="Return the tutorials",
     )
     resource_tag = DjangoFilterPaginateListField(
         ResourceTagType,
