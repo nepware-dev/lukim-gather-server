@@ -59,6 +59,7 @@ class Feedback(UserStampedModel, TimeStampedModel):
 
 class Category(MPTTModel):
     title = models.TextField(_("title"), max_length=255)
+    icon = models.TextField(_("icon"), blank=True, null=True, max_length=50)
     parent = TreeForeignKey(
         "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
     )

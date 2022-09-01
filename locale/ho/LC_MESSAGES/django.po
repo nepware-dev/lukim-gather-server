@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 10:39+0000\n"
+"POT-Creation-Date: 2022-09-01 09:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gallery/models.py:8
+#: gallery/models.py:10 support/models.py:118
 msgid "Video"
 msgstr ""
 
-#: gallery/models.py:9
+#: gallery/models.py:11
 msgid "Image"
 msgstr ""
 
-#: gallery/models.py:10
+#: gallery/models.py:12
 msgid "Other"
 msgstr ""
 
-#: gallery/models.py:14 survey/models.py:41
+#: gallery/models.py:17 survey/models.py:43
 msgid "Title"
 msgstr ""
 
-#: gallery/models.py:16
+#: gallery/models.py:19
 msgid "Media Type"
 msgstr ""
 
-#: gallery/models.py:22
+#: gallery/models.py:25
 msgid "Media File"
 msgstr ""
 
-#: gallery/models.py:32
+#: gallery/models.py:35
 msgid "Gallery"
 msgstr ""
 
-#: gallery/models.py:33
+#: gallery/models.py:36
 msgid "Galleries"
 msgstr ""
 
@@ -59,15 +59,15 @@ msgstr ""
 msgid "code"
 msgstr ""
 
-#: lukimgather/settings.py:262
+#: lukimgather/settings.py:273
 msgid "English"
 msgstr ""
 
-#: lukimgather/settings.py:263
+#: lukimgather/settings.py:274
 msgid "Hiri Motu"
 msgstr ""
 
-#: lukimgather/settings.py:264
+#: lukimgather/settings.py:275
 msgid "Tok Pisin"
 msgstr ""
 
@@ -79,81 +79,141 @@ msgstr ""
 msgid "notifications"
 msgstr ""
 
-#: notification/models.py:18
-msgid "recipient"
-msgstr ""
-
-#: notification/models.py:21
-msgid "read"
-msgstr ""
-
-#: notification/models.py:29
-msgid "actor content type"
-msgstr ""
-
-#: notification/models.py:32
-msgid "actor object id"
-msgstr ""
-
-#: notification/models.py:37
-msgid "verb"
-msgstr ""
-
-#: notification/models.py:38 notification/models.py:85 support/models.py:23
-#: support/models.py:51 survey/models.py:16 user/models.py:192
-msgid "description"
-msgstr ""
-
-#: notification/models.py:40
-msgid "notification type"
-msgstr ""
-
-#: notification/models.py:42
-msgid "timestamp"
-msgstr ""
-
-#: notification/models.py:51
-msgid "action object content type"
-msgstr ""
-
-#: notification/models.py:54
-msgid "action object object id"
-msgstr ""
-
-#: notification/models.py:67
-msgid "target content type"
-msgstr ""
-
-#: notification/models.py:70
-msgid "target object id"
-msgstr ""
-
-#: notification/models.py:81
-msgid "User"
-msgstr ""
-
-#: notification/models.py:82
-msgid "Public"
-msgstr ""
-
-#: notification/models.py:84 support/models.py:50 survey/models.py:14
-#: survey/models.py:29 survey/models.py:82 user/models.py:191
+#: notification/models.py:13 notification/models.py:106
+#: organization/models.py:12 support/models.py:53 support/models.py:61
+#: support/models.py:106 support/models.py:120 survey/models.py:15
+#: survey/models.py:31 survey/models.py:84 user/models.py:231
 msgid "title"
 msgstr ""
 
-#: notification/models.py:87
+#: notification/models.py:14 notification/models.py:54
+#: notification/models.py:107 organization/models.py:16 support/models.py:26
+#: support/models.py:54 support/models.py:121 survey/models.py:17
+#: user/models.py:232
+msgid "description"
+msgstr ""
+
+#: notification/models.py:16 user/models.py:234
+msgid "Organizations"
+msgstr ""
+
+#: notification/models.py:18
+msgid "Users"
+msgstr ""
+
+#: notification/models.py:19
+msgid "Notify all"
+msgstr ""
+
+#: notification/models.py:31
+msgid "recipient"
+msgstr ""
+
+#: notification/models.py:34
+msgid "read"
+msgstr ""
+
+#: notification/models.py:42
+msgid "actor content type"
+msgstr ""
+
+#: notification/models.py:45
+msgid "actor object id"
+msgstr ""
+
+#: notification/models.py:53
+msgid "verb"
+msgstr ""
+
+#: notification/models.py:56
+msgid "notification type"
+msgstr ""
+
+#: notification/models.py:58
+msgid "timestamp"
+msgstr ""
+
+#: notification/models.py:67
+msgid "action object content type"
+msgstr ""
+
+#: notification/models.py:70
+msgid "action object object id"
+msgstr ""
+
+#: notification/models.py:86
+msgid "target content type"
+msgstr ""
+
+#: notification/models.py:89
+msgid "target object id"
+msgstr ""
+
+#: notification/models.py:103
+msgid "User"
+msgstr ""
+
+#: notification/models.py:104
+msgid "Public"
+msgstr ""
+
+#: notification/models.py:109
 msgid "notice type"
 msgstr ""
 
-#: notification/models.py:92
+#: notification/models.py:114
 msgid "active"
 msgstr ""
 
-#: region/models.py:7
+#: notification/mutations.py:23
+msgid "Successfully marked all notification as read"
+msgstr ""
+
+#: notification/mutations.py:28
+msgid "Successfully marked as read"
+msgstr ""
+
+#: organization/admin.py:24 user/models.py:54
+msgid "organization"
+msgstr ""
+
+#: organization/admin.py:25
+msgid "organizations"
+msgstr ""
+
+#: organization/models.py:14
+msgid "acronym"
+msgstr ""
+
+#: organization/models.py:18 user/models.py:39
+msgid "Email Address"
+msgstr ""
+
+#: organization/models.py:23
+msgid "logo"
+msgstr ""
+
+#: organization/models.py:33
+msgid "members"
+msgstr ""
+
+#: organization/models.py:36
+msgid "point of contact"
+msgstr ""
+
+#: organization/models.py:39
+msgid "website"
+msgstr ""
+
+#: organization/models.py:40
+msgid "Address"
+msgstr ""
+
+#: region/models.py:7 region/models.py:27
 msgid "name"
 msgstr ""
 
-#: region/models.py:10
+#: region/models.py:10 region/models.py:30
 msgid "boundary"
 msgstr ""
 
@@ -161,282 +221,406 @@ msgstr ""
 msgid "parent region"
 msgstr ""
 
-#: support/admin.py:14
+#: region/models.py:36
+msgid "parent protected area"
+msgstr ""
+
+#: support/admin.py:35
 msgid "legal document"
 msgstr ""
 
-#: support/admin.py:15
+#: support/admin.py:36
 msgid "legal documents"
 msgstr ""
 
-#: support/admin.py:23
+#: support/admin.py:44
 msgid "feedback"
 msgstr ""
 
-#: support/admin.py:24
+#: support/admin.py:45
 msgid "feedbacks"
 msgstr ""
 
-#: support/admin.py:38
+#: support/admin.py:55
+msgid "frequently asked question"
+msgstr ""
+
+#: support/admin.py:56
+msgid "frequently asked questions"
+msgstr ""
+
+#: support/admin.py:64
+msgid "tutorial"
+msgstr ""
+
+#: support/admin.py:65
+msgid "tutorials"
+msgstr ""
+
+#: support/admin.py:74 support/admin.py:90
+msgid "resource"
+msgstr ""
+
+#: support/admin.py:75 support/models.py:128
+msgid "resource tags"
+msgstr ""
+
+#: support/admin.py:91
+msgid "resources"
+msgstr ""
+
+#: support/admin.py:105
 msgid "email template"
 msgstr ""
 
-#: support/admin.py:39
+#: support/admin.py:106
 msgid "email templates"
 msgstr ""
 
-#: support/models.py:10
+#: support/models.py:13
 msgid "About"
 msgstr ""
 
-#: support/models.py:11
+#: support/models.py:14
 msgid "Terms And Conditions"
 msgstr ""
 
-#: support/models.py:12
+#: support/models.py:15
 msgid "Privacy Policy"
 msgstr ""
 
-#: support/models.py:13
+#: support/models.py:16
 msgid "Cookie Policy"
 msgstr ""
 
-#: support/models.py:18
+#: support/models.py:21
 msgid "document type"
 msgstr ""
 
-#: support/models.py:58
-msgid "identifier"
+#: support/models.py:62
+msgid "icon"
 msgstr ""
 
-#: support/models.py:59
-msgid "subject"
+#: support/models.py:71
+msgid "categories"
 msgstr ""
 
-#: support/models.py:60
-msgid "html message"
+#: support/models.py:75 support/models.py:92
+msgid "question"
 msgstr ""
 
-#: support/models.py:61
-msgid "text message"
-msgstr ""
-
-#: survey/models.py:18
-msgid "XForms"
-msgstr ""
-
-#: survey/models.py:24
-msgid "Form"
-msgstr ""
-
-#: survey/models.py:25
-msgid "Forms"
-msgstr ""
-
-#: survey/models.py:30
+#: support/models.py:76 support/models.py:93 survey/models.py:32
 msgid "answer"
 msgstr ""
 
-#: survey/models.py:36
+#: support/models.py:117
+msgid "Attachment"
+msgstr ""
+
+#: support/models.py:123
+msgid "resource type"
+msgstr ""
+
+#: support/models.py:125
+msgid "video url"
+msgstr ""
+
+#: support/models.py:126
+msgid "attachment"
+msgstr ""
+
+#: support/models.py:139
+msgid "identifier"
+msgstr ""
+
+#: support/models.py:140
+msgid "subject"
+msgstr ""
+
+#: support/models.py:141
+msgid "html message"
+msgstr ""
+
+#: support/models.py:142
+msgid "text message"
+msgstr ""
+
+#: survey/admin.py:102
+#, python-format
+msgid "Approve/Reject selected %(verbose_name_plural)s"
+msgstr ""
+
+#: survey/admin.py:177
+#, python-format
+msgid "Successfully executed action on %(count)d %(items)s."
+msgstr ""
+
+#: survey/models.py:19
+msgid "XForms"
+msgstr ""
+
+#: survey/models.py:20
+msgid "Question mapping"
+msgstr ""
+
+#: survey/models.py:26
+msgid "Form"
+msgstr ""
+
+#: survey/models.py:27
+msgid "Forms"
+msgstr ""
+
+#: survey/models.py:38
 msgid "Survey"
 msgstr ""
 
-#: survey/models.py:37
+#: survey/models.py:39
 msgid "Surveys"
 msgstr ""
 
-#: survey/models.py:43 survey/models.py:85
+#: survey/models.py:45 survey/models.py:87
 msgid "Description"
 msgstr ""
 
-#: survey/models.py:56
+#: survey/models.py:58
 msgid "Protected area category"
 msgstr ""
 
-#: survey/models.py:57
+#: survey/models.py:59
 msgid "Protected area categories"
 msgstr ""
 
-#: survey/models.py:61
+#: survey/models.py:63
 msgid "Approved"
 msgstr ""
 
-#: survey/models.py:62
+#: survey/models.py:64
 msgid "Rejected"
 msgstr ""
 
-#: survey/models.py:63
+#: survey/models.py:65
 msgid "Pending"
 msgstr ""
 
-#: survey/models.py:67
+#: survey/models.py:69
 msgid "Increasing"
 msgstr ""
 
-#: survey/models.py:68
+#: survey/models.py:70
 msgid "Same"
 msgstr ""
 
-#: survey/models.py:69
+#: survey/models.py:71
 msgid "Decreasing"
 msgstr ""
 
-#: survey/models.py:87
+#: survey/models.py:89
 msgid "Sentiments"
 msgstr ""
 
-#: survey/models.py:89
+#: survey/models.py:91
 msgid "Attachments"
 msgstr ""
 
-#: survey/models.py:91
+#: survey/models.py:93
 msgid "Location"
 msgstr ""
 
-#: survey/models.py:93
+#: survey/models.py:95
 msgid "Location Boundary"
 msgstr ""
 
-#: survey/models.py:96
+#: survey/models.py:98
 msgid "Happening Survey Answer Status"
 msgstr ""
 
-#: survey/models.py:102
+#: survey/models.py:104
 msgid "Happening Survey Improvement Status"
 msgstr ""
 
-#: survey/models.py:125
+#: survey/models.py:155
 msgid "Happening survey"
 msgstr ""
 
-#: survey/models.py:126
+#: survey/models.py:156
 msgid "Happening surveys"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:6
+msgid "Home"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:9
+msgid "Approve/Reject multiple happening surveys"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:15
+#, python-format
+msgid ""
+"Changing the selected %(objects_name)s would result in approving or "
+"declining objects, but your account doesn't have permission to change the "
+"following types of objects."
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:22
+#, python-format
+msgid ""
+"Changing the selected %(objects_name)s would require editing the following "
+"protected related objects."
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:30
+#, python-format
+msgid ""
+"Are you sure you want to execute this action on the selected "
+"%(objects_name)s?"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:32
+msgid "Summary"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:38
+msgid "Objects"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:48
+msgid "Accept"
+msgstr ""
+
+#: templates/admin/accept_reject_bulk_action.html:49
+msgid "Decline"
 msgstr ""
 
 #: user/admin.py:11
 msgid "Additional Fields"
 msgstr ""
 
-#: user/models.py:23 user/mutations.py:43 user/mutations.py:53
-#: user/mutations.py:64 user/mutations.py:71 user/mutations.py:81
+#: user/models.py:24 user/mutations.py:54 user/mutations.py:64
+#: user/mutations.py:75 user/mutations.py:82 user/mutations.py:92
+#: user/mutations.py:102
 msgid "Username"
 msgstr ""
 
-#: user/models.py:27
+#: user/models.py:28
 msgid ""
 "Required. Length can be between 5 to 20. Letters, digits and ./-/_ only."
 msgstr ""
 
-#: user/models.py:34
+#: user/models.py:35
 msgid "A user with that username already exists."
-msgstr ""
-
-#: user/models.py:38
-msgid "Email Address"
 msgstr ""
 
 #: user/models.py:41
 msgid "A user with that email already exists."
 msgstr ""
 
-#: user/models.py:45
+#: user/models.py:47
 msgid "Active"
 msgstr ""
 
-#: user/models.py:48
+#: user/models.py:50
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: user/models.py:52
-msgid "organization"
-msgstr ""
-
-#: user/models.py:55
+#: user/models.py:57
 msgid "Avatar"
 msgstr ""
 
-#: user/models.py:142 user/models.py:159 user/models.py:175
-#: user/mutations.py:55 user/mutations.py:73 user/mutations.py:83
+#: user/models.py:149 user/models.py:166 user/models.py:182 user/models.py:199
+#: user/models.py:215 user/mutations.py:66 user/mutations.py:84
+#: user/mutations.py:94 user/mutations.py:104
 msgid "No Of Incorrect Attempts"
 msgstr ""
 
-#: user/models.py:145 user/models.py:162 user/models.py:178
-#: user/mutations.py:57 user/mutations.py:75 user/mutations.py:85
-#: user/mutations.py:96
+#: user/models.py:152 user/models.py:169 user/models.py:185 user/models.py:202
+#: user/models.py:218 user/mutations.py:68 user/mutations.py:86
+#: user/mutations.py:96 user/mutations.py:106 user/mutations.py:117
 msgid "Pin"
 msgstr ""
 
-#: user/models.py:147 user/models.py:164 user/models.py:180
-#: user/mutations.py:58 user/mutations.py:76
+#: user/models.py:154 user/models.py:171 user/models.py:187 user/models.py:204
+#: user/models.py:220 user/mutations.py:69 user/mutations.py:87
+#: user/mutations.py:97
 msgid "Pin Expiry Time"
 msgstr ""
 
-#: user/models.py:148 user/models.py:165 user/models.py:182
-#: user/mutations.py:59 user/mutations.py:77 user/mutations.py:87
+#: user/models.py:155 user/models.py:172 user/models.py:189 user/models.py:205
+#: user/models.py:222 user/mutations.py:70 user/mutations.py:88
+#: user/mutations.py:98 user/mutations.py:108
 msgid "Is Active"
 msgstr ""
 
-#: user/models.py:149 user/mutations.py:60 user/mutations.py:67
+#: user/models.py:156 user/mutations.py:71 user/mutations.py:78
 msgid "Identifier"
 msgstr ""
 
-#: user/mutations.py:31
+#: user/mutations.py:41
 msgid "First name"
 msgstr ""
 
-#: user/mutations.py:32
+#: user/mutations.py:42
 msgid "Last name"
 msgstr ""
 
-#: user/mutations.py:33
+#: user/mutations.py:43
 msgid "Organization"
 msgstr ""
 
-#: user/mutations.py:38
+#: user/mutations.py:48
 msgid "First Name"
 msgstr ""
 
-#: user/mutations.py:39
+#: user/mutations.py:49
 msgid "Last Name"
 msgstr ""
 
-#: user/mutations.py:40
+#: user/mutations.py:50
 msgid "Email"
 msgstr ""
 
-#: user/mutations.py:41 user/mutations.py:47 user/mutations.py:65
-#: user/mutations.py:92
+#: user/mutations.py:51
+msgid "Phone Number"
+msgstr ""
+
+#: user/mutations.py:52 user/mutations.py:58 user/mutations.py:76
+#: user/mutations.py:113
 msgid "Password"
 msgstr ""
 
-#: user/mutations.py:42 user/mutations.py:49 user/mutations.py:66
+#: user/mutations.py:53 user/mutations.py:60 user/mutations.py:77
 msgid "Retype Password"
 msgstr ""
 
-#: user/mutations.py:48
+#: user/mutations.py:59
 msgid "New Password"
 msgstr ""
 
-#: user/mutations.py:86 user/mutations.py:91
+#: user/mutations.py:107 user/mutations.py:112
 msgid "New Email"
 msgstr ""
 
-#: user/mutations.py:102
+#: user/mutations.py:123
 msgid "Fields required to create a user."
 msgstr ""
 
-#: user/mutations.py:128
+#: user/mutations.py:160
 msgid "Fields required to change password."
 msgstr ""
 
-#: user/mutations.py:184 user/mutations.py:226 user/mutations.py:278
-#: user/mutations.py:349 user/mutations.py:392 user/mutations.py:443
-#: user/mutations.py:487
+#: user/mutations.py:216 user/mutations.py:258 user/mutations.py:310
+#: user/mutations.py:381 user/mutations.py:424 user/mutations.py:475
+#: user/mutations.py:519 user/mutations.py:621
 msgid "Fields required to reset password."
 msgstr ""
 
-#: user/schema.py:27
+#: user/mutations.py:576
+msgid "Fields required to confirm phone number."
+msgstr ""
+
+#: user/schema.py:29
 msgid "Return the currently authenticated user."
 msgstr ""
