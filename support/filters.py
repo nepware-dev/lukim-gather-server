@@ -14,7 +14,7 @@ class CategoryFilter(django_filters.FilterSet):
     class Meta:
         model = Category
         fields = {
-            "title": ["icontains"],
+            "title": ["exact", "icontains"],
             "parent": ["exact"],
             "level": ["exact"],
         }

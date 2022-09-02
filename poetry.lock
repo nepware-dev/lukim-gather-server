@@ -331,7 +331,7 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "3.2.14"
+version = "3.2.15"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -567,14 +567,14 @@ python-versions = "*"
 
 [[package]]
 name = "django-phonenumber-field"
-version = "6.3.0"
+version = "6.4.0"
 description = "An international phone number field for django models."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-Django = ">=2.2"
+Django = ">=3.2"
 phonenumbers = {version = ">=7.0.2", optional = true, markers = "extra == \"phonenumbers\""}
 
 [package.extras]
@@ -623,7 +623,7 @@ djangorestframework = "*"
 
 [[package]]
 name = "dparse"
-version = "0.5.1"
+version = "0.5.2"
 description = "A parser for Python dependency files"
 category = "dev"
 optional = false
@@ -631,11 +631,11 @@ python-versions = ">=3.5"
 
 [package.dependencies]
 packaging = "*"
-pyyaml = "*"
 toml = "*"
 
 [package.extras]
 pipenv = ["pipenv"]
+conda = ["pyyaml"]
 
 [[package]]
 name = "environs"
@@ -1703,10 +1703,7 @@ django-ordered-model = [
     {file = "django-ordered-model-3.5.tar.gz", hash = "sha256:26c6b5a87a6e51323c53e0233d999dd1a9f40d43b0f17e478de951bc1f999c73"},
     {file = "django_ordered_model-3.5-py3-none-any.whl", hash = "sha256:a840b475ca0f2bac5f6e4918e107a8e075578babcd94b3b8d0ba7f009eaf1450"},
 ]
-django-phonenumber-field = [
-    {file = "django-phonenumber-field-6.3.0.tar.gz", hash = "sha256:668db2e61559908ce8dcd660ac716262c7922cc29ec76ede3f9b88772992dc28"},
-    {file = "django_phonenumber_field-6.3.0-py3-none-any.whl", hash = "sha256:188ca55b27ef1ac4d9b279d90ee3f1377ece6cd9ed8c63f0a66efd565bf9ad6f"},
-]
+django-phonenumber-field = []
 django-vectortiles = [
     {file = "django-vectortiles-0.1.0.tar.gz", hash = "sha256:c3f257fb46c2a37ed609f6170f1ab6af8401ad4beb21a4c0a2493f96ec5828ba"},
 ]
@@ -1718,10 +1715,7 @@ djangorestframework-gis = [
     {file = "djangorestframework-gis-0.18.tar.gz", hash = "sha256:6ddd201a208e68f8f11ac71d2df2c030b1280818a4b54681be00e73057fcafb1"},
     {file = "djangorestframework_gis-0.18-py2.py3-none-any.whl", hash = "sha256:7df5d5a32c3492d55837e2a695ef8f9a5c83dc163d90a0764eaa187091a9a633"},
 ]
-dparse = [
-    {file = "dparse-0.5.1-py3-none-any.whl", hash = "sha256:e953a25e44ebb60a5c6efc2add4420c177f1d8404509da88da9729202f306994"},
-    {file = "dparse-0.5.1.tar.gz", hash = "sha256:a1b5f169102e1c894f9a7d5ccf6f9402a836a5d24be80a986c7ce9eaed78f367"},
-]
+dparse = []
 environs = [
     {file = "environs-9.5.0-py2.py3-none-any.whl", hash = "sha256:1e549569a3de49c05f856f40bce86979e7d5ffbbc4398e7f338574c220189124"},
     {file = "environs-9.5.0.tar.gz", hash = "sha256:a76307b36fbe856bdca7ee9161e6c466fd7fcffc297109a118c59b54e27e30c9"},
