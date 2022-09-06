@@ -68,3 +68,15 @@
       Thanks,
       Lukim Gather Team
     text_message: *account_blocked_content
+- model: support.EmailTemplate
+  pk: 5
+  fields:
+    identifier: announcement
+    subject: Announcement
+    html_message: &announcement_content |
+      Dear {{ user.username }}
+      {{announcement_object}}
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *announcement_content
