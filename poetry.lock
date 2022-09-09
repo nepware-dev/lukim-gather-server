@@ -582,6 +582,14 @@ phonenumbers = ["phonenumbers (>=7.0.2)"]
 phonenumberslite = ["phonenumberslite (>=7.0.2)"]
 
 [[package]]
+name = "django-ratelimit"
+version = "3.0.1"
+description = "Cache-based rate-limiting for Django."
+category = "main"
+optional = false
+python-versions = ">=3.4"
+
+[[package]]
 name = "django-vectortiles"
 version = "0.1.0"
 description = "Django vector tile generation"
@@ -1445,7 +1453,7 @@ asgi = ["uvicorn", "gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "fcdc4f96acc5dc55aeb6e2f8f544e8512f1a8e0d9d72c22b140c79f4177caafa"
+content-hash = "1a511becd799dfdd6912f2ae486925329d19facbe8f7b7266b18192cb3224368"
 
 [metadata.files]
 amqp = [
@@ -1704,6 +1712,7 @@ django-ordered-model = [
     {file = "django_ordered_model-3.5-py3-none-any.whl", hash = "sha256:a840b475ca0f2bac5f6e4918e107a8e075578babcd94b3b8d0ba7f009eaf1450"},
 ]
 django-phonenumber-field = []
+django-ratelimit = []
 django-vectortiles = [
     {file = "django-vectortiles-0.1.0.tar.gz", hash = "sha256:c3f257fb46c2a37ed609f6170f1ab6af8401ad4beb21a4c0a2493f96ec5828ba"},
 ]
