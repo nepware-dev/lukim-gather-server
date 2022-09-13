@@ -26,6 +26,7 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
             instance.status,
             action_object=instance,
             notification_type=f"happening_survey_{instance.status}",
+            description=f"admin {instance.status} {instance.title}",
         )
     if created or (
         update_fields

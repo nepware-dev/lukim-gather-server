@@ -1,10 +1,11 @@
+import graphene
 from graphene_django.types import DjangoObjectType
 
 from lukimgather.resolvers import staff_resolver
 from user.models import Grant, PasswordResetPin, User
 
 
-class UserType(DjangoObjectType):
+class PrivateUserType(DjangoObjectType):
     class Meta:
         model = User
         exclude = ("password",)
@@ -16,6 +17,12 @@ class UserType(DjangoObjectType):
             return None
 
 
+class UserType(DjangoObjectType):
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name")
+
+
 class PasswordResetPinType(DjangoObjectType):
     class Meta:
         model = PasswordResetPin
@@ -23,6 +30,8 @@ class PasswordResetPinType(DjangoObjectType):
 
 
 class GrantType(DjangoObjectType):
+    user = graphene.Field(PrivateUserType)
+
     class Meta:
         model = Grant
         fields = "__all__"

@@ -21,12 +21,12 @@ from user.mutations import (
     ResetUserPasswordVerify,
     UpdateUser,
 )
-from user.types import GrantType, UserType
+from user.types import GrantType, PrivateUserType
 
 
 class UserQueries(graphene.ObjectType):
     me = graphene.Field(
-        UserType, description=_("Return the currently authenticated user.")
+        PrivateUserType, description=_("Return the currently authenticated user.")
     )
     grant = DjangoFilterPaginateListField(
         GrantType,
