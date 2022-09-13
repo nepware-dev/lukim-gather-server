@@ -16,6 +16,7 @@ from graphql_jwt.refresh_token.shortcuts import create_refresh_token
 from graphql_jwt.shortcuts import get_token
 from phonenumber_field.validators import validate_international_phonenumber
 
+from lukimgather.throttling import ratelimit
 from lukimgather.utils import gen_random_number, gen_random_string
 from support.models import EmailTemplate
 from user.models import (
@@ -127,6 +128,8 @@ class RegisterUser(graphene.Mutation):
     result = graphene.Field(PrivateUserType)
     ok = graphene.Boolean()
 
+    @ratelimit(key="ip", rate="500/h", block=True)
+    @ratelimit(key="gql:data.username", rate="10/m", block=True)
     def mutate(self, info, data):
         user_exists = User.objects.filter_by_username(data.username).exists()
         if user_exists:
@@ -580,6 +583,8 @@ class PhoneNumberConfirm(graphene.Mutation):
     ok = graphene.Boolean()
     result = GenericScalar()
 
+    @ratelimit(key="ip", rate="500/h", block=True)
+    @ratelimit(key="gql:data.username", rate="10/m", block=True)
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username).first()
         if not user:
