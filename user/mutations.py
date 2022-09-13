@@ -26,11 +26,11 @@ from user.models import (
     User,
 )
 from user.serializers import GrantSerializer
-from user.types import PasswordResetPinType, UserType
+from user.types import PasswordResetPinType, PrivateUserType
 
 
 class CustomObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
-    user = graphene.Field(UserType)
+    user = graphene.Field(PrivateUserType)
 
     @classmethod
     def resolve(cls, root, info, **kwargs):
@@ -124,7 +124,7 @@ class RegisterUser(graphene.Mutation):
         )
 
     errors = GenericScalar()
-    result = graphene.Field(UserType)
+    result = graphene.Field(PrivateUserType)
     ok = graphene.Boolean()
 
     def mutate(self, info, data):
@@ -195,7 +195,7 @@ class UpdateUser(graphene.Mutation):
 
     errors = GenericScalar()
     ok = graphene.Boolean()
-    result = graphene.Field(UserType)
+    result = graphene.Field(PrivateUserType)
 
     @login_required
     def mutate(self, info, data=None):
@@ -621,7 +621,7 @@ class PhoneNumberConfirmVerify(graphene.Mutation):
             description=_("Fields required to reset password."), required=True
         )
 
-    user = graphene.Field(UserType)
+    user = graphene.Field(PrivateUserType)
     token = graphene.String()
     refresh_token = graphene.String()
 
