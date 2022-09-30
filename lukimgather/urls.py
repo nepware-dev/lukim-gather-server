@@ -6,6 +6,7 @@ from django.urls import include, path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_file_upload.django import FileUploadGraphQLView
 
+from region.views import ProtectedAreaTileView
 from survey.views import TileView
 from user.views import UserInfoView
 
@@ -35,6 +36,11 @@ urlpatterns += [
         "tiles/<int:z>/<int:x>/<int:y>",
         TileView.as_view(),
         name="happening-surveys-tile",
+    ),
+    path(
+        "protected_area_tiles/<int:z>/<int:x>/<int:y>",
+        ProtectedAreaTileView.as_view(),
+        name="protected-area-tile",
     ),
 ]
 
