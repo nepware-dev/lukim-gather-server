@@ -46,6 +46,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
     improvement = Improvement(required=False)
     is_public = graphene.Boolean(default=True, required=False)
     is_test = graphene.Boolean(default=False, required=False)
+    is_offline = graphene.Boolean(default=False, required=False)
 
 
 class CreateHappeningSurvey(graphene.Mutation):

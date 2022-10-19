@@ -10,7 +10,6 @@ from .models import Announcement, Notice, Notification
 class NotificationAdmin(admin.ModelAdmin):
     list_display = (
         "recipient",
-        "actor",
         "action_object",
         "target",
         "notification_type",

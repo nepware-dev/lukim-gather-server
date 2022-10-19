@@ -1,3 +1,4 @@
+import graphene
 from graphene.types.generic import GenericScalar
 from graphene_django.types import DjangoObjectType
 from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
@@ -18,6 +19,11 @@ class ProtectedAreaCategoryType(DjangoObjectType):
 
 
 class HappeningSurveyType(DjangoObjectType):
+    is_offline = graphene.Boolean()
+
+    def resolve_is_offline(self, info):
+        return False
+
     class Meta:
         model = HappeningSurvey
         description = "Type definition for a happening survey"
