@@ -365,7 +365,7 @@ class PasswordResetChange(graphene.Mutation):
                 validate_password(password=password, user=user)
             except ValidationError as e:
                 errors = list(e.messages)
-                raise GraphQLError(errors)
+                raise GraphQLError(errors[0])
             password_reset_pin_object.no_of_incorrect_attempts = 0
             password_reset_pin_object.is_active = False
             password_reset_pin_object.save()
