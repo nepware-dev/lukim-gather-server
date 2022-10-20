@@ -164,7 +164,7 @@ if DEBUG:
     ]
 
 # CORS settings
-CORS_URLS_REGEX = r"^(/graphql).*$"
+CORS_URLS_REGEX = r"^/(graphql|protected_area_tiles).*$"
 CORS_ALLOWED_ORIGIN_REGEXES = env.list(
     "CORS_ALLOWED_ORIGIN_REGEXES", default=[], subcast=str
 )
