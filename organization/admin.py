@@ -8,7 +8,6 @@ from .models import Organization
 
 @admin.register(Organization)
 class OrganizationAdmin(UserStampedModelAdmin):
-    autocomplete_fields = ("members",)
     list_display = (
         "title",
         "acronym",

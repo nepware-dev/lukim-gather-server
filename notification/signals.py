@@ -3,6 +3,7 @@ from django.db.models.signals import m2m_changed, post_save
 from django.dispatch.dispatcher import receiver
 from django.utils.html import strip_tags
 
+from project.models import Project
 from support.models import EmailTemplate
 from user.models import User
 
@@ -17,8 +18,8 @@ def send_announcement(sender, instance, **kwargs):
     if "notification.Announcement_organization" in sender._meta.label:
         organizations = instance.organization.all()
         for organization in organizations:
-            members = organization.members.all()
-            for user in members:
+            project_users = Project.objects.filter(organization=organization).distinct()
+            for user in project_users:
                 user.notify(
                     user,
                     instance.title,

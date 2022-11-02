@@ -80,6 +80,9 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         on_delete=models.SET_NULL,
         related_name="happening_survey",
     )
+    project = models.ForeignKey(
+        "project.Project", on_delete=models.CASCADE, blank=True, null=True, default=None
+    )
     title = models.CharField(
         _("title"), max_length=255, null=True, blank=True, default=None
     )

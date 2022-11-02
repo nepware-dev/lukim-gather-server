@@ -37,6 +37,7 @@ class Improvement(graphene.Enum):
 class HappeningSurveyInput(graphene.InputObjectType):
     id = graphene.UUID(description="uuid", require=False)
     category_id = graphene.Int(description="category id", required=True)
+    project_id = graphene.Int(description="project id")
     title = graphene.String(description="title", required=True)
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
@@ -68,11 +69,14 @@ class CreateHappeningSurvey(graphene.Mutation):
                 id = data.get("id", None)
                 if id:
                     survey_obj = HappeningSurvey.objects.create(
-                        id=id, category_id=data.get("category_id")
+                        id=id,
+                        category_id=data.get("category_id"),
+                        project_id=data.get("project_id"),
                     )
                 else:
                     survey_obj = HappeningSurvey.objects.create(
-                        category_id=data.get("category_id")
+                        category_id=data.get("category_id"),
+                        project_id=data.get("project_id"),
                     )
                 survey_obj.title = data.get("title")
                 survey_obj.description = data.get("description")

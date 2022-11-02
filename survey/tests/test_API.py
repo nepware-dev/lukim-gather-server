@@ -22,6 +22,9 @@ class APITest(TestBase):
         cls.category = cls.baker.make(
             "survey.ProtectedAreaCategory", title="test", _quantity=1
         )[0]
+        cls.project = cls.baker.make(
+            "project.Project", title="project test", _quantity=1
+        )[0]
         cls.happening_survey = cls.baker.make(
             "survey.HappeningSurvey", title="test", _quantity=1
         )[0]
@@ -89,6 +92,7 @@ class APITest(TestBase):
             "sentiment": "\U0001f600",
             "improvement": "INCREASING",
             "location": str(geos.Point(1, 0)),
+            "projectId": self.project.id,
             "categoryId": self.category.id,
             "isPublic": False,
             "isTest": True,
@@ -100,6 +104,7 @@ class APITest(TestBase):
             "sentiment": "\U0001f600",
             "improvement": "INCREASING",
             "location": str(geos.Point(1, 0)),
+            "projectId": self.project.id,
             "categoryId": self.category.id,
             "isPublic": False,
             "isTest": True,
