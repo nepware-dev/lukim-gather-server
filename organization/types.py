@@ -1,6 +1,9 @@
 import graphene
+from django.db.models import Count
 from graphene_django.types import DjangoObjectType
 from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
+
+from project.models import Project
 
 from .models import Organization
 
@@ -10,12 +13,14 @@ class OrganizationType(DjangoObjectType):
         model = Organization
         description = "Type defincation for a organization"
         paginations = LimitOffsetGraphqlPagination(ordering="title")
-        exclude = ("members",)
 
     members_count = graphene.Int()
 
     def resolve_members_count(root, info, **kwargs):
-        return root.members.count()
+        members_count = Project.objects.filter(organization=root).aggregate(
+            members_count=Count("users", distinct=True)
+        )
+        return members_count.get("members_count")
 
     def resolve_logo(self, info):
         if self.logo and self.logo.url:

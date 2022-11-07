@@ -9,6 +9,7 @@ from notification.schema import (
     NotificationQueries,
 )
 from organization.schema import OrganizationQueries
+from project.schema import ProjectQueries
 from region.schema import RegionQueries
 from support.schema import SupportMutations, SupportQueries
 from survey.schema import SurveyMutations, SurveyQueries
@@ -19,6 +20,7 @@ class Query(
     NotificationQueries,
     NoticeQueries,
     OrganizationQueries,
+    ProjectQueries,
     SupportQueries,
     SurveyQueries,
     RegionQueries,

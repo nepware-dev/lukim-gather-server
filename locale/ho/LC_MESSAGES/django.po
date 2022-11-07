@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-09 11:21+0000\n"
+"POT-Creation-Date: 2022-11-04 10:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,37 +59,38 @@ msgstr ""
 msgid "code"
 msgstr ""
 
-#: lukimgather/settings.py:273
+#: lukimgather/settings.py:274
 msgid "English"
 msgstr ""
 
-#: lukimgather/settings.py:274
+#: lukimgather/settings.py:275
 msgid "Hiri Motu"
 msgstr ""
 
-#: lukimgather/settings.py:275
+#: lukimgather/settings.py:276
 msgid "Tok Pisin"
 msgstr ""
 
-#: notification/admin.py:26 notification/apps.py:8
+#: notification/admin.py:25 notification/apps.py:8
 msgid "notification"
 msgstr ""
 
-#: notification/admin.py:27
+#: notification/admin.py:26
 msgid "notifications"
 msgstr ""
 
 #: notification/models.py:13 notification/models.py:106
-#: organization/models.py:12 support/models.py:53 support/models.py:61
-#: support/models.py:106 support/models.py:120 survey/models.py:15
-#: survey/models.py:31 survey/models.py:84 user/models.py:231
+#: organization/models.py:11 project/models.py:10 support/models.py:53
+#: support/models.py:61 support/models.py:106 support/models.py:120
+#: survey/models.py:15 survey/models.py:31 survey/models.py:87
+#: user/models.py:231
 msgid "title"
 msgstr ""
 
 #: notification/models.py:14 notification/models.py:54
-#: notification/models.py:107 organization/models.py:16 support/models.py:26
-#: support/models.py:54 support/models.py:121 survey/models.py:17
-#: user/models.py:232
+#: notification/models.py:107 organization/models.py:15 project/models.py:11
+#: support/models.py:26 support/models.py:54 support/models.py:121
+#: survey/models.py:17 user/models.py:232
 msgid "description"
 msgstr ""
 
@@ -173,40 +174,64 @@ msgstr ""
 msgid "Successfully marked as read"
 msgstr ""
 
-#: organization/admin.py:24 user/models.py:54
+#: organization/admin.py:23 project/models.py:19 user/models.py:54
 msgid "organization"
 msgstr ""
 
-#: organization/admin.py:25
+#: organization/admin.py:24
 msgid "organizations"
 msgstr ""
 
-#: organization/models.py:14
+#: organization/models.py:13
 msgid "acronym"
 msgstr ""
 
-#: organization/models.py:18 user/models.py:39
+#: organization/models.py:17 user/models.py:39
 msgid "Email Address"
 msgstr ""
 
-#: organization/models.py:23
+#: organization/models.py:22
 msgid "logo"
 msgstr ""
 
-#: organization/models.py:33
-msgid "members"
-msgstr ""
-
-#: organization/models.py:36
+#: organization/models.py:29
 msgid "point of contact"
 msgstr ""
 
-#: organization/models.py:39
+#: organization/models.py:32
 msgid "website"
 msgstr ""
 
-#: organization/models.py:40
+#: organization/models.py:33
 msgid "Address"
+msgstr ""
+
+#: project/admin.py:30 project/models.py:38
+msgid "project"
+msgstr ""
+
+#: project/admin.py:31
+msgid "projects"
+msgstr ""
+
+#: project/admin.py:40
+msgid "project user"
+msgstr ""
+
+#: project/admin.py:41
+msgid "project users"
+msgstr ""
+
+#: project/filters.py:10
+msgid "My Project"
+msgstr ""
+
+#: project/models.py:26
+msgid "users"
+msgstr ""
+
+#: project/models.py:41
+msgid "user"
 msgstr ""
 
 #: region/models.py:7 region/models.py:27
@@ -379,7 +404,7 @@ msgstr ""
 msgid "Surveys"
 msgstr ""
 
-#: survey/models.py:45 survey/models.py:87
+#: survey/models.py:45 survey/models.py:90
 msgid "Description"
 msgstr ""
 
@@ -415,35 +440,35 @@ msgstr ""
 msgid "Decreasing"
 msgstr ""
 
-#: survey/models.py:89
+#: survey/models.py:92
 msgid "Sentiments"
 msgstr ""
 
-#: survey/models.py:91
+#: survey/models.py:94
 msgid "Attachments"
 msgstr ""
 
-#: survey/models.py:93
+#: survey/models.py:96
 msgid "Location"
 msgstr ""
 
-#: survey/models.py:95
+#: survey/models.py:98
 msgid "Location Boundary"
 msgstr ""
 
-#: survey/models.py:98
+#: survey/models.py:101
 msgid "Happening Survey Answer Status"
 msgstr ""
 
-#: survey/models.py:104
+#: survey/models.py:107
 msgid "Happening Survey Improvement Status"
 msgstr ""
 
-#: survey/models.py:155
+#: survey/models.py:158
 msgid "Happening survey"
 msgstr ""
 
-#: survey/models.py:156
+#: survey/models.py:159
 msgid "Happening surveys"
 msgstr ""
 

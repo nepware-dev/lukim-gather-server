@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from lukimgather import settings
 from lukimgather.fields import LowerEmailField
 from lukimgather.models import TimeStampedModel, UserStampedModel
 
@@ -25,12 +24,6 @@ class Organization(UserStampedModel, TimeStampedModel):
         null=True,
         blank=True,
         default=None,
-    )
-    members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        related_name="member_organizations",
-        blank=True,
-        verbose_name=_("members"),
     )
     point_of_contact = models.TextField(
         _("point of contact"), null=True, blank=True, default=None

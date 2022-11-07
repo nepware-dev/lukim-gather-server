@@ -82,6 +82,7 @@ INTERNAL_APPS = [
     "gallery",
     "notification",
     "organization",
+    "project",
     "region",
     "survey",
     "support",
