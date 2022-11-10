@@ -230,3 +230,71 @@ class APITest(TestBase):
             **self.headers,
         )
         self.assertResponseNoErrors(response)
+
+    def test_happening_survey_history_get(self):
+        response = self.query(
+            """
+            query {
+              happeningSurveysHistory {
+                id
+                objectRepr
+                objectId
+                format
+                db
+                revision {
+                  id
+                  comment
+                  dateCreated
+                }
+                serializedData {
+                  fields {
+                    title
+                    description
+                    improvement
+                    sentiment
+                    status
+                    isPublic
+                    isTest
+                    region {
+                      id
+                      name
+                    }
+                    location {
+                      type
+                      coordinates
+                    }
+                    boundary {
+                      type
+                      coordinates
+                    }
+                    protectedArea {
+                      id
+                      name
+                    }
+                    project {
+                      id
+                    }
+                    category {
+                      id
+                      title
+                    }
+                    createdBy {
+                      id
+                      firstName
+                      lastName
+                    }
+                    updatedBy {
+                      id
+                      firstName
+                      lastName
+                    }
+                    createdAt
+                    modifiedAt
+                  }
+                }
+              }
+            }
+            """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)

@@ -1,4 +1,5 @@
 import django_filters
+from reversion.models import Version
 
 from survey.models import HappeningSurvey, Survey
 
@@ -15,6 +16,17 @@ class HappeningSurveyFilter(django_filters.FilterSet):
             "is_public": [
                 "exact",
             ],
+        }
+
+
+class HappeningSurveyHistoryFilter(django_filters.FilterSet):
+    class Meta:
+        model = Version
+        fields = {
+            "id": ["exact"],
+            "object_id": ["exact"],
+            "object_repr": ["exact", "icontains"],
+            "revision__comment": ["exact"],
         }
 
 

@@ -104,6 +104,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "rest_framework",
     "rest_framework_gis",
+    "reversion",
     "oauth2_provider",
     "allauth",
     "allauth.account",

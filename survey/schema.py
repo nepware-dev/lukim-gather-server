@@ -2,16 +2,22 @@ import graphene
 from django.db.models import Q
 from graphene_django_extras import DjangoFilterPaginateListField
 
-from survey.filters import HappeningSurveyFilter, SurveyFilter
+from survey.filters import (
+    HappeningSurveyFilter,
+    HappeningSurveyHistoryFilter,
+    SurveyFilter,
+)
 from survey.models import HappeningSurvey
 from survey.mutations import (
     CreateHappeningSurvey,
     DeleteHappeningSurvey,
+    EditHappeningSurvey,
     UpdateHappeningSurvey,
     WritableSurveyMutation,
 )
 from survey.types import (
     FormType,
+    HappeningSurveyHistoryType,
     HappeningSurveyType,
     ProtectedAreaCategoryType,
     SurveyType,
@@ -23,6 +29,11 @@ class SurveyQueries(graphene.ObjectType):
         HappeningSurveyType,
         description="Return the happening survey",
         filterset_class=HappeningSurveyFilter,
+    )
+    happening_surveys_history = DjangoFilterPaginateListField(
+        HappeningSurveyHistoryType,
+        description="Return the happening survey history",
+        filterset_class=HappeningSurveyHistoryFilter,
     )
     protected_area_categories = DjangoFilterPaginateListField(
         ProtectedAreaCategoryType, description="Return all protected area category"
@@ -50,5 +61,6 @@ class SurveyQueries(graphene.ObjectType):
 class SurveyMutations(graphene.ObjectType):
     create_happening_survey = CreateHappeningSurvey.Field()
     delete_happening_survey = DeleteHappeningSurvey.Field()
+    edit_happening_survey = EditHappeningSurvey.Field()
     update_happening_survey = UpdateHappeningSurvey.Field()
     create_writable_survey = WritableSurveyMutation.Field()

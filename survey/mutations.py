@@ -1,5 +1,6 @@
 import graphene
 import graphql_geojson
+import reversion
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from graphene.types.generic import GenericScalar
@@ -131,6 +132,7 @@ class DeleteHappeningSurvey(graphene.Mutation):
 
 class UpdateHappeningSurveyInput(graphene.InputObjectType):
     category_id = graphene.Int(description="category id", required=False)
+    project_id = graphene.Int(description="project id", required=False)
     title = graphene.String(description="title", required=False)
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
@@ -146,6 +148,60 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
 
 
 class UpdateHappeningSurvey(graphene.Mutation):
+    class Input:
+        id = graphene.UUID(description="UUID", required=True)
+        data = UpdateHappeningSurveyInput(
+            description="Fields required to create a happening survey.",
+            required=True,
+        )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = graphene.Field(HappeningSurveyType)
+
+    @login_required
+    def mutate(self, info, id, data=None):
+        try:
+            with transaction.atomic(), reversion.create_revision():
+                attachment_links = data.pop("attachment_link", None)
+                attachments = data.pop("attachment", [])
+                happening_survey_obj = HappeningSurvey.objects.get(id=id)
+                for key, value in data.items():
+                    try:
+                        value = value.value
+                    except AttributeError:
+                        pass
+                    setattr(happening_survey_obj, key, value)
+                try:
+                    happening_survey_obj.full_clean()
+                    if attachment_links is not None:
+                        happening_survey_obj.attachment.set(attachment_links)
+                    happening_survey_obj.updated_by = info.context.user
+                    happening_survey_obj.save()
+                    if attachments:
+                        for attachment in attachments:
+                            if is_valid_uuid(attachment.name):
+                                new_attachment = happening_survey_obj.attachment.create(
+                                    id=attachment.name,
+                                    media=attachment,
+                                    title=attachment.name,
+                                    type="image",
+                                )
+                            else:
+                                new_attachment = happening_survey_obj.attachment.create(
+                                    media=attachment,
+                                    title=attachment.name,
+                                    type="image",
+                                )
+                            happening_survey_obj.attachment.add(new_attachment)
+                except ValidationError as e:
+                    return UpdateHappeningSurvey(result=None, errors=e, ok=False)
+        except Exception:
+            raise GraphQLError("Failed to update happening survey")
+        return UpdateHappeningSurvey(result=happening_survey_obj, errors=None, ok=True)
+
+
+class EditHappeningSurvey(graphene.Mutation):
     class Input:
         id = graphene.UUID(description="UUID", required=True)
         data = UpdateHappeningSurveyInput(

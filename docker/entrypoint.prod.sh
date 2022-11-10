@@ -10,5 +10,6 @@ then
 else
     poetry run ./manage.py migrate --no-input
     poetry run ./manage.py import_default_email_template
+    poetry run ./manage.py createinitialrevisions
     poetry run gunicorn lukimgather.asgi:application -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
 fi

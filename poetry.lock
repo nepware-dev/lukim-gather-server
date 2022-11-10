@@ -331,7 +331,7 @@ python-versions = "*"
 
 [[package]]
 name = "django"
-version = "3.2.15"
+version = "3.2.16"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -588,6 +588,17 @@ description = "Cache-based rate-limiting for Django."
 category = "main"
 optional = false
 python-versions = ">=3.4"
+
+[[package]]
+name = "django-reversion"
+version = "5.0.4"
+description = "An extension to the Django web framework that provides version control for model instances."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+django = ">=3.2"
 
 [[package]]
 name = "django-vectortiles"
@@ -1453,7 +1464,7 @@ asgi = ["uvicorn", "gunicorn"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "1a511becd799dfdd6912f2ae486925329d19facbe8f7b7266b18192cb3224368"
+content-hash = "04ad5202af8194383ce810a74beadb21a90f6a3fd879163a6929e6927d05b410"
 
 [metadata.files]
 amqp = [
@@ -1639,7 +1650,10 @@ dj-email-url = [
     {file = "dj-email-url-1.0.5.tar.gz", hash = "sha256:ef36f8a324ec57cf3be5c7a7ef44ed6900ca0208624a918ab33adc1cf6427b39"},
     {file = "dj_email_url-1.0.5-py2.py3-none-any.whl", hash = "sha256:64257c4f9d8139a4af8e5267229d32260e433fbf257b0cf8fc855bb0cc39ca7d"},
 ]
-django = []
+django = [
+    {file = "Django-3.2.16-py3-none-any.whl", hash = "sha256:18ba8efa36b69cfcd4b670d0fa187c6fe7506596f0ababe580e16909bcdec121"},
+    {file = "Django-3.2.16.tar.gz", hash = "sha256:3adc285124244724a394fa9b9839cc8cd116faf7d159554c43ecdaa8cdf0b94d"},
+]
 django-admin-autocomplete-filter = [
     {file = "django-admin-autocomplete-filter-0.7.1.tar.gz", hash = "sha256:5a8c9a7016e03104627b80b40811dcc567f26759971e4407f933951546367ba0"},
     {file = "django_admin_autocomplete_filter-0.7.1-py3-none-any.whl", hash = "sha256:b2a71be2c4a68f828289eb51f71316dbdfac00a1843f53df1fbe4767aad2e3c0"},
@@ -1713,6 +1727,10 @@ django-ordered-model = [
 ]
 django-phonenumber-field = []
 django-ratelimit = []
+django-reversion = [
+    {file = "django-reversion-5.0.4.tar.gz", hash = "sha256:c12bab452d31dd3c244456cf1df383acf14ba147cf99404c5e44412596de42fc"},
+    {file = "django_reversion-5.0.4-py3-none-any.whl", hash = "sha256:a591cbce8621b5d036a37617554668b5ef2eb9777682e3af20b6401ee87cfbc5"},
+]
 django-vectortiles = [
     {file = "django-vectortiles-0.1.0.tar.gz", hash = "sha256:c3f257fb46c2a37ed609f6170f1ab6af8401ad4beb21a4c0a2493f96ec5828ba"},
 ]
