@@ -89,3 +89,18 @@ class APITest(TestBase):
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
+
+    def test_account_delete_requestion(self):
+        response = self.query(
+            """
+            mutation DeleteAccount($input: AccountDeletionRequestMutationInput!) {
+              deleteAccount(input: $input) {
+                reason
+                clientMutationId
+              }
+            }
+            """,
+            input_data={"reason": "test"},
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
