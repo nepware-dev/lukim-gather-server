@@ -79,6 +79,7 @@ DJANGO_APPS = [
 
 # Internal apps
 INTERNAL_APPS = [
+    "discussion",
     "gallery",
     "notification",
     "organization",

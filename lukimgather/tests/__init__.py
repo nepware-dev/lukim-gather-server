@@ -8,6 +8,7 @@ class TestBase(GraphQLTestCase):
     baker = baker
     baker.generators.add("lukimgather.fields.LowerCharField", random_gen.gen_string)
     baker.generators.add("lukimgather.fields.LowerEmailField", random_gen.gen_email)
+    baker.generators.add("ckeditor.fields.RichTextField", random_gen.gen_text)
     factory = RequestFactory()
     fixtures = ["support/content/email.yaml"]
     GRAPHQL_URL = reverse("api")
