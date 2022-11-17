@@ -3,11 +3,13 @@ import graphql_geojson
 import reversion
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils import timezone
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
+from reversion.models import Version
 
 from gallery.models import Gallery
 from lukimgather.utils import is_valid_uuid
@@ -49,6 +51,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
     is_public = graphene.Boolean(default=True, required=False)
     is_test = graphene.Boolean(default=False, required=False)
     is_offline = graphene.Boolean(default=False, required=False)
+    created_at = graphene.DateTime(required=False)
 
 
 class CreateHappeningSurvey(graphene.Mutation):
@@ -66,7 +69,7 @@ class CreateHappeningSurvey(graphene.Mutation):
     @login_required
     def mutate(self, info, anonymous, data):
         try:
-            with transaction.atomic():
+            with transaction.atomic(), reversion.create_revision():
                 id = data.get("id", None)
                 if id:
                     survey_obj = HappeningSurvey.objects.create(
@@ -90,6 +93,7 @@ class CreateHappeningSurvey(graphene.Mutation):
                 survey_obj.is_public = data.get("is_public", True)
                 survey_obj.is_test = data.get("is_test", False)
                 survey_obj.created_by = None if anonymous else info.context.user
+                survey_obj.created_at = data.get("created_at", timezone.now())
                 if data.get("attachment"):
                     for file in data.attachment:
                         if is_valid_uuid(file.name):
@@ -108,6 +112,7 @@ class CreateHappeningSurvey(graphene.Mutation):
                         gallery.save()
                         survey_obj.attachment.add(gallery)
                 survey_obj.save()
+                reversion.set_comment("Initial version.")
         except Exception:
             raise GraphQLError("Failed to create happening survey")
         return CreateHappeningSurvey(result=survey_obj, ok=True, errors=None)
@@ -145,6 +150,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     is_public = graphene.Boolean(default=True, required=False)
     is_test = graphene.Boolean(default=False, required=False)
     is_offline = graphene.Boolean(default=False, required=False)
+    modified_at = graphene.DateTime(required=False)
 
 
 class UpdateHappeningSurvey(graphene.Mutation):
@@ -177,7 +183,9 @@ class UpdateHappeningSurvey(graphene.Mutation):
                     if attachment_links is not None:
                         happening_survey_obj.attachment.set(attachment_links)
                     happening_survey_obj.updated_by = info.context.user
-                    happening_survey_obj.save()
+                    happening_survey_obj.modified_at = data.get(
+                        "modified_at", timezone.now()
+                    )
                     if attachments:
                         for attachment in attachments:
                             if is_valid_uuid(attachment.name):
@@ -194,6 +202,11 @@ class UpdateHappeningSurvey(graphene.Mutation):
                                     type="image",
                                 )
                             happening_survey_obj.attachment.add(new_attachment)
+                    happening_survey_obj.save()
+                    version_no = Version.objects.get_for_object(
+                        happening_survey_obj
+                    ).count()
+                    reversion.set_comment(f"v{version_no}")
                 except ValidationError as e:
                     return UpdateHappeningSurvey(result=None, errors=e, ok=False)
         except Exception:

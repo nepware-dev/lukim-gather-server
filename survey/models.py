@@ -4,11 +4,10 @@ import reversion
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.gis.db.models import MultiPolygonField, PointField
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models, transaction
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 from ordered_model.models import OrderedModel
-from reversion.models import Version
 
 from lukimgather.models import CodeModel, TimeStampedModel, UserStampedModel
 
@@ -73,7 +72,7 @@ class Improvement(models.TextChoices):
     DECREASING = "decreasing", _("Decreasing")
 
 
-@reversion.register()
+@reversion.register
 class HappeningSurvey(TimeStampedModel, UserStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
@@ -154,12 +153,6 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
                     pass
             if changed_fields:
                 kwargs["update_fields"] = changed_fields
-        with transaction.atomic(), reversion.create_revision():
-            version_no = Version.objects.get_for_object(self).count()
-            if self.pk:
-                reversion.set_comment(f"v{version_no}")
-            else:
-                reversion.set_comment(f"v{version_no}")
         super().save(*args, **kwargs)
 
     class Meta:

@@ -5,6 +5,7 @@ from graphene_django.types import DjangoObjectType
 from graphene_django_extras.paginations import LimitOffsetGraphqlPagination
 from reversion.models import Version
 
+from gallery.models import Gallery
 from lukimgather.types import RevisionType
 from survey.models import Form, HappeningSurvey, ProtectedAreaCategory, Survey
 
@@ -38,8 +39,18 @@ class HappeningSurveyHistoryVersionType(graphene.ObjectType):
     fields = graphene.Field(HappeningSurveyType)
 
     def resolve_fields(self, info):
-        for obj in serializers.deserialize("json", self):
-            return obj.object
+        deserialized_object = list(serializers.deserialize("json", self))[0]
+        happening_survey_dict = {}
+        for field in HappeningSurveyType._meta.fields.keys():
+            happening_survey_dict[field] = getattr(
+                deserialized_object.object, field, None
+            )
+        attachments = deserialized_object.m2m_data.get("attachment")
+        if attachments:
+            happening_survey_dict["attachment"] = Gallery.objects.filter(
+                id__in=attachments
+            )
+        return HappeningSurveyType(**happening_survey_dict)
 
 
 class HappeningSurveyHistoryType(DjangoObjectType):
