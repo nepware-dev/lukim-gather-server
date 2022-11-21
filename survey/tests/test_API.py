@@ -5,6 +5,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.gis import geos
+from django.utils import timezone
 from graphql_jwt.shortcuts import get_token
 from PIL import Image
 
@@ -97,6 +98,7 @@ class APITest(TestBase):
             "isPublic": False,
             "isTest": True,
             "attachment": [None, None],
+            "createdAt": timezone.now().isoformat(),
         }
         data_without_id = {
             "title": "test title",
@@ -109,6 +111,7 @@ class APITest(TestBase):
             "isPublic": False,
             "isTest": True,
             "attachment": [None, None],
+            "createdAt": timezone.now().isoformat(),
         }
         response_with_id = self.client.post(
             self.GRAPHQL_URL,
@@ -207,6 +210,7 @@ class APITest(TestBase):
             "location": str(geos.Point(1, 0)),
             "categoryId": self.category.id,
             "attachment": [None],
+            "modifiedAt": timezone.now().isoformat(),
         }
         response = self.client.post(
             self.GRAPHQL_URL,
