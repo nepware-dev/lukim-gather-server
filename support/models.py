@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import gettext_lazy as _
@@ -150,3 +151,30 @@ class EmailTemplate(models.Model):
         html_message = html_template.render(Context(context))
         text_message = text_template.render(Context(context))
         return self.subject, html_message, text_message
+
+
+class AccountDeletionRequest(models.Model):
+    account = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        editable=False,
+        related_name="account_deletion_request_account",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        default=None,
+    )
+    reason = models.TextField(
+        _("reason"),
+        null=True,
+        blank=True,
+        default=None,
+    )
+    approved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        editable=False,
+        related_name="account_deletion_request_approved_by",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        default=None,
+    )

@@ -1,6 +1,7 @@
 from graphene_django.types import DjangoObjectType
 
 from support.models import (
+    AccountDeletionRequest,
     Category,
     FrequentlyAskedQuestion,
     LegalDocument,
@@ -8,6 +9,13 @@ from support.models import (
     ResourceTag,
     Tutorial,
 )
+
+
+class AccountDeletionRequestType(DjangoObjectType):
+    class Meta:
+        model = AccountDeletionRequest
+        description = "Type defination for account deletion request"
+        fields = ("reason",)
 
 
 class CategoryType(DjangoObjectType):

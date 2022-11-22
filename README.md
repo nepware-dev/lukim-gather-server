@@ -47,6 +47,8 @@ docker-compose exec container_name poetry run ./manage.py loaddata survey/fixtur
 
 ## Datasets
 
+The data collected at lukim gather app is synced to [PNG Geoportal](https://png-geoportal.org/maps/295)
+
 ### Region
 
 | Attribute name | Label | Type   | Description |

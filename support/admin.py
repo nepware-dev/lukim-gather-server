@@ -6,6 +6,7 @@ from ordered_model.admin import OrderedModelAdmin
 
 from lukimgather.admin import UserStampedModelAdmin
 from support.models import (
+    AccountDeletionRequest,
     Category,
     EmailTemplate,
     Feedback,
@@ -104,3 +105,17 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = _("email template")
         verbose_plural_name = _("email templates")
+
+
+@admin.register(AccountDeletionRequest)
+class AccountDeletionRequest(admin.ModelAdmin):
+    list_display = (
+        "account",
+        "reason",
+        "approved_by",
+    )
+    list_filter = ("approved_by",)
+
+    class Meta:
+        verbose_name = _("Account deletion request")
+        verbose_plural_name = _("Account deletion requests")
