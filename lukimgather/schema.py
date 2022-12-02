@@ -2,6 +2,7 @@ import graphene
 from django.conf import settings
 from graphene_django.debug import DjangoDebug
 
+from discussion.schema import DiscussionMutations, DiscussionQueries
 from gallery.schema import UploadFileMutation
 from notification.schema import (
     NoticeQueries,
@@ -17,6 +18,7 @@ from user.schema import UserMutations, UserQueries
 
 
 class Query(
+    DiscussionQueries,
     NotificationQueries,
     NoticeQueries,
     OrganizationQueries,
@@ -32,6 +34,7 @@ class Query(
 
 
 class Mutation(
+    DiscussionMutations,
     NotificationMutations,
     SurveyMutations,
     SupportMutations,

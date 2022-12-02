@@ -20,7 +20,13 @@ class PrivateUserType(DjangoObjectType):
 class UserType(DjangoObjectType):
     class Meta:
         model = User
-        fields = ("id", "first_name", "last_name")
+        fields = ("id", "first_name", "last_name", "avatar")
+
+    def resolve_avatar(self, info):
+        if self.avatar and self.avatar.url:
+            return info.context.build_absolute_uri(self.avatar.url)
+        else:
+            return None
 
 
 class PasswordResetPinType(DjangoObjectType):

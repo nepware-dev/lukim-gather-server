@@ -3,7 +3,6 @@ import graphql_geojson
 import reversion
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.utils import timezone
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_file_upload.scalars import Upload
@@ -13,7 +12,6 @@ from reversion.models import Version
 
 from gallery.models import Gallery
 from lukimgather.utils import is_valid_uuid
-from region.models import Region
 from survey.models import HappeningSurvey
 from survey.serializers import SurveySerializer
 from survey.types import HappeningSurveyType
@@ -93,7 +91,8 @@ class CreateHappeningSurvey(graphene.Mutation):
                 survey_obj.is_public = data.get("is_public", True)
                 survey_obj.is_test = data.get("is_test", False)
                 survey_obj.created_by = None if anonymous else info.context.user
-                survey_obj.created_at = data.get("created_at", timezone.now())
+                if "created_at" in data:
+                    survey_obj.created_at = data.get("created_at")
                 if data.get("attachment"):
                     for file in data.attachment:
                         if is_valid_uuid(file.name):
@@ -183,9 +182,8 @@ class UpdateHappeningSurvey(graphene.Mutation):
                     if attachment_links is not None:
                         happening_survey_obj.attachment.set(attachment_links)
                     happening_survey_obj.updated_by = info.context.user
-                    happening_survey_obj.modified_at = data.get(
-                        "modified_at", timezone.now()
-                    )
+                    if "modified_at" in data:
+                        happening_survey_obj.modified_at = data.get("modified_at")
                     if attachments:
                         for attachment in attachments:
                             if is_valid_uuid(attachment.name):
@@ -244,6 +242,8 @@ class EditHappeningSurvey(graphene.Mutation):
                     if attachment_links is not None:
                         happening_survey_obj.attachment.set(attachment_links)
                     happening_survey_obj.updated_by = info.context.user
+                    if "modified_at" in data:
+                        happening_survey_obj.modified_at = data.get("modified_at")
                     happening_survey_obj.save()
                     if attachments:
                         for attachment in attachments:
