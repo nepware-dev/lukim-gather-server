@@ -7,6 +7,7 @@ from discussion.models import Comment, LikeComment
 class CommentType(DjangoObjectType):
     total_likes = graphene.Int()
     has_liked = graphene.Boolean()
+    total_replies = graphene.Int()
 
     class Meta:
         model = Comment
@@ -20,6 +21,9 @@ class CommentType(DjangoObjectType):
         if user:
             return self.likes.filter(user=user).exists()
         return False
+
+    def resolve_total_replies(self, info):
+        return self.get_descendants().count()
 
 
 class LikeCommentType(DjangoObjectType):
