@@ -588,14 +588,14 @@ class PhoneNumberConfirm(graphene.Mutation):
         user = User.objects.filter_by_username(data.username).first()
         if not user:
             raise GraphQLError("No user present with given phone number/username")
-        active_for_five_minutes = timezone.now() + timezone.timedelta(minutes=5)
         phone_number_confirm_pin = PhoneNumberConfirmationPin.objects.filter(
-            user=user, is_active=True, pin_expiry_time__lte=active_for_five_minutes
+            user=user, is_active=True, pin_expiry_time__gte=timezone.now()
         ).first()
         if phone_number_confirm_pin:
             if phone_number_confirm_pin.no_of_incorrect_attempts >= 5:
                 raise GraphQLError("User is inactive for trying too many times")
             raise GraphQLError("Confirmation SMS has already been sent")
+        active_for_five_minutes = timezone.now() + timezone.timedelta(minutes=5)
         random_6_digit_pin = gen_random_number(6)
         (
             phone_number_confirm_pin_object,

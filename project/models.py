@@ -40,3 +40,4 @@ class ProjectUser(TimeStampedModel, UserStampedModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("user")
     )
+    is_admin = models.BooleanField(default=False)

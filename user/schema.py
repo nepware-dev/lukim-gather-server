@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from graphene_django_extras import DjangoFilterPaginateListField
 from graphql_jwt.decorators import login_required
 
-from user.filters import GrantFilter
+from user.filters import GrantFilter, UserFilter
 from user.mutations import (
     ChangePassword,
     CustomObtainJSONWebToken,
@@ -21,7 +21,7 @@ from user.mutations import (
     ResetUserPasswordVerify,
     UpdateUser,
 )
-from user.types import GrantType, PrivateUserType
+from user.types import GrantType, PrivateUserType, UserType
 
 
 class UserQueries(graphene.ObjectType):
@@ -32,6 +32,11 @@ class UserQueries(graphene.ObjectType):
         GrantType,
         description="Return the user grant",
         filterset_class=GrantFilter,
+    )
+    users = DjangoFilterPaginateListField(
+        UserType,
+        description="Returns user",
+        filterset_class=UserFilter,
     )
 
     @login_required

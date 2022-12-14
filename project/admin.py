@@ -13,8 +13,14 @@ class OrganizationAutoCompleteFilter(AutocompleteFilter):
     field_name = "organization"
 
 
+class ProjectUserInline(admin.TabularInline):
+    model = ProjectUser
+    autocomplete_fields = ("user",)
+
+
 @admin.register(Project)
 class ProjectAdmin(UserStampedModelAdmin, OrderedModelAdmin):
+    inlines = [ProjectUserInline]
     list_display = (
         "title",
         "organization",
