@@ -47,6 +47,22 @@ class APITest(TestBase):
         )
         self.assertResponseNoErrors(response)
 
+    def test_get_users(self):
+        response = self.query(
+            """
+            query Users($search: String!) {
+              users(search: $search) {
+                id
+                firstName
+                lastName
+              }
+            }
+            """,
+            variables={"search": "name"},
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
     def test_user_update(self):
         avatar = self.generate_photo_file()
         query = """

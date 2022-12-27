@@ -18,7 +18,7 @@ class CommentType(DjangoObjectType):
 
     def resolve_has_liked(self, info):
         user = info.context.user
-        if user:
+        if not user.is_anonymous:
             return self.likes.filter(user=user).exists()
         return False
 
