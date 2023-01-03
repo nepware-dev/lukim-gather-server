@@ -7,6 +7,7 @@ class CommentFilter(FilterSet):
     class Meta:
         model = Comment
         fields = {
+            "id": ["exact"],
             "user": ["exact"],
             "content_type": ["exact"],
             "content_type__app_label": ["exact"],

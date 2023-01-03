@@ -13,6 +13,9 @@ class CommentType(DjangoObjectType):
         model = Comment
         fields = "__all__"
 
+    def resolve_description(self, info):
+        return self.description if not self.is_deleted else "[deleted]"
+
     def resolve_total_likes(self, info):
         return self.likes.count()
 
@@ -24,6 +27,9 @@ class CommentType(DjangoObjectType):
 
     def resolve_total_replies(self, info):
         return self.get_descendants().count()
+
+    def resolve_user(self, info):
+        return self.user if not self.is_deleted else None
 
 
 class LikeCommentType(DjangoObjectType):

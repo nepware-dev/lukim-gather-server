@@ -74,6 +74,24 @@ class APITest(TestBase):
         )
         self.assertResponseNoErrors(response)
 
+    def test_update_comment(self):
+        response = self.query(
+            """
+            mutation UpdateComment($input: UpdateCommentInput!) {
+              updateComment(input: $input) {
+                ok
+                errors {
+                  field
+                  messages
+                }
+              }
+            }
+            """,
+            input_data={"id": self.comment.id, "message": "test update comment"},
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
     def test_like_comment(self):
         response = self.query(
             """
@@ -100,6 +118,24 @@ class APITest(TestBase):
                     ok
                     errors
                 }
+            }
+            """,
+            variables={"id": self.comment.id},
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_delete_comment(self):
+        response = self.query(
+            """
+            mutation DislikeComment($id: ID!) {
+              deleteComment(id: $id) {
+                ok
+                errors {
+                  field
+                  messages
+                }
+              }
             }
             """,
             variables={"id": self.comment.id},
