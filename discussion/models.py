@@ -25,6 +25,7 @@ class Comment(TimeStampedModel, MPTTModel):
     parent = TreeForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="replies"
     )
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Comment: #{self.pk}"

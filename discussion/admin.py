@@ -15,6 +15,7 @@ class CommentAdmin(MPTTModelAdmin):
         "object_id",
         "truncated_description",
     )
+    list_filter = ("is_deleted",)
     search_fields = ("user__username", "content_type")
     autocomplete_fields = ("user", "parent")
 

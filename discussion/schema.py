@@ -4,7 +4,13 @@ from graphene_django_extras.fields import DjangoFilterPaginateListField
 from discussion.types import CommentType, LikeCommentType
 
 from .filters import CommentFilter, LikeCommentFilter
-from .mutations import CommentMutation, DislikeCommentMutation, LikeCommentMutation
+from .mutations import (
+    CommentMutation,
+    DeleteCommentMutation,
+    DislikeCommentMutation,
+    LikeCommentMutation,
+    UpdateCommentMutation,
+)
 
 
 class DiscussionQueries(graphene.ObjectType):
@@ -22,5 +28,7 @@ class DiscussionQueries(graphene.ObjectType):
 
 class DiscussionMutations(graphene.ObjectType):
     create_comment = CommentMutation.Field()
+    update_comment = UpdateCommentMutation.Field()
+    delete_comment = DeleteCommentMutation.Field()
     like_comment = LikeCommentMutation.Field()
     dislike_comment = DislikeCommentMutation.Field()
