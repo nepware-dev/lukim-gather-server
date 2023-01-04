@@ -33,7 +33,8 @@ class AddProjectUserMutation(SerializerMutation):
 
 class ProjectUserDeleteMutation(graphene.Mutation):
     class Arguments:
-        id = graphene.ID(required=True)
+        project_id = graphene.ID(required=True)
+        user_id = graphene.ID(required=True)
 
     ok = graphene.Boolean()
     errors = GenericScalar()
@@ -41,9 +42,9 @@ class ProjectUserDeleteMutation(graphene.Mutation):
     @classmethod
     @login_required
     @staff_member_required
-    def mutate(cls, root, info, id):
+    def mutate(cls, root, info, project_id, user_id):
         try:
-            get_object_or_404(ProjectUser, user=id).delete()
+            get_object_or_404(ProjectUser, user=user_id, project=project_id).delete()
         except Exception as e:
             return cls(ok=False, errors=str(e))
         return cls(ok=True, errors=None)

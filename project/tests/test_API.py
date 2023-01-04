@@ -61,14 +61,17 @@ class APITest(TestBase):
     def test_delete_project_user(self):
         response = self.query(
             """
-            mutation DeleteProjectUser($id: ID!) {
-              deleteProjectUser(id: $id) {
+            mutation DeleteProjectUser($userId: ID!, $projectId: ID!) {
+              deleteProjectUser(userId: $userId, projectId: $projectId) {
                 ok
                 errors
               }
             }
             """,
-            variables={"id": self.projects.users.first().id},
+            variables={
+                "userId": self.projects.users.first().id,
+                "projectId": self.projects.id,
+            },
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
