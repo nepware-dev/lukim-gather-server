@@ -43,7 +43,7 @@ class APITest(TestBase):
             """
             mutation AddProjectUser($input: AddProjectUserMutationInput!) {
               addProjectUser(input: $input) {
-                id
+                ok
                 errors {
                   field
                   messages

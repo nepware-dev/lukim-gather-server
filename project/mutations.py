@@ -1,34 +1,36 @@
 import graphene
 from graphene.types.generic import GenericScalar
-from graphene_django.rest_framework.mutation import (
-    SerializerMutation,
-    get_object_or_404,
-)
+from graphene_django.rest_framework.mutation import ErrorType, get_object_or_404
 from graphql_jwt.decorators import login_required, staff_member_required
 
 from project.models import Project, ProjectUser
-from project.serializers import ProjectSerializer
 from user.models import User
 
 
-class AddProjectUserMutation(SerializerMutation):
-    class Input:
-        users = graphene.List(graphene.ID)
+class AddProjectUserMutationInput(graphene.InputObjectType):
+    id = graphene.ID()
+    users = graphene.List(graphene.ID)
 
-    class Meta:
-        serializer_class = ProjectSerializer
-        model_operations = ["update"]
+
+class AddProjectUserMutation(graphene.Mutation):
+    class Arguments:
+        input = AddProjectUserMutationInput(required=True)
+
+    ok = graphene.Boolean()
+    errors = graphene.Field(ErrorType)
 
     @classmethod
     @login_required
-    def get_serializer_kwargs(cls, root, info, **input):
-        if "users" and "id" in input:
+    def mutate(cls, root, info, input):
+        try:
             users = User.objects.filter(id__in=input.get("users"))
             project = get_object_or_404(Project, id=input.get("id"))
             if users and project:
                 for user in users:
                     project.users.add(user.id)
-        return {"data": input, "partial": True}
+        except Exception as e:
+            return cls(ok=False, errors={"field": "id", "messages": {str(e)}})
+        return cls(ok=True, errors=None)
 
 
 class ProjectUserDeleteMutation(graphene.Mutation):
