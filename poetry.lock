@@ -396,7 +396,7 @@ python-versions = "*"
 
 [[package]]
 name = "django-ckeditor"
-version = "6.4.1"
+version = "6.5.1"
 description = "Django admin CKEditor integration."
 category = "main"
 optional = false
@@ -404,7 +404,7 @@ python-versions = ">=3.8"
 
 [package.dependencies]
 Django = ">=3.2"
-django-js-asset = ">=1.2.2"
+django-js-asset = ">=2.0"
 
 [[package]]
 name = "django-colorfield"
@@ -1671,8 +1671,8 @@ django-cache-url = [
     {file = "django_cache_url-3.4.0-py2.py3-none-any.whl", hash = "sha256:9061f8e7ffbb29eb92ba93fa9058003ec92393e85c537d1969570652ff8721fa"},
 ]
 django-ckeditor = [
-    {file = "django-ckeditor-6.4.1.tar.gz", hash = "sha256:53f6489bfdfc98c2bafd312636db24db8f7964e16178a59153422200ac602de7"},
-    {file = "django_ckeditor-6.4.1-py3-none-any.whl", hash = "sha256:59130740564fe258fb50ea51ed7daff556129118ed282dc5ce831e0689662826"},
+    {file = "django-ckeditor-6.5.1.tar.gz", hash = "sha256:57cd8fb7cd150adca354cd4e5c35a743fadaab7073f957d2b7167f0d9fe1fcaf"},
+    {file = "django_ckeditor-6.5.1-py3-none-any.whl", hash = "sha256:1321f24df392f30698513930ce5c9f6d899f9bd0ef734c3b64fe936d809e11b3"},
 ]
 django-colorfield = [
     {file = "django-colorfield-0.7.0.tar.gz", hash = "sha256:be9cad8abb4c309d89e5c3beee3cd89cb3b9042c51adcf1017cf315487df10cf"},
