@@ -8,7 +8,7 @@ from graphene_file_upload.django import FileUploadGraphQLView
 
 from region.views import ProtectedAreaTileView
 from survey.views import TileView
-from user.views import UserInfoView
+from user.views import ProfileView, UserInfoView
 
 from .schema import schema
 from .views import generate_204
@@ -42,6 +42,7 @@ urlpatterns += [
         ProtectedAreaTileView.as_view(),
         name="protected-area-tile",
     ),
+    path("accounts/profile/", ProfileView.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

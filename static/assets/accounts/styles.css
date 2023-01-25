@@ -1,0 +1,93 @@
+body {
+  background-color: #f2f5f9;
+  font-family: Inter;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 1.5rem;
+  padding: 42px 32px;
+  min-width: 20%;
+}
+
+.container > h1 {
+  line-height: 1.5rem;
+  font-weight: bold;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.login > p:not(:last-of-type) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.login > p:last-of-type {
+  align-self: flex-start;
+}
+
+label {
+  color: #888c94;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+#id_login,
+#id_password {
+  display: flex;
+  margin-top: 0.5rem;
+  padding: 1rem 1rem 1rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  border: 1px solid rgb(204 220 232 / 100%);
+  border-radius: 0.5rem;
+}
+
+.primaryAction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: #ec6d25;
+  width: 100%;
+  height: 49px;
+  border: none;
+  border-radius: 0.5rem;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.secondaryAction {
+  align-self: flex-end;
+  color: #00518b;
+  text-decoration: none;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.errorlist {
+  color: red;
+}

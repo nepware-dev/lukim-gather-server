@@ -6,6 +6,7 @@ __pycache__/
 # Django related
 media/
 static/
+!static/assets
 *.sqlite3
 .env
 
