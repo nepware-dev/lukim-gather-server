@@ -4,7 +4,7 @@ import reversion
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from graphene.types.generic import GenericScalar
-from graphene_django.rest_framework.mutation import SerializerMutation
+from graphene_django.rest_framework.mutation import ErrorType, SerializerMutation
 from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
@@ -12,15 +12,46 @@ from reversion.models import Version
 
 from gallery.models import Gallery
 from lukimgather.utils import is_valid_uuid
-from survey.models import HappeningSurvey
+from survey.models import HappeningSurvey, Survey
 from survey.serializers import SurveySerializer
-from survey.types import HappeningSurveyType
+from survey.types import HappeningSurveyType, SurveyType
 
 
 class WritableSurveyMutation(SerializerMutation):
     class Meta:
         serializer_class = SurveySerializer
         fields = "__all__"
+
+    @classmethod
+    def perform_mutate(cls, serializer, info):
+        if not info.context.user.is_anonymous:
+            serializer.save(created_by=info.context.user)
+        return super().perform_mutate(serializer, info)
+
+
+class UpdateSurveyMutation(graphene.Mutation):
+    class Input:
+        id = graphene.ID(description="ID", required=True)
+        answer = graphene.JSONString(required=True)
+
+    errors = graphene.Field(ErrorType)
+    ok = graphene.Boolean()
+    result = graphene.Field(SurveyType)
+
+    @login_required
+    def mutate(self, info, id, answer):
+        if not isinstance(answer, dict):
+            raise GraphQLError("Answer must be a valid JSON object.")
+        try:
+            survey_obj = Survey.objects.get(id=id)
+            survey_obj.answer = answer
+            survey_obj.updated_by = info.context.user
+            survey_obj.save()
+        except Exception as e:
+            return UpdateSurveyMutation(
+                result=None, ok=False, errors={"field": "id", "messages": {str(e)}}
+            )
+        return UpdateSurveyMutation(result=survey_obj, ok=True, errors=None)
 
 
 class Status(graphene.Enum):
