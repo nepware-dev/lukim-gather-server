@@ -13,6 +13,7 @@ from survey.mutations import (
     DeleteHappeningSurvey,
     EditHappeningSurvey,
     UpdateHappeningSurvey,
+    UpdateSurveyMutation,
     WritableSurveyMutation,
 )
 from survey.types import (
@@ -64,3 +65,4 @@ class SurveyMutations(graphene.ObjectType):
     edit_happening_survey = EditHappeningSurvey.Field()
     update_happening_survey = UpdateHappeningSurvey.Field()
     create_writable_survey = WritableSurveyMutation.Field()
+    update_survey = UpdateSurveyMutation.Field()
