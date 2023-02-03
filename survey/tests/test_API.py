@@ -235,6 +235,64 @@ class APITest(TestBase):
         )
         self.assertResponseNoErrors(response)
 
+    def test_edit_happening_survey(self):
+        mutation = """
+            mutation EditHappeningSurvey($data: UpdateHappeningSurveyInput!, $id: UUID!) {
+                  editHappeningSurvey(data: $data, id: $id) {
+                    ok
+                    result {
+                        id
+                        title
+                        description
+                        sentiment
+                        improvement
+                        location {
+                          type
+                          coordinates
+                        }
+                        category {
+                          id
+                        }
+                        attachment {
+                          id
+                        }
+                    }
+                    errors
+                  }
+            }
+        """
+        data = {
+            "title": "test title",
+            "description": "test description",
+            "sentiment": "\U0001f600",
+            "improvement": "INCREASING",
+            "location": str(geos.Point(1, 0)),
+            "categoryId": self.category.id,
+            "attachment": [None],
+        }
+        response = self.client.post(
+            self.GRAPHQL_URL,
+            data={
+                "operations": json.dumps(
+                    {
+                        "query": mutation,
+                        "variables": {
+                            "data": data,
+                            "id": str(self.happening_survey.id),
+                        },
+                    }
+                ),
+                "0": self.generate_photo_file(),
+                "map": json.dumps(
+                    {
+                        "0": ["variables.data.attachment.0"],
+                    }
+                ),
+            },
+            **self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
     def test_happening_survey_history_get(self):
         response = self.query(
             """
