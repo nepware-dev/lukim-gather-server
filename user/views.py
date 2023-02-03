@@ -1,13 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.generic import TemplateView
 from oauth2_provider.views.generic import ProtectedResourceView
 
 
 class UserInfoView(ProtectedResourceView):
     def get(self, request, *args, **kwargs):
-        user = request.user
-        return HttpResponse(
+        user = request.resource_owner
+        return JsonResponse(
             {
                 "username": user.username,
                 "email": user.email,
