@@ -131,13 +131,20 @@ class RegisterUser(graphene.Mutation):
     @ratelimit(key="gql:data.username", rate="10/m", block=True)
     def mutate(self, info, data):
         user_exists = User.objects.filter_by_username(data.username).exists()
+        user_email = data.get("email", None)
+        user_phone_number = data.get("phone_number", None)
         if user_exists:
-            raise GraphQLError("User with username/email already exists")
+            sign_in_method = (
+                "email"
+                if user_email
+                else "phone number"
+                if user_phone_number
+                else "username"
+            )
+            raise GraphQLError(f"User with {sign_in_method} already exists")
         user_password = None
         if "re_password" in data:
             user_password = data.pop("re_password")
-        user_email = data.get("email")
-        user_phone_number = data.get("phone_number")
         try:
             if user_email:
                 validate_email(user_email)
@@ -149,7 +156,7 @@ class RegisterUser(graphene.Mutation):
             try:
                 validate_password(password=user_password)
             except ValidationError as e:
-                raise GraphQLError(e.message[0])
+                raise GraphQLError(e.messages[0])
         user = User.objects.create_user(**data)
         user.is_active = True  # Note:- Temporary fix to remove 2 step verification
         user.save()
