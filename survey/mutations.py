@@ -1,8 +1,11 @@
+from enum import Enum
+
 import graphene
 import graphql_geojson
 import reversion
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils import timezone
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import ErrorType, SerializerMutation
 from graphene_file_upload.scalars import Upload
@@ -187,7 +190,7 @@ class UpdateHappeningSurvey(graphene.Mutation):
     class Input:
         id = graphene.UUID(description="UUID", required=True)
         data = UpdateHappeningSurveyInput(
-            description="Fields required to create a happening survey.",
+            description="Fields required to update a happening survey.",
             required=True,
         )
 
@@ -197,47 +200,44 @@ class UpdateHappeningSurvey(graphene.Mutation):
 
     @login_required
     def mutate(self, info, id, data=None):
+        happening_survey_obj = HappeningSurvey.objects.filter(id=id).first()
+        if not happening_survey_obj:
+            raise GraphQLError("Happening survey doesn't exist")
+
+        attachment_links = data.pop("attachment_link", None)
+        attachments = data.pop("attachment", [])
+        for key, value in data.items():
+            if isinstance(value, Enum):
+                value = value.value
+            setattr(happening_survey_obj, key, value)
+
         try:
             with transaction.atomic(), reversion.create_revision():
-                attachment_links = data.pop("attachment_link", None)
-                attachments = data.pop("attachment", [])
-                happening_survey_obj = HappeningSurvey.objects.get(id=id)
-                for key, value in data.items():
-                    try:
-                        value = value.value
-                    except AttributeError:
-                        pass
-                    setattr(happening_survey_obj, key, value)
-                try:
-                    happening_survey_obj.full_clean()
-                    if attachment_links is not None:
-                        happening_survey_obj.attachment.set(attachment_links)
-                    happening_survey_obj.updated_by = info.context.user
-                    if "modified_at" in data:
-                        happening_survey_obj.modified_at = data.get("modified_at")
-                    if attachments:
-                        for attachment in attachments:
-                            if is_valid_uuid(attachment.name):
-                                new_attachment = happening_survey_obj.attachment.create(
-                                    id=attachment.name,
-                                    media=attachment,
-                                    title=attachment.name,
-                                    type="image",
-                                )
-                            else:
-                                new_attachment = happening_survey_obj.attachment.create(
-                                    media=attachment,
-                                    title=attachment.name,
-                                    type="image",
-                                )
-                            happening_survey_obj.attachment.add(new_attachment)
-                    happening_survey_obj.save()
-                    version_no = Version.objects.get_for_object(
-                        happening_survey_obj
-                    ).count()
-                    reversion.set_comment(f"v{version_no}")
-                except ValidationError as e:
-                    return UpdateHappeningSurvey(result=None, errors=e, ok=False)
+                happening_survey_obj.full_clean()
+                happening_survey_obj.updated_by = info.context.user
+                happening_survey_obj.modified_at = data.get(
+                    "modified_at", timezone.now()
+                )
+                if attachment_links is not None:
+                    happening_survey_obj.attachment.set(attachment_links)
+                if attachments:
+                    for attachment in attachments:
+                        new_attachment = happening_survey_obj.attachment.create(
+                            media=attachment,
+                            title=attachment.name,
+                            type="image",
+                            id=attachment.name
+                            if is_valid_uuid(attachment.name)
+                            else None,
+                        )
+                        happening_survey_obj.attachment.add(new_attachment)
+                happening_survey_obj.save()
+                version_no = Version.objects.get_for_object(
+                    happening_survey_obj
+                ).count()
+                reversion.set_comment(f"v{version_no}")
+        except ValidationError as e:
+            return UpdateHappeningSurvey(result=None, errors=e, ok=False)
         except Exception:
             raise GraphQLError("Failed to update happening survey")
         return UpdateHappeningSurvey(result=happening_survey_obj, errors=None, ok=True)
@@ -247,7 +247,7 @@ class EditHappeningSurvey(graphene.Mutation):
     class Input:
         id = graphene.UUID(description="UUID", required=True)
         data = UpdateHappeningSurveyInput(
-            description="Fields required to create a happening survey.",
+            description="Fields required to edit a happening survey.",
             required=True,
         )
 
@@ -257,43 +257,41 @@ class EditHappeningSurvey(graphene.Mutation):
 
     @login_required
     def mutate(self, info, id, data=None):
+        happening_survey_obj = HappeningSurvey.objects.filter(id=id).first()
+        if not happening_survey_obj:
+            raise GraphQLError("Happening survey doesn't exist")
+
+        attachment_links = data.pop("attachment_link", None)
+        attachments = data.pop("attachment", [])
+
+        for key, value in data.items():
+            if isinstance(value, Enum):
+                value = value.value
+            setattr(happening_survey_obj, key, value)
+
         try:
             with transaction.atomic():
-                attachment_links = data.pop("attachment_link", None)
-                attachments = data.pop("attachment", [])
-                happening_survey_obj = HappeningSurvey.objects.get(id=id)
-                for key, value in data.items():
-                    try:
-                        value = value.value
-                    except AttributeError:
-                        pass
-                    setattr(happening_survey_obj, key, value)
-                try:
-                    happening_survey_obj.full_clean()
-                    if attachment_links is not None:
-                        happening_survey_obj.attachment.set(attachment_links)
-                    happening_survey_obj.updated_by = info.context.user
-                    if "modified_at" in data:
-                        happening_survey_obj.modified_at = data.get("modified_at")
-                    happening_survey_obj.save()
-                    if attachments:
-                        for attachment in attachments:
-                            if is_valid_uuid(attachment.name):
-                                new_attachment = happening_survey_obj.attachment.create(
-                                    id=attachment.name,
-                                    media=attachment,
-                                    title=attachment.name,
-                                    type="image",
-                                )
-                            else:
-                                new_attachment = happening_survey_obj.attachment.create(
-                                    media=attachment,
-                                    title=attachment.name,
-                                    type="image",
-                                )
-                            happening_survey_obj.attachment.add(new_attachment)
-                except ValidationError as e:
-                    return UpdateHappeningSurvey(result=None, errors=e, ok=False)
+                happening_survey_obj.full_clean()
+                if attachment_links is not None:
+                    happening_survey_obj.attachment.set(attachment_links)
+                happening_survey_obj.updated_by = info.context.user
+                happening_survey_obj.modified_at = data.get(
+                    "modified_at", timezone.now()
+                )
+                happening_survey_obj.save()
+                if attachments:
+                    for attachment in attachments:
+                        new_attachment = happening_survey_obj.attachment.create(
+                            media=attachment,
+                            title=attachment.name,
+                            type="image",
+                            id=attachment.name
+                            if is_valid_uuid(attachment.name)
+                            else None,
+                        )
+                        happening_survey_obj.attachment.add(new_attachment)
+        except ValidationError as e:
+            return EditHappeningSurvey(result=None, errors=e, ok=False)
         except Exception:
-            raise GraphQLError("Failed to update happening survey")
-        return UpdateHappeningSurvey(result=happening_survey_obj, errors=None, ok=True)
+            raise GraphQLError("Failed to edit happening survey")
+        return EditHappeningSurvey(result=happening_survey_obj, errors=None, ok=True)
