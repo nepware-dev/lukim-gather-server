@@ -41,6 +41,10 @@ class UserInput(graphene.InputObjectType):
     first_name = graphene.String(description=_("First name"))
     last_name = graphene.String(description=_("Last name"))
     organization = graphene.String(description=_("Organization"), required=False)
+    email = graphene.String(description=_("Email"), validators=[validate_email])
+    phone_number = graphene.String(
+        description=_("Phone number"), validators=[validate_international_phonenumber]
+    )
     avatar = Upload(required=False)
 
 
@@ -208,15 +212,28 @@ class UpdateUser(graphene.Mutation):
 
     @login_required
     def mutate(self, info, data=None):
-        user = info.context.user
+        username = info.context.user.username
         for key, value in data.items():
+            if (
+                key == "email"
+                and User.objects.exclude(username=username).filter(email=value).exists()
+            ):
+                raise GraphQLError("Email already registered.")
+            if (
+                key == "phone_number"
+                and User.objects.exclude(username=username)
+                .filter(phone_number=value)
+                .exists()
+            ):
+                raise GraphQLError("Phone number already registered.")
             setattr(user, key, value)
+
         try:
             user.full_clean()
             user.save()
             return UpdateUser(result=user, errors=None, ok=True)
         except ValidationError as e:
-            raise GraphQLError(e)
+            raise GraphQLError(e.messages[0])
 
 
 class ResetUserPassword(graphene.Mutation):

@@ -82,7 +82,14 @@ class APITest(TestBase):
                 "operations": json.dumps(
                     {
                         "query": query,
-                        "variables": {"data": {"organization": "test", "avatar": None}},
+                        "variables": {
+                            "data": {
+                                "organization": "test",
+                                "avatar": None,
+                                "email": "test@mail.com",
+                                "phoneNumber": "+33612345678",
+                            }
+                        },
                     }
                 ),
                 "t_file": avatar,
