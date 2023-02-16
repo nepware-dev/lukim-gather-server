@@ -8,12 +8,12 @@ from django.db import transaction
 from django.utils import timezone
 from graphene.types.generic import GenericScalar
 from graphene_django.rest_framework.mutation import ErrorType, SerializerMutation
-from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 from reversion.models import Version
 
 from gallery.models import Gallery
+from lukimgather.scalars import UploadImage
 from lukimgather.utils import is_valid_uuid
 from survey.models import HappeningSurvey, Survey
 from survey.serializers import SurveySerializer
@@ -76,7 +76,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
     title = graphene.String(description="title", required=True)
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
-    attachment = graphene.List(Upload, required=False)
+    attachment = graphene.List(UploadImage, required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     improvement = Improvement(required=False)
@@ -174,7 +174,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     title = graphene.String(description="title", required=False)
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
-    attachment = graphene.List(Upload, required=False)
+    attachment = graphene.List(UploadImage, required=False)
     attachment_link = graphene.List(graphene.UUID, required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
