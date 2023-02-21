@@ -22,6 +22,7 @@ from user.models import (
     EmailChangePin,
     EmailConfirmationPin,
     PasswordResetPin,
+    PhoneNumberChangePin,
     PhoneNumberConfirmationPin,
     User,
 )
@@ -112,9 +113,42 @@ class EmailChangeInput(graphene.InputObjectType):
     new_email = graphene.String(description=_("New Email"))
     password = graphene.String(description=_("Password"), required=True)
 
+    def validate(self, info):
+        try:
+            validate_email(self.new_email)
+        except ValidationError as error:
+            raise GraphQLError(error.message)
+        user = info.context.user
+        if User.objects.filter(email=self.new_email).exists():
+            raise GraphQLError("Email already used for account creation.")
+        if not user.check_password(self.password):
+            raise GraphQLError("Invalid password for user")
+
+
+class PhoneNumberChangeInput(graphene.InputObjectType):
+    new_phone_number = graphene.String(description=_("New Phone Number"), required=True)
+    password = graphene.String(description=_("Password"), required=True)
+
+    def validate(self, info):
+        if not self.new_phone_number:
+            raise GraphQLError("Phone number is required.")
+        try:
+            validate_international_phonenumber(self.new_phone_number)
+        except ValidationError as error:
+            raise GraphQLError(error.message)
+        user = info.context.user
+        if User.objects.filter(phone_number=self.new_phone_number).exists():
+            raise GraphQLError("Phone number already used for account creation.")
+        if not user.check_password(self.password):
+            raise GraphQLError("Invalid password for user")
+
 
 class EmailChangePinVerifyInput(graphene.InputObjectType):
-    pin = graphene.Int(description=_("Pin"))
+    pin = graphene.Int(description=_("Pin"), required=True)
+
+
+class PhoneNumberChangePinVerifyInput(graphene.InputObjectType):
+    pin = graphene.Int(description=_("Pin"), required=True)
 
 
 class RegisterUser(graphene.Mutation):
@@ -387,7 +421,7 @@ class PasswordResetChange(graphene.Mutation):
 class EmailConfirm(graphene.Mutation):
     class Arguments:
         data = EmailConfirmInput(
-            description=_("Fields required to reset password."), required=True
+            description=_("Fields required to confirm email."), required=True
         )
 
     errors = GenericScalar()
@@ -430,7 +464,7 @@ class EmailConfirm(graphene.Mutation):
 class EmailConfirmVerify(graphene.Mutation):
     class Arguments:
         data = EmailConfirmInput(
-            description=_("Fields required to reset password."), required=True
+            description=_("Fields required to verify email."), required=True
         )
 
     errors = GenericScalar()
@@ -481,19 +515,20 @@ class EmailConfirmVerify(graphene.Mutation):
 class EmailChange(graphene.Mutation):
     class Arguments:
         data = EmailChangeInput(
-            description=_("Fields required to reset password."), required=True
+            description=_("Fields required to change email."), required=True
         )
 
     errors = GenericScalar()
     ok = graphene.Boolean()
     result = GenericScalar()
 
+    @login_required
     def mutate(self, info, data):
+        data.validate(info)
         user = info.context.user
         email_change_pin = EmailChangePin.objects.filter(user=user).first()
-        if email_change_pin:
-            if email_change_pin.no_of_incorrect_attempts >= 5:
-                raise GraphQLError("User is inactive for trying too many times")
+        if email_change_pin and email_change_pin.no_of_incorrect_attempts >= 5:
+            raise GraphQLError("User is inactive for trying too many times")
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
         email_change_pin_object, _obj = EmailChangePin.objects.update_or_create(
@@ -502,7 +537,7 @@ class EmailChange(graphene.Mutation):
                 "pin": random_6_digit_pin,
                 "pin_expiry_time": active_for_one_hour,
                 "is_active": True,
-                "new_email": data["new_email"],
+                "new_email": data.new_email,
             },
         )
         subject, html_message, text_message = EmailTemplate.objects.get(
@@ -525,7 +560,7 @@ class EmailChange(graphene.Mutation):
 class EmailChangeVerify(graphene.Mutation):
     class Arguments:
         data = EmailChangePinVerifyInput(
-            description=_("Fields required to reset password."), required=True
+            description=_("Fields required to verify email change."), required=True
         )
 
     errors = GenericScalar()
@@ -629,7 +664,8 @@ class PhoneNumberConfirm(graphene.Mutation):
 class PhoneNumberConfirmVerify(graphene.Mutation):
     class Arguments:
         data = PhoneNumberConfirmInput(
-            description=_("Fields required to reset password."), required=True
+            description=_("Fields required to confirm phone number change."),
+            required=True,
         )
 
     user = graphene.Field(PrivateUserType)
@@ -677,4 +713,98 @@ class PhoneNumberConfirmVerify(graphene.Mutation):
                 token=get_token(user),
                 refresh_token=create_refresh_token(user).token,
                 user=user,
+            )
+
+
+class PhoneNumberChange(graphene.Mutation):
+    class Arguments:
+        data = PhoneNumberChangeInput(
+            description=_("Fields required to change phone number."), required=True
+        )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
+    @login_required
+    def mutate(self, info, data):
+        data.validate(info)
+        user = info.context.user
+        phone_change_pin = PhoneNumberChangePin.objects.filter(user=user).first()
+        if phone_change_pin and phone_change_pin.no_of_incorrect_attempts >= 5:
+            raise GraphQLError("User is inactive for trying too many times")
+        random_6_digit_pin = gen_random_number(6)
+        active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
+        phone_change_pin_object, _obj = PhoneNumberChangePin.objects.update_or_create(
+            user=user,
+            defaults={
+                "pin": random_6_digit_pin,
+                "pin_expiry_time": active_for_one_hour,
+                "is_active": True,
+                "new_phone_number": data.new_phone_number,
+            },
+        )
+        user.celery_sms_user(
+            to=user.username,
+            message=f"Your OTP is {phone_change_pin_object.pin} for Lukim Gather, It will expire in 1 hour.",
+        )
+        return PhoneNumberChange(
+            result={"detail": "Phone number change sms successfully send"},
+            errors=None,
+            ok=True,
+        )
+
+
+class PhoneNumberChangeVerify(graphene.Mutation):
+    class Arguments:
+        data = PhoneNumberChangePinVerifyInput(
+            description=_("Fields required to verify phone number change."),
+            required=True,
+        )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
+    @login_required
+    def mutate(self, info, data):
+        user = info.context.user
+        pin = data.pin
+        current_time = timezone.now()
+        phone_number_change_object = PhoneNumberChangePin.objects.filter(
+            user=user,
+            pin=pin,
+            is_active=True,
+            pin_expiry_time__gte=current_time,
+        ).first()
+        if not phone_number_change_object:
+            user_only_phone_number_change_object = PhoneNumberChangePin.objects.filter(
+                user=user
+            ).first()
+            if user_only_phone_number_change_object:
+                if not user_only_phone_number_change_object.is_active:
+                    raise GraphQLError("Phone number is already changed for user")
+                user_only_phone_number_change_object.no_of_incorrect_attempts += 1
+                user_only_phone_number_change_object.save()
+                if user_only_phone_number_change_object.no_of_incorrect_attempts >= 5:
+                    raise GraphQLError("User is now inactive for trying too many times")
+                elif user_only_phone_number_change_object.pin != pin:
+                    raise GraphQLError("Phone number change pin is incorrect")
+                else:
+                    raise GraphQLError("Phone number change pin has expired")
+            raise GraphQLError("No matching active phone number change request found")
+        else:
+            if User.objects.filter(
+                phone_number=phone_number_change_object.new_phone_number
+            ).exists():
+                raise GraphQLError("phone number already used for account creation")
+            phone_number_change_object.no_of_incorrect_attempts = 0
+            phone_number_change_object.is_active = False
+            phone_number_change_object.save()
+            user.phone_number = phone_number_change_object.new_phone_number
+            user.save()
+            return PhoneNumberChangeVerify(
+                result={"detail": "Phone number successfully changed."},
+                errors=None,
+                ok=True,
             )

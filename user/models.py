@@ -218,7 +218,7 @@ class PhoneNumberChangePin(TimeStampedModel):
         verbose_name=_("Pin"), validators=[MinLengthValidator(6), MaxLengthValidator(6)]
     )
     pin_expiry_time = models.DateTimeField(verbose_name=_("Pin Expiry Time"))
-    new_email = LowerEmailField()
+    new_phone_number = PhoneNumberField(default=None)
     is_active = models.BooleanField(verbose_name=_("Is Active"), default=True)
 
 
