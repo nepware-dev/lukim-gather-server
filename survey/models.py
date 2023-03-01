@@ -95,6 +95,12 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
     attachment = models.ManyToManyField(
         "gallery.Gallery", blank=True, verbose_name=_("Attachments")
     )
+    audio_file = models.FileField(
+        _("Audio File"),
+        upload_to="attachments/%Y/%m/%d/",
+        null=True,
+        blank=True,
+    )
     location = PointField(_("Location"), null=True, blank=True, default=None)
     boundary = MultiPolygonField(
         _("Location Boundary"), null=True, blank=True, default=None

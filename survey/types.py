@@ -28,6 +28,12 @@ class HappeningSurveyType(DjangoObjectType):
     def resolve_is_offline(self, info):
         return False
 
+    def resolve_audio_file(self, info):
+        if self.audio_file and self.audio_file.url:
+            return info.context.build_absolute_uri(self.audio_file.url)
+        else:
+            return None
+
     class Meta:
         model = HappeningSurvey
         description = "Type definition for a happening survey"
