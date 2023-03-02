@@ -13,7 +13,7 @@ from graphql_jwt.decorators import login_required
 from reversion.models import Version
 
 from gallery.models import Gallery
-from lukimgather.scalars import UploadImage
+from lukimgather.scalars import UploadAudio, UploadImage
 from lukimgather.utils import is_valid_uuid
 from survey.models import HappeningSurvey, Survey
 from survey.serializers import SurveySerializer
@@ -77,6 +77,7 @@ class HappeningSurveyInput(graphene.InputObjectType):
     description = graphene.String(description="description", required=False)
     sentiment = graphene.String(description="Sentiment", required=False)
     attachment = graphene.List(UploadImage, required=False)
+    audio_file = UploadAudio(required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     improvement = Improvement(required=False)
@@ -124,6 +125,7 @@ class CreateHappeningSurvey(graphene.Mutation):
                 survey_obj.boundary = data.get("boundary")
                 survey_obj.is_public = data.get("is_public", True)
                 survey_obj.is_test = data.get("is_test", False)
+                survey_obj.audio_file = data.get("audio_file", False)
                 survey_obj.created_by = None if anonymous else info.context.user
                 if "created_at" in data:
                     survey_obj.created_at = data.get("created_at")
@@ -176,6 +178,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
     sentiment = graphene.String(description="Sentiment", required=False)
     attachment = graphene.List(UploadImage, required=False)
     attachment_link = graphene.List(graphene.UUID, required=False)
+    audio_file = UploadAudio(required=False)
     location = graphql_geojson.Geometry(required=False)
     boundary = graphql_geojson.Geometry(required=False)
     status = Status()
