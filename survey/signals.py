@@ -21,13 +21,14 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
     if update_fields and "status" in update_fields:
         if instance.status == "pending":
             return
-        instance.created_by.notify(
-            instance.updated_by,
-            instance.status,
-            action_object=instance,
-            notification_type=f"happening_survey_{instance.status}",
-            description=f"admin {instance.status} {instance.title}",
-        )
+        if instance.created_by:
+            instance.created_by.notify(
+                instance.updated_by,
+                instance.status,
+                action_object=instance,
+                notification_type=f"happening_survey_{instance.status}",
+                description=f"admin {instance.status} {instance.title}",
+            )
     if created or (
         update_fields
         and any(field in update_fields for field in ["boundary", "location"])

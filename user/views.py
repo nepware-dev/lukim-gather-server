@@ -9,6 +9,7 @@ class UserInfoView(ProtectedResourceView):
         user = request.resource_owner
         return JsonResponse(
             {
+                "id": user.id,
                 "username": user.username,
                 "email": user.email,
                 "first_name": user.first_name,

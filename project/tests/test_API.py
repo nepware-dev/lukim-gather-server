@@ -10,7 +10,9 @@ class APITest(TestBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        users = cls.baker.make(settings.AUTH_USER_MODEL, is_active=True, _quantity=1)
+        users = cls.baker.make(
+            settings.AUTH_USER_MODEL, is_active=True, is_staff=True, _quantity=1
+        )
         cls.activated_initial_password = get_user_model().objects.make_random_password()
         cls.projects = cls.baker.make(
             "project.Project", title="test project title", make_m2m=True
@@ -55,6 +57,7 @@ class APITest(TestBase):
                 "id": self.projects.id,
                 "users": [user.id for user in self.users],
             },
+            headers=self.headers,
         )
         self.assertResponseNoErrors(response)
 

@@ -268,7 +268,7 @@ class APITest(TestBase):
         email_change_response = self.query(
             email_change_mutation, input_data=email_change_data, headers=self.headers
         )
-        self.assertEqual(email_change_response.status_code, 200)
+        self.assertResponseNoErrors(email_change_response)
         email_change_pin = (
             apps.get_model("user", "EmailChangePin")
             .objects.get(user=self.activated_user)
@@ -283,6 +283,51 @@ class APITest(TestBase):
         self.assertEqual(email_change_verify_response.status_code, 200)
         user = get_user_model().objects.get(pk=self.activated_user.pk)
         self.assertEqual(new_email, user.email)
+
+    def test_phone_number_change_flow(self):
+        phone_number_change_mutation = """
+            mutation Mutation($input: PhoneNumberChangeInput!) {
+              phoneNumberChange(data: $input) {
+                errors
+                result
+                ok
+              }
+            }
+        """
+        phone_number_change_verify_mutation = """
+            mutation Mutation($input: PhoneNumberChangePinVerifyInput!) {
+              phoneNumberChangeVerify(data: $input) {
+                result
+                errors
+                ok
+              }
+            }
+        """
+        new_phone_number = "+33612345678"
+        phone_number_change_data = {
+            "newPhoneNumber": new_phone_number,
+            "password": self.activated_initial_password,
+        }
+        phone_number_change_response = self.query(
+            phone_number_change_mutation,
+            input_data=phone_number_change_data,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(phone_number_change_response)
+        phone_number_change_pin = (
+            apps.get_model("user", "PhoneNumberChangePin")
+            .objects.get(user=self.activated_user)
+            .pin
+        )
+        phone_number_change_verify_data = {"pin": phone_number_change_pin}
+        phone_number_change_verify_response = self.query(
+            phone_number_change_verify_mutation,
+            input_data=phone_number_change_verify_data,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(phone_number_change_verify_response)
+        user = get_user_model().objects.get(pk=self.activated_user.pk)
+        self.assertEqual(new_phone_number, user.phone_number)
 
     def test_user_grant_get(self):
         response = self.query(
@@ -347,7 +392,7 @@ class APITest(TestBase):
             """,
             input_data=user_data,
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertResponseNoErrors(response)
         non_activated_user = get_user_model().objects.get(
             username=non_activated_user_username
         )
