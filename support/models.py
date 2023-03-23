@@ -178,3 +178,16 @@ class AccountDeletionRequest(models.Model):
         blank=True,
         default=None,
     )
+
+
+class ContactUs(TimeStampedModel):
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    subject = models.CharField(max_length=255)
+    message = RichTextField(_("message"))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "contact us"

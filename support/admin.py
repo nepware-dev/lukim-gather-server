@@ -8,6 +8,7 @@ from lukimgather.admin import UserStampedModelAdmin
 from support.models import (
     AccountDeletionRequest,
     Category,
+    ContactUs,
     EmailTemplate,
     Feedback,
     FrequentlyAskedQuestion,
@@ -119,3 +120,16 @@ class AccountDeletionRequest(admin.ModelAdmin):
     class Meta:
         verbose_name = _("Account deletion request")
         verbose_plural_name = _("Account deletion requests")
+
+
+@admin.register(ContactUs)
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "email",
+        "subject",
+        "message",
+    )
+
+    class Meta:
+        verbose_plural_name = _("Contact Us")
