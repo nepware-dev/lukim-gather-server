@@ -307,7 +307,6 @@ class APITest(TestBase):
         new_phone_number = "+33612345678"
         phone_number_change_data = {
             "newPhoneNumber": new_phone_number,
-            "password": self.activated_initial_password,
         }
         phone_number_change_response = self.query(
             phone_number_change_mutation,

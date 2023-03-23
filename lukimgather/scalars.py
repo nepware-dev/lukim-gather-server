@@ -12,7 +12,9 @@ class UploadImage(graphene.Scalar):
             image = Image.open(upload)
             image.verify()
         except:
-            raise GraphQLError("Invalid image type.")
+            raise GraphQLError(
+                "Upload a valid image. The file you uploaded was either not an image or a corrupted image."
+            )
         return upload
 
     @staticmethod
@@ -47,7 +49,9 @@ class UploadAudio(graphene.Scalar):
 
         extension = Path(upload.name).suffix[1:].lower()
         if extension not in audio_type_dict.keys():
-            raise GraphQLError("Invalid audio type.")
+            raise GraphQLError(
+                "Upload a valid audio. The file you uploaded was either not an audio or a corrupted audio file."
+            )
         return upload
 
     @staticmethod
