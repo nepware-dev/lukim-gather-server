@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from graphql_jwt.shortcuts import get_token
 
 from lukimgather.tests import TestBase
@@ -101,6 +101,28 @@ class APITest(TestBase):
             }
             """,
             input_data={"reason": "test"},
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_contact_us(self):
+        response = self.query(
+            """
+            mutation ContactUs($input: ContactUsMutationInput!) {
+              contactUs(input: $input) {
+                name
+                email
+                subject
+                message
+              }
+            }
+            """,
+            input_data={
+                "name": "test",
+                "email": "test@mail.com",
+                "subject": "test",
+                "message": "test",
+            },
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)

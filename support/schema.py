@@ -2,7 +2,11 @@ import graphene
 from graphene_django_extras import DjangoFilterPaginateListField
 
 from .filters import CategoryFilter, LegalDocumentFilter, ResourceFilter
-from .mutations import AccountDeletionRequestMutation, FeedbackMutation
+from .mutations import (
+    AccountDeletionRequestMutation,
+    ContactUsMutation,
+    FeedbackMutation,
+)
 from .types import (
     CategoryType,
     FrequentlyAskedQuestionType,
@@ -46,3 +50,4 @@ class SupportQueries(graphene.ObjectType):
 class SupportMutations(graphene.ObjectType):
     create_feedback = FeedbackMutation.Field()
     delete_account = AccountDeletionRequestMutation.Field()
+    contact_us = ContactUsMutation.Field()
