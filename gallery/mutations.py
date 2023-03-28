@@ -14,7 +14,7 @@ class MediaUploadMutation(graphene.Mutation):
     class Arguments:
         title = graphene.String(description="Title", required=True)
         type = graphene.String(description="Media Type", required=True)
-        media = Upload(required=False)
+        media = Upload(required=True)
 
     errors = GenericScalar()
     result = graphene.Field(GalleryType)
@@ -22,11 +22,11 @@ class MediaUploadMutation(graphene.Mutation):
 
     @login_required
     def mutate(self, info, media=None, **kwargs):
-        if media is not None:
+        try:
             gallery = Gallery(
                 media=media, title=kwargs.get("title"), type=kwargs.get("type")
             )
             gallery.save()
-            return MediaUploadMutation(result=gallery, ok=True, errors=None)
-        else:
-            return GraphQLError("Image required !")
+        except Exception:
+            raise GraphQLError("Unable to upload file!")
+        return MediaUploadMutation(result=gallery, ok=True, errors=None)
