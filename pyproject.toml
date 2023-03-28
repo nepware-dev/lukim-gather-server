@@ -44,6 +44,7 @@ django-phonenumber-field = {version = "^6.3.0", extras = ["phonenumbers"]}
 watchtower = "^3.0.0"
 django-ratelimit = "^3.0.1"
 django-reversion = "^5.0.3"
+sorl-thumbnail = "^12.9.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
