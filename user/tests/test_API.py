@@ -243,7 +243,7 @@ class APITest(TestBase):
 
     def test_email_change_flow(self):
         email_change_mutation = """
-            mutation Mutation($input: EmailChangeInput!) {
+            mutation EmailChangeMutation($input: EmailChangeInput!) {
               emailChange(data: $input) {
                 errors
                 result
@@ -252,7 +252,7 @@ class APITest(TestBase):
             }
         """
         email_change_verify_mutation = """
-            mutation Mutation($input: EmailChangePinVerifyInput!) {
+            mutation EmailChangeVerifyMutation($input: EmailChangePinVerifyInput!) {
               emailChangeVerify(data: $input) {
                 result
                 errors
@@ -264,6 +264,7 @@ class APITest(TestBase):
         email_change_data = {
             "newEmail": new_email,
             "password": self.activated_initial_password,
+            "option": "CHANGE",
         }
         email_change_response = self.query(
             email_change_mutation, input_data=email_change_data, headers=self.headers
