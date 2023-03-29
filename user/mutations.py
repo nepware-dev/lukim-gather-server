@@ -109,9 +109,15 @@ class EmailChangePinInput(graphene.InputObjectType):
     is_active = graphene.Boolean(description=_("Is Active"))
 
 
+class EmailChangeOption(graphene.Enum):
+    ADD = "ADD"
+    CHANGE = "CHANGE"
+
+
 class EmailChangeInput(graphene.InputObjectType):
     new_email = graphene.String(description=_("New Email"))
-    password = graphene.String(description=_("Password"), required=True)
+    password = graphene.String(description=_("Password"), required=False)
+    option = EmailChangeOption(required=True)
 
     def validate(self, info):
         try:
@@ -119,10 +125,16 @@ class EmailChangeInput(graphene.InputObjectType):
         except ValidationError as error:
             raise GraphQLError(error.message)
         user = info.context.user
+        if self.option == EmailChangeOption.ADD and user.email:
+            raise GraphQLError("You have already set the email.")
+
+        if self.option == EmailChangeOption.CHANGE and not user.check_password(
+            self.password
+        ):
+            raise GraphQLError("Invalid password for user.")
+
         if User.objects.filter(email=self.new_email).exists():
             raise GraphQLError("Email already used for account creation.")
-        if not user.check_password(self.password):
-            raise GraphQLError("Invalid password for user")
 
 
 class PhoneNumberChangeInput(graphene.InputObjectType):
@@ -431,13 +443,13 @@ class EmailConfirm(graphene.Mutation):
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username).first()
         if not user:
-            raise GraphQLError("No user present with given email address/username")
+            raise GraphQLError("No user present with given email address/username.")
         email_confirm_pin = EmailConfirmationPin.objects.filter(user=user).first()
         if email_confirm_pin:
             if email_confirm_pin.no_of_incorrect_attempts >= 5:
-                raise GraphQLError("User is inactive for trying too many times")
+                raise GraphQLError("User is inactive for trying too many times.")
             if not email_confirm_pin.is_active:
-                raise GraphQLError("Email address has already been confirmed")
+                raise GraphQLError("Email address has already been confirmed.")
         random_6_digit_pin = gen_random_number(6)
         active_for_one_hour = timezone.now() + timezone.timedelta(hours=1)
         email_confirm_pin_object, _obj = EmailConfirmationPin.objects.update_or_create(
@@ -455,7 +467,7 @@ class EmailConfirm(graphene.Mutation):
         )
         user.email_user(subject, text_message, html_message=html_message)
         return EmailConfirm(
-            result={"detail": "Email confirmation mail successfully send"},
+            result={"detail": "Email confirmation mail successfully send."},
             errors=None,
             ok=True,
         )
@@ -474,7 +486,7 @@ class EmailConfirmVerify(graphene.Mutation):
     def mutate(self, info, data):
         user = User.objects.filter_by_username(data.username, is_active=False).first()
         if not user:
-            raise GraphQLError("No inactive user present for username")
+            raise GraphQLError("No inactive user present for username.")
         pin = data.pin
         current_time = timezone.now()
         email_confirmation_mail_object = EmailConfirmationPin.objects.filter(
@@ -489,16 +501,18 @@ class EmailConfirmVerify(graphene.Mutation):
             ).first()
             if user_only_email_confirm_mail_object:
                 if not user_only_email_confirm_mail_object.is_active:
-                    raise GraphQLError("Email is already confirmed for user")
+                    raise GraphQLError("Email is already confirmed for user.")
                 user_only_email_confirm_mail_object.no_of_incorrect_attempts += 1
                 user_only_email_confirm_mail_object.save()
                 if user_only_email_confirm_mail_object.no_of_incorrect_attempts >= 5:
-                    raise GraphQLError("User is now inactive for trying too many times")
+                    raise GraphQLError(
+                        "User is now inactive for trying too many times."
+                    )
                 elif user_only_email_confirm_mail_object.pin != pin:
-                    raise GraphQLError("Email confirmation pin is incorrect")
+                    raise GraphQLError("Email confirmation pin is incorrect.")
                 else:
-                    raise GraphQLError("Email confirmation pin has expired")
-            raise GraphQLError("No matching active username/email found")
+                    raise GraphQLError("Email confirmation pin has expired.")
+            raise GraphQLError("No matching active username/email found.")
         else:
             email_confirmation_mail_object.no_of_incorrect_attempts = 0
             email_confirmation_mail_object.is_active = False
@@ -506,7 +520,7 @@ class EmailConfirmVerify(graphene.Mutation):
             user.is_active = True
             user.save()
             return EmailConfirmVerify(
-                result={"detail": "Email successfully confirmed"},
+                result={"detail": "Email successfully confirmed."},
                 errors=None,
                 ok=True,
             )
@@ -551,7 +565,7 @@ class EmailChange(graphene.Mutation):
             html_message=html_message,
         )
         return EmailChange(
-            result={"detail": "Email change mail successfully send"},
+            result={"detail": "Email change mail successfully send."},
             errors=None,
             ok=True,
         )
