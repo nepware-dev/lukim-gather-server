@@ -13,6 +13,7 @@ from graphql import GraphQLError
 from graphql_jwt.decorators import login_required
 from graphql_jwt.refresh_token.shortcuts import create_refresh_token
 from graphql_jwt.shortcuts import get_token
+from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.validators import validate_international_phonenumber
 
 from lukimgather.throttling import ratelimit
@@ -139,7 +140,6 @@ class EmailChangeInput(graphene.InputObjectType):
 
 class PhoneNumberChangeInput(graphene.InputObjectType):
     new_phone_number = graphene.String(description=_("New Phone Number"), required=True)
-    password = graphene.String(description=_("Password"), required=True)
 
     def validate(self, info):
         if not self.new_phone_number:
@@ -148,11 +148,8 @@ class PhoneNumberChangeInput(graphene.InputObjectType):
             validate_international_phonenumber(self.new_phone_number)
         except ValidationError as error:
             raise GraphQLError(error.message)
-        user = info.context.user
         if User.objects.filter(phone_number=self.new_phone_number).exists():
             raise GraphQLError("Phone number already used for account creation.")
-        if not user.check_password(self.password):
-            raise GraphQLError("Invalid password for user")
 
 
 class EmailChangePinVerifyInput(graphene.InputObjectType):
@@ -641,7 +638,7 @@ class PhoneNumberConfirm(graphene.Mutation):
     @ratelimit(key="ip", rate="500/h", block=True)
     @ratelimit(key="gql:data.username", rate="10/m", block=True)
     def mutate(self, info, data):
-        user = User.objects.filter_by_username(data.username).first()
+        user = User.objects.filter_by_username(data.username, is_active=True).first()
         if not user:
             raise GraphQLError("No user present with given phone number/username")
         phone_number_confirm_pin = PhoneNumberConfirmationPin.objects.filter(
@@ -759,7 +756,7 @@ class PhoneNumberChange(graphene.Mutation):
             },
         )
         user.celery_sms_user(
-            to=user.username,
+            to=data.new_phone_number,
             message=f"Your OTP is {phone_change_pin_object.pin} for Lukim Gather, It will expire in 1 hour.",
         )
         return PhoneNumberChange(
@@ -816,6 +813,8 @@ class PhoneNumberChangeVerify(graphene.Mutation):
             phone_number_change_object.is_active = False
             phone_number_change_object.save()
             user.phone_number = phone_number_change_object.new_phone_number
+            if PhoneNumber.is_valid(to_python(user.username)):
+                user.username = str(phone_number_change_object.new_phone_number)
             user.save()
             return PhoneNumberChangeVerify(
                 result={"detail": "Phone number successfully changed."},

@@ -15,6 +15,7 @@ from reversion.models import Version
 from gallery.models import Gallery
 from lukimgather.scalars import UploadAudio, UploadImage
 from lukimgather.utils import is_valid_uuid
+from survey.decorators import can_edit_happening_survey, can_edit_survey
 from survey.models import HappeningSurvey, Survey
 from survey.serializers import SurveySerializer
 from survey.types import HappeningSurveyType, SurveyType
@@ -41,7 +42,7 @@ class UpdateSurveyMutation(graphene.Mutation):
     ok = graphene.Boolean()
     result = graphene.Field(SurveyType)
 
-    @login_required
+    @can_edit_survey
     def mutate(self, info, id, answer):
         if not isinstance(answer, dict):
             raise GraphQLError("Answer must be a valid JSON object.")
@@ -125,7 +126,7 @@ class CreateHappeningSurvey(graphene.Mutation):
                 survey_obj.boundary = data.get("boundary")
                 survey_obj.is_public = data.get("is_public", True)
                 survey_obj.is_test = data.get("is_test", False)
-                survey_obj.audio_file = data.get("audio_file", False)
+                survey_obj.audio_file = data.get("audio_file", None)
                 survey_obj.created_by = None if anonymous else info.context.user
                 if "created_at" in data:
                     survey_obj.created_at = data.get("created_at")
@@ -161,6 +162,7 @@ class DeleteHappeningSurvey(graphene.Mutation):
         id = graphene.UUID(description="UUID", required=True)
 
     @classmethod
+    @can_edit_happening_survey
     def mutate(cls, root, info, **kwargs):
         try:
             happening_survey_obj = HappeningSurvey.objects.get(pk=kwargs["id"])
@@ -258,12 +260,9 @@ class EditHappeningSurvey(graphene.Mutation):
     ok = graphene.Boolean()
     result = graphene.Field(HappeningSurveyType)
 
-    @login_required
+    @can_edit_happening_survey
     def mutate(self, info, id, data=None):
         happening_survey_obj = HappeningSurvey.objects.filter(id=id).first()
-        if not happening_survey_obj:
-            raise GraphQLError("Happening survey doesn't exist")
-
         attachment_links = data.pop("attachment_link", None)
         attachments = data.pop("attachment", [])
 

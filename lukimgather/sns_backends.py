@@ -11,6 +11,15 @@ class SnsBackend:
             region_name=settings.AWS_SNS_REGION_NAME,
         )
         try:
-            client.publish(PhoneNumber=to, Message=message)
-        except:
-            raise
+            client.publish(
+                PhoneNumber=to,
+                Message=message,
+                MessageAttributes={
+                    "AWS.SNS.SMS.SenderID": {
+                        "DataType": "String",
+                        "StringValue": "LukimGather",
+                    }
+                },
+            )
+        except Exception as error:
+            raise error
