@@ -21,6 +21,7 @@ from user.mutations import (
     RegisterUser,
     ResetUserPassword,
     ResetUserPasswordVerify,
+    SetPassword,
     UpdateUser,
 )
 from user.types import GrantType, PrivateUserType, UserType
@@ -52,6 +53,7 @@ class UserMutations(graphene.ObjectType):
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
     change_password = ChangePassword.Field()
+    set_password = SetPassword.Field()
     register_user = RegisterUser.Field()
     password_reset = ResetUserPassword.Field()
     password_reset_verify = ResetUserPasswordVerify.Field()

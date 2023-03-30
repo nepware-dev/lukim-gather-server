@@ -4,16 +4,16 @@
   pk: 1
   fields:
     identifier: email_change
-    subject: Email change mail
+    subject: Email {{option}} mail
     html_message: &email_change_content |
       Dear {{ email_change_object.user.username }},
 
-      Recently you have requested to change your email address.
+      Recently you have requested to {{option}} your email address.
       We have send this email to verify your email address.
 
-      If you haven't requested recently to change email address to this mail you can safely ignore this email.
+      If you haven't requested recently to {{option}} email address to this mail you can safely ignore this email.
 
-      Your email change request confirmation pin is {{ email_change_object.pin }}
+      Your email {{option}} request confirmation pin is {{ email_change_object.pin }}
       Your pin will expire in 1 hour at {{email_change_object.pin_expiry_time }} UTC
 
       Thanks,

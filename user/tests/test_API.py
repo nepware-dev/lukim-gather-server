@@ -263,7 +263,6 @@ class APITest(TestBase):
         new_email = random_gen.gen_email().lower()
         email_change_data = {
             "newEmail": new_email,
-            "password": self.activated_initial_password,
             "option": "CHANGE",
         }
         email_change_response = self.query(
