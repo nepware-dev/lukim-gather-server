@@ -20,7 +20,7 @@ graphene-django = {version = "^3.0.0-beta.7", allow-prereleases = true}
 django-filter = "^22.1"
 django-graphql-jwt = "^0.3.4"
 celery = "^5.2.3"
-redis = "^4.1.1"
+redis = "^4.5.4"
 django-modeltranslation = "^0.17.5"
 django-ordered-model = "^3.5"
 django-ckeditor = "^6.2.0"
