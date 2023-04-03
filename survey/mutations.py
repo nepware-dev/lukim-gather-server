@@ -277,9 +277,10 @@ class EditHappeningSurvey(graphene.Mutation):
                 if attachment_links is not None:
                     happening_survey_obj.attachment.set(attachment_links)
                 happening_survey_obj.updated_by = info.context.user
-                happening_survey_obj.modified_at = data.get(
-                    "modified_at", timezone.now()
-                )
+                if not data.get("status", None):
+                    happening_survey_obj.modified_at = data.get(
+                        "modified_at", timezone.now()
+                    )
                 happening_survey_obj.save()
                 if attachments:
                     for attachment in attachments:
