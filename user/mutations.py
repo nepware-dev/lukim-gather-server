@@ -55,11 +55,60 @@ class RegisterUserInput(graphene.InputObjectType):
     re_password = graphene.String(description=_("Retype Password"), required=False)
     username = graphene.String(description=_("Username"), required=True)
 
+    def validate(input, info):
+        user_email = input.get("email", None)
+        user_phone_number = input.get("phone_number", None)
+        if not any((user_email, user_phone_number)):
+            raise ValidationError("Please enter an email or phone number.")
+        password = input.get("password", None)
+        re_password = input.pop("re_password", None)
+        if user_email:
+            if not any((password, re_password)):
+                raise ValidationError("Password field is required.")
+            if password != re_password:
+                raise ValidationError("password and re_password does not match.")
+        try:
+            if user_email:
+                validate_email(user_email)
+                validate_password(password=input.password)
+            elif user_phone_number:
+                validate_international_phonenumber(user_phone_number)
+                input.pop("password", None)  # Note:- OTP login
+        except ValidationError as error:
+            raise ValidationError(error.messages[0])
+        if User.objects.filter_by_username(input.username).exists():
+            sign_in_method = (
+                "email"
+                if user_email
+                else "phone number"
+                if user_phone_number
+                else "username"
+            )
+            raise ValidationError(f"User with {sign_in_method} already exists.")
+        return input
+
 
 class ChangePasswordInput(graphene.InputObjectType):
     password = graphene.String(description=_("Password"), required=True)
     new_password = graphene.String(description=_("New Password"), required=True)
     re_password = graphene.String(description=_("Retype Password"), required=True)
+
+
+class SetPasswordInput(graphene.InputObjectType):
+    new_password = graphene.String(description=_("New Password"), required=True)
+    re_password = graphene.String(description=_("Retype Password"), required=True)
+
+    def validate(self, info):
+        user = info.context.user
+        if user.has_usable_password():
+            raise ValidationError("You have already set the password.")
+        if self.new_password != self.re_password:
+            raise ValidationError("New password and re new password doesn't match")
+        try:
+            validate_password(password=self.new_password, user=user)
+        except ValidationError as e:
+            raise ValidationError(e.messages[0])
+        return {"new_password": self.new_password, "re_password": self.re_password}
 
 
 class PasswordResetPinInput(graphene.InputObjectType):
@@ -111,13 +160,12 @@ class EmailChangePinInput(graphene.InputObjectType):
 
 
 class EmailChangeOption(graphene.Enum):
-    ADD = "ADD"
-    CHANGE = "CHANGE"
+    ADD = "add"
+    CHANGE = "change"
 
 
 class EmailChangeInput(graphene.InputObjectType):
     new_email = graphene.String(description=_("New Email"))
-    password = graphene.String(description=_("Password"), required=False)
     option = EmailChangeOption(required=True)
 
     def validate(self, info):
@@ -128,12 +176,6 @@ class EmailChangeInput(graphene.InputObjectType):
         user = info.context.user
         if self.option == EmailChangeOption.ADD and user.email:
             raise GraphQLError("You have already set the email.")
-
-        if self.option == EmailChangeOption.CHANGE and not user.check_password(
-            self.password
-        ):
-            raise GraphQLError("Invalid password for user.")
-
         if User.objects.filter(email=self.new_email).exists():
             raise GraphQLError("Email already used for account creation.")
 
@@ -173,37 +215,12 @@ class RegisterUser(graphene.Mutation):
     @ratelimit(key="ip", rate="500/h", block=True)
     @ratelimit(key="gql:data.username", rate="10/m", block=True)
     def mutate(self, info, data):
-        user_exists = User.objects.filter_by_username(data.username).exists()
-        user_email = data.get("email", None)
-        user_phone_number = data.get("phone_number", None)
-        if user_exists:
-            sign_in_method = (
-                "email"
-                if user_email
-                else "phone number"
-                if user_phone_number
-                else "username"
-            )
-            raise GraphQLError(f"User with {sign_in_method} already exists")
-        user_password = None
-        if "re_password" in data:
-            user_password = data.pop("re_password")
         try:
-            if user_email:
-                validate_email(user_email)
-            elif user_phone_number:
-                validate_international_phonenumber(user_phone_number)
-        except ValidationError as e:
-            raise GraphQLError(e.message)
-        if user_password:
-            try:
-                validate_password(password=user_password)
-            except ValidationError as e:
-                raise GraphQLError(e.messages[0])
-        user = User.objects.create_user(**data)
-        user.is_active = True  # Note:- Temporary fix to remove 2 step verification
-        user.save()
-        return RegisterUser(result=user, ok=True, errors=None)
+            validated_data = data.validate(info)
+            user = User.objects.create_user(**validated_data, is_active=True)
+            return RegisterUser(result=user, ok=True, errors=None)
+        except ValidationError as error:
+            return GraphQLError(error.message)
 
 
 class ChangePassword(graphene.Mutation):
@@ -233,6 +250,34 @@ class ChangePassword(graphene.Mutation):
             errors = list(e.messages)
             raise GraphQLError(errors)
         user.set_password(new_password)
+        user.save()
+        return ChangePassword(
+            result={"detail": "Password successfully updated"},
+            ok=True,
+            errors=None,
+        )
+
+
+class SetPassword(graphene.Mutation):
+    class Arguments:
+        data = SetPasswordInput(
+            description=_("Fields required to set password."), required=True
+        )
+
+    errors = GenericScalar()
+    ok = graphene.Boolean()
+    result = GenericScalar()
+
+    @login_required
+    def mutate(self, info, data):
+        try:
+            validated_data = data.validate(info)
+        except ValidationError as e:
+            return GraphQLError(e.messages[0])
+        user = User.objects.filter_by_username(
+            info.context.user.username, is_active=True
+        ).first()
+        user.set_password(validated_data["new_password"])
         user.save()
         return ChangePassword(
             result={"detail": "Password successfully updated"},
@@ -553,7 +598,12 @@ class EmailChange(graphene.Mutation):
         )
         subject, html_message, text_message = EmailTemplate.objects.get(
             identifier="email_change"
-        ).get_email_contents({"email_change_object": email_change_pin_object})
+        ).get_email_contents(
+            {
+                "email_change_object": email_change_pin_object,
+                "option": data.option.value,
+            }
+        )
         send_mail(
             subject,
             text_message,
