@@ -18,9 +18,10 @@ from .tasks import send_user_mail, send_user_sms
 
 class User(AbstractUser):
     class Gender(models.TextChoices):
-        MALE = "M", _("Male")
-        FEMALE = "F", _("Female")
-        OTHER = "O", _("Other")
+        MALE = "male", _("Male")
+        FEMALE = "female", _("Female")
+        OTHER = "other", _("Other")
+        PREFER_NOT_TO_SAY = "unspecified", _("Prefer not to say")
 
     username_validator = CustomASCIIUsernameValidator
 
@@ -69,7 +70,7 @@ class User(AbstractUser):
     gender = models.CharField(
         blank=True,
         null=True,
-        max_length=1,
+        max_length=15,
         choices=Gender.choices,
         default=None,
     )
