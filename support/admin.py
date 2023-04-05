@@ -108,20 +108,6 @@ class EmailTemplateAdmin(admin.ModelAdmin):
         verbose_plural_name = _("email templates")
 
 
-@admin.register(AccountDeletionRequest)
-class AccountDeletionRequest(admin.ModelAdmin):
-    list_display = (
-        "account",
-        "reason",
-        "approved_by",
-    )
-    list_filter = ("approved_by",)
-
-    class Meta:
-        verbose_name = _("Account deletion request")
-        verbose_plural_name = _("Account deletion requests")
-
-
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = (
@@ -133,3 +119,31 @@ class ContactUsAdmin(admin.ModelAdmin):
 
     class Meta:
         verbose_plural_name = _("Contact Us")
+
+
+@admin.register(AccountDeletionRequest)
+class AccountDeletionRequest(UserStampedModelAdmin):
+    list_display = (
+        "account",
+        "reason",
+        "approved_by",
+    )
+    list_filter = ("approved_by",)
+    search_fields = ("account__username",)
+
+    class Meta:
+        verbose_name = _("Account deletion request")
+        verbose_plural_name = _("Account deletion requests")
+
+    def has_approve_permission(self, request, obj=None):
+        if request.user.is_staff or request.user.is_superuser:
+            return True
+        return False
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra_context = extra_context or {}
+        obj = self.get_object(request, object_id)
+        if obj:
+            extra_context["show_approve_link"] = self.has_approve_permission(request)
+            extra_context["account"] = obj.account
+        return super().change_view(request, object_id, form_url, extra_context)
