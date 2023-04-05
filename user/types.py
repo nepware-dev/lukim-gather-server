@@ -6,6 +6,10 @@ from user.models import Grant, PasswordResetPin, User
 
 
 class PrivateUserType(DjangoObjectType):
+    has_password = graphene.Boolean(
+        description="Determine if user has set password or not."
+    )
+
     class Meta:
         model = User
         exclude = ("password",)
@@ -15,6 +19,11 @@ class PrivateUserType(DjangoObjectType):
             return info.context.build_absolute_uri(self.avatar.url)
         else:
             return None
+
+    def resolve_has_password(self, info):
+        if self.has_usable_password():
+            return True
+        return False
 
 
 class UserType(DjangoObjectType):

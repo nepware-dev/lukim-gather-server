@@ -661,6 +661,14 @@ class EmailChangeVerify(graphene.Mutation):
             email_change_mail_object.is_active = False
             email_change_mail_object.save()
             user.email = email_change_mail_object.new_email
+            try:
+                validate_email(user.username)
+                user.username = email_change_mail_object.new_email
+            except ValidationError:
+                if PhoneNumber.is_valid(
+                    to_python(user.username)
+                ):  # Note: use email for username instead of phone number
+                    user.username = email_change_mail_object.new_email
             user.save()
             return EmailChangeVerify(
                 result={"detail": "Email successfully changed"},
@@ -712,7 +720,7 @@ class PhoneNumberConfirm(graphene.Mutation):
             },
         )
         user.celery_sms_user(
-            to=user.username,
+            to=user.phone_number.as_international,
             message=f"Your OTP is {random_6_digit_pin} for Lukim Gather, It will expire in next 5 minutes.",
         )
         return PhoneNumberConfirm(
@@ -770,10 +778,11 @@ class PhoneNumberConfirmVerify(graphene.Mutation):
             phone_number_confirmation_sms_object.no_of_incorrect_attempts = 0
             phone_number_confirmation_sms_object.is_active = False
             phone_number_confirmation_sms_object.save()
+            refresh_token = create_refresh_token(user)
             return PhoneNumberConfirmVerify(
                 token=get_token(user),
-                refresh_token=create_refresh_token(user).token,
-                user=user,
+                refresh_token=refresh_token.token,
+                user=refresh_token.user,
             )
 
 
