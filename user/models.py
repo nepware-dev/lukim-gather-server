@@ -17,6 +17,11 @@ from .tasks import send_user_mail, send_user_sms
 
 
 class User(AbstractUser):
+    class Gender(models.TextChoices):
+        MALE = "M", _("Male")
+        FEMALE = "F", _("Female")
+        OTHER = "O", _("Other")
+
     username_validator = CustomASCIIUsernameValidator
 
     # Abstract user modification
@@ -61,6 +66,13 @@ class User(AbstractUser):
         default=None,
     )
     phone_number = PhoneNumberField(blank=True, null=True)
+    gender = models.CharField(
+        blank=True,
+        null=True,
+        max_length=1,
+        choices=Gender.choices,
+        default=None,
+    )
 
     objects = CustomUserManager()
 

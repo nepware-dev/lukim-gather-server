@@ -39,6 +39,9 @@ class CustomObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
         return cls(user=info.context.user)
 
 
+GenderEnum = graphene.Enum.from_enum(User.Gender)
+
+
 class UserInput(graphene.InputObjectType):
     first_name = graphene.String(description=_("First name"))
     last_name = graphene.String(description=_("Last name"))
@@ -54,6 +57,7 @@ class RegisterUserInput(graphene.InputObjectType):
     password = graphene.String(description=_("Password"), required=False)
     re_password = graphene.String(description=_("Retype Password"), required=False)
     username = graphene.String(description=_("Username"), required=True)
+    gender = GenderEnum(required=False)
 
     def validate(input, info):
         user_email = input.get("email", None)

@@ -11,6 +11,7 @@ ADDITIONAL_USER_FIELDS = (
         _("Additional Fields"),
         {
             "fields": (
+                "gender",
                 "phone_number",
                 "organization",
                 "avatar",
