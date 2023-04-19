@@ -103,6 +103,7 @@ THIRD_PARTY_APPS = [
     "mptt",
     "ordered_model",
     "phonenumber_field",
+    "push_notifications",
     "rest_framework",
     "rest_framework_gis",
     "reversion",
@@ -186,6 +187,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
             os.path.join(BASE_DIR, "templates", "allauth"),
         ],
         "APP_DIRS": True,
@@ -543,3 +545,12 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SITE_ID = 1
 LOGIN_URL = "/accounts/login/"
+
+# Push notification
+ENABLE_PUSH_NOTIFICATION = env.bool("ENABLE_PUSH_NOTIFICATION", default=False)
+if ENABLE_PUSH_NOTIFICATION:
+    PUSH_NOTIFICATIONS_SETTINGS = {
+        "FCM_API_KEY": env.str("FCM_API_KEY"),
+        "APNS_CERTIFICATE": env.str("APNS_CERTIFICATE"),
+        "UPDATE_ON_DUPLICATE_REG_ID": True,
+    }

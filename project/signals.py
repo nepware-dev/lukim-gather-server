@@ -12,7 +12,10 @@ def send_project_user_add_notification(sender, instance, created, **kwargs):
             instance.project.title,
             action_object=instance,
             notification_type="project_user_add",
-            description=f"You have been added to project {instance.project.title}",
+            description=f'You have been added to the project "{instance.project.title}".',
+        )
+        instance.user.send_push_notification(
+            message=f'You have been added to the project "{instance.project.title}".'
         )
 
 
@@ -23,5 +26,8 @@ def send_project_user_delete_notification(sender, instance, *args, **kwargs):
         instance.project.title,
         action_object=instance,
         notification_type="project_user_delete",
-        description=f"You have been removed from project {instance.project.title}",
+        description=f'You have been removed from the project "{instance.project.title}."',
+    )
+    instance.user.send_push_notification(
+        message=f'You have been removed from project "{instance.project.title}"'
     )
