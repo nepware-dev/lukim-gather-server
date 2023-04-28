@@ -1,4 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
+from push_notifications.api.rest_framework import (
+    APNSDeviceSerializer,
+    GCMDeviceSerializer,
+)
 from rest_framework import serializers
 
 from lukimgather.serializers import UserModelSerializer
@@ -48,3 +52,35 @@ class NotificationSerializer(UserModelSerializer):
 
 class UnReadCountResponseSerializer(serializers.Serializer):
     unread_count = serializers.IntegerField()
+
+
+class CustomGCMDeviceSerializer(GCMDeviceSerializer):
+    device_id = serializers.CharField(
+        help_text="ANDROID_ID / TelephonyManager.getDeviceId() (e.g: 0x01)",
+        style={"input_type": "text"},
+        required=False,
+        allow_null=True,
+    )
+
+    def validate_device_id(self, value):
+        try:
+            value = int(value, 16) if type(value) != int else value
+        except ValueError:
+            raise serializers.ValidationError("Device ID is not a valid hex number")
+        return value
+
+
+class CustomAPNSDeviceSerializer(APNSDeviceSerializer):
+    device_id = serializers.CharField(
+        help_text="ANDROID_ID / TelephonyManager.getDeviceId() (e.g: 0x01)",
+        style={"input_type": "text"},
+        required=False,
+        allow_null=True,
+    )
+
+    def validate_device_id(self, value):
+        try:
+            value = int(value, 16) if type(value) != int else value
+        except ValueError:
+            raise serializers.ValidationError("Device ID is not a valid hex number")
+        return value

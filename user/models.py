@@ -7,6 +7,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
+from push_notifications.api.rest_framework import APNSDevice
+from push_notifications.models import GCMDevice
 
 from lukimgather.auth_validators import CustomASCIIUsernameValidator
 from lukimgather.fields import LowerCharField, LowerEmailField
@@ -150,6 +152,19 @@ class User(AbstractUser):
     def celery_sms_user(self, to, message, **kwargs):
         if settings.ENABLE_SNS:
             send_user_sms.delay(to=to, message=message)
+
+    def send_push_notification(self, message, **kwargs):
+        if not settings.ENABLE_PUSH_NOTIFICATION:
+            return
+        try:
+            device = GCMDevice.objects.filter(user=self.id).first()
+        except GCMDevice.DoesNotExist:
+            try:
+                device = APNSDevice.objects.filter(user=self.id).first()
+            except APNSDevice.DoesNotExist:
+                return
+        if device:
+            device.send_message(f"{message}")
 
 
 class PasswordResetPin(TimeStampedModel):

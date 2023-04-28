@@ -27,6 +27,7 @@ def send_announcement(sender, instance, **kwargs):
                     notification_type="announcement",
                     description=strip_tags(instance.description),
                 )
+                user.send_push_notification(message=strip_tags(instance.description))
     elif "notification.Announcement_user" in sender._meta.label or instance.notify_all:
         users = User.objects.all() if instance.notify_all else instance.user.all()
         for user in users:
@@ -37,6 +38,7 @@ def send_announcement(sender, instance, **kwargs):
                 notification_type="announcement",
                 description=strip_tags(instance.description),
             )
+            user.send_push_notification(message=strip_tags(instance.description))
             if not instance.notify_all:
                 subject, html_message, text_message = EmailTemplate.objects.get(
                     identifier="announcement"
@@ -54,3 +56,4 @@ def send_announcement(sender, instance, **kwargs):
                     user.celery_email_user(
                         subject, text_message, html_message=html_message
                     )
+                user.send_push_notification(message=strip_tags(instance.description))

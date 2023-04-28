@@ -14,9 +14,12 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
             if instance.updated_by:
                 instance.created_by.notify(
                     instance.updated_by,
-                    "have made the project private",
+                    f'has made the project "{instance.title}" private',
                     action_object=instance,
                     notification_type=f"happening_survey_private",
+                )
+                instance.created_by.send_push_notification(
+                    message=f"{instance.updated_by} has made the project '{instance.title}' private."
                 )
                 return
     if update_fields and "status" in update_fields:
@@ -28,7 +31,10 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
                 instance.status,
                 action_object=instance,
                 notification_type=f"happening_survey_{instance.status}",
-                description=f"admin {instance.status} {instance.title}",
+                description=f'Admin has {instance.status} the project "{instance.title}".',
+            )
+            instance.created_by.send_push_notification(
+                message=f'Admin has {instance.status} the project "{instance.title}".'
             )
             return
     if created or (

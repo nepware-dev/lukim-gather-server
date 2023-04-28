@@ -6,7 +6,7 @@ from graphql_jwt.decorators import login_required
 
 from .filters import NoticeFilter, NotificationFilter
 from .models import Notification
-from .mutations import MarkNotification
+from .mutations import APNSDeviceMutation, GCMDeviceMutation, MarkNotification
 from .types import NoticeType, NotificationType
 
 
@@ -33,3 +33,5 @@ class NoticeQueries(graphene.ObjectType):
 
 class NotificationMutations(graphene.ObjectType):
     mark_as_read = MarkNotification.Field()
+    create_apns_device = APNSDeviceMutation.Field()
+    create_gcm_device = GCMDeviceMutation.Field()

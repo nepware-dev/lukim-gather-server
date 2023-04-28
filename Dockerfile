@@ -24,6 +24,9 @@ RUN apt-get update \
     python3.9-dev \
     python3.9-venv
 
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
+RUN update-alternatives --set python /usr/bin/python3.9
+
 FROM base as python-base
 
 ENV PYTHONUNBUFFERED=1 \
