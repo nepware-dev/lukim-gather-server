@@ -45,6 +45,7 @@ watchtower = "^3.0.0"
 django-ratelimit = "^3.0.1"
 django-reversion = "^5.0.3"
 django-push-notifications = {version = "^3.0.0", extras = ["WP", "APNS"]}
+py3-validate-email = "^1.0.5.post1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
