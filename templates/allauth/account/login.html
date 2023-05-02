@@ -1,43 +1,76 @@
 {% extends "account/base.html" %}
-
 {% load i18n %}
 {% load account socialaccount %}
-
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
-
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock %}
 {% block content %}
     <div class="main-container">
         <div class="container">
             <h1>{% trans "Welcome back" %}</h1>
-
             {% get_providers as socialaccount_providers %}
-
             {% if socialaccount_providers %}
-                <p>{% blocktrans with site.name as site_name %}Please sign in with one
+                <p>
+                    {% blocktrans with site.name as site_name %}Please sign in with one
                     of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-                    for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
-
+                    for a {{ site_name }} account and sign in below:{% endblocktrans %}
+                </p>
                 <div class="socialaccount_ballot">
-
                     <ul class="socialaccount_providers">
                         {% include "socialaccount/snippets/provider_list.html" with process="login" %}
                     </ul>
-
                     <div class="login-or">{% trans 'or' %}</div>
-
                 </div>
-
                 {% include "socialaccount/snippets/login_extra.html" %}
             {% endif %}
             <form class="login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
                 {{ form.as_p }}
                 {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    <input type="hidden"
+                           name="{{ redirect_field_name }}"
+                           value="{{ redirect_field_value }}" />
                 {% endif %}
-                <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                <a class="button secondaryAction"
+                   href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
                 <button class="primaryAction" type="submit">{% trans "Login" %}</button>
             </form>
+            <span class="info">
+                Note:- Email is the only supported method of login for OAuth.
+                If you haven't already added email to your account,
+                please provide your <a href="#" id="infoBtn">email</a> address to support OAuth login.
+            </span>
         </div>
     </div>
+</div>
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>To set up your email address, follow these steps:</h2>
+        <ol>
+            <li>
+                Login to Lukim Gather <a href="https://lukimgather.org" target="_blank">website</a> using registered phone number.
+            </li>
+            <li>Go to account settings.</li>
+            <li>Click on 'Email' tab.</li>
+            <li>Add your email address.</li>
+        </ol>
+    </div>
+</div>
+<script>
+      var modal = document.getElementById("infoModal");
+      var btn = document.getElementById("infoBtn");
+      var span = document.getElementsByClassName("close")[0];
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+</script>
 {% endblock %}
