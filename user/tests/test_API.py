@@ -260,7 +260,7 @@ class APITest(TestBase):
               }
             }
         """
-        new_email = random_gen.gen_email().lower()
+        new_email = "new_email@address.com"
         email_change_data = {
             "newEmail": new_email,
             "option": "CHANGE",

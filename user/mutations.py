@@ -3,7 +3,6 @@ import graphql_jwt
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.core.validators import validate_email
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from graphene.types.generic import GenericScalar
@@ -15,6 +14,7 @@ from graphql_jwt.refresh_token.shortcuts import create_refresh_token
 from graphql_jwt.shortcuts import get_token
 from phonenumber_field.phonenumber import PhoneNumber, to_python
 from phonenumber_field.validators import validate_international_phonenumber
+from validate_email import validate_email
 
 from lukimgather.throttling import ratelimit
 from lukimgather.utils import gen_random_number, gen_random_string
@@ -73,7 +73,8 @@ class RegisterUserInput(graphene.InputObjectType):
                 raise ValidationError("password and re_password does not match.")
         try:
             if user_email:
-                validate_email(user_email)
+                if not validate_email(user_email, check_smtp=False):
+                    raise ValidationError("Invalid email address.")
                 validate_password(password=input.password)
             elif user_phone_number:
                 validate_international_phonenumber(user_phone_number)
@@ -174,7 +175,8 @@ class EmailChangeInput(graphene.InputObjectType):
 
     def validate(self, info):
         try:
-            validate_email(self.new_email)
+            if not validate_email(self.new_email, check_smtp=False):
+                raise ValidationError("Invalid email address.")
         except ValidationError as error:
             raise GraphQLError(error.message)
         user = info.context.user
@@ -666,7 +668,8 @@ class EmailChangeVerify(graphene.Mutation):
             email_change_mail_object.save()
             user.email = email_change_mail_object.new_email
             try:
-                validate_email(user.username)
+                if not validate_email(user.username, check_smtp=False):
+                    raise ValidationError("Invalid email address.")
                 user.username = email_change_mail_object.new_email
             except ValidationError:
                 if PhoneNumber.is_valid(
