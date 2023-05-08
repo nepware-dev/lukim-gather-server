@@ -20,5 +20,5 @@ class LowerEmailField(models.EmailField):
 
     def validate(self, value, model_instance):
         if not validate_email(value, check_smtp=False):
-            return ValidationError("Invalid email address.")
+            raise ValidationError("Invalid email address.")
         return super().validate(value, model_instance)
