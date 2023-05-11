@@ -51,7 +51,7 @@ RUN apt-get update \
     gettext
 
 # Install pip
-RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python3.9
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python
 
 # Install virtualenv
 RUN pip3.9 install -U virtualenv
@@ -65,7 +65,7 @@ RUN apt-get update \
     gdal-bin
 
 # Install Poetry - respects $POETRY_VERSION & $POETRY_HOME
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3.9
+RUN curl -sSL https://install.python-poetry.org | python
 
 # Testing stage
 FROM python-base as testing

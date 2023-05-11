@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 import graphene
@@ -132,9 +133,10 @@ class CreateHappeningSurvey(graphene.Mutation):
                     survey_obj.created_at = data.get("created_at")
                 if data.get("attachment"):
                     for file in data.attachment:
-                        if is_valid_uuid(file.name):
+                        name, _extension = os.path.splitext(file.name)
+                        if is_valid_uuid(name):
                             gallery = Gallery(
-                                id=file.name,
+                                id=name,
                                 media=file,
                                 title=file.name,
                                 type="image",
@@ -227,13 +229,12 @@ class UpdateHappeningSurvey(graphene.Mutation):
                     happening_survey_obj.attachment.set(attachment_links)
                 if attachments:
                     for attachment in attachments:
+                        name, _extension = os.path.splitext(attachment.name)
                         new_attachment = happening_survey_obj.attachment.create(
                             media=attachment,
                             title=attachment.name,
                             type="image",
-                            id=attachment.name
-                            if is_valid_uuid(attachment.name)
-                            else None,
+                            id=name if is_valid_uuid(name) else None,
                         )
                         happening_survey_obj.attachment.add(new_attachment)
                 happening_survey_obj.save()
@@ -284,13 +285,12 @@ class EditHappeningSurvey(graphene.Mutation):
                 happening_survey_obj.save()
                 if attachments:
                     for attachment in attachments:
+                        name, _extension = os.path.splitext(attachment.name)
                         new_attachment = happening_survey_obj.attachment.create(
                             media=attachment,
                             title=attachment.name,
                             type="image",
-                            id=attachment.name
-                            if is_valid_uuid(attachment.name)
-                            else None,
+                            id=name if is_valid_uuid(name) else None,
                         )
                         happening_survey_obj.attachment.add(new_attachment)
         except ValidationError as e:
