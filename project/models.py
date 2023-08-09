@@ -18,6 +18,13 @@ class Project(TimeStampedModel, UserStampedModel, OrderedModel):
         default=None,
         verbose_name=_("organization"),
     )
+    logo = models.ImageField(
+        _("logo"),
+        upload_to="project/logos",
+        null=True,
+        blank=True,
+        default=None,
+    )
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="projects",
