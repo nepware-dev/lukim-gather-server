@@ -39,3 +39,9 @@ class ProjectType(DjangoObjectType):
             .first()
         )
         return None if not obj else obj.modified_at
+
+    def resolve_logo(self, info):
+        if self.logo and self.logo.url:
+            return info.context.build_absolute_uri(self.logo.url)
+        else:
+            return None
