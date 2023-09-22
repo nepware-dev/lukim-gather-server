@@ -62,15 +62,18 @@ class RegisterUserInput(graphene.InputObjectType):
     def validate(input, info):
         user_email = input.get("email", None)
         user_phone_number = input.get("phone_number", None)
-        if not any((user_email, user_phone_number)):
-            raise ValidationError("Please enter an email or phone number.")
         password = input.get("password", None)
         re_password = input.pop("re_password", None)
+
+        if not any((user_email, user_phone_number)):
+            raise ValidationError("Please enter an email or phone number.")
+
         if user_email:
             if not any((password, re_password)):
                 raise ValidationError("Password field is required.")
             if password != re_password:
                 raise ValidationError("password and re_password does not match.")
+
         try:
             if user_email:
                 if not validate_email(user_email, check_smtp=False):
@@ -81,7 +84,16 @@ class RegisterUserInput(graphene.InputObjectType):
                 input.pop("password", None)  # Note:- OTP login
         except ValidationError as error:
             raise ValidationError(error.messages[0])
-        if User.objects.filter_by_username(input.username).exists():
+
+        if (
+            User.objects.filter_by_username(input.username).exists()
+            or User.objects.filter(email=user_email)
+            .exclude(email__isnull=True)
+            .exists()
+            or User.objects.filter(phone_number=user_phone_number)
+            .exclude(phone_number__isnull=True)
+            .exists()
+        ):
             sign_in_method = (
                 "email"
                 if user_email
@@ -89,7 +101,9 @@ class RegisterUserInput(graphene.InputObjectType):
                 if user_phone_number
                 else "username"
             )
-            raise ValidationError(f"User with {sign_in_method} already exists.")
+            raise ValidationError(
+                f"This {sign_in_method} is already registered to another user. Try another {sign_in_method}."
+            )
         return input
 
 
