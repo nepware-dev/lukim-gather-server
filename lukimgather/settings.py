@@ -552,6 +552,7 @@ if ENABLE_PUSH_NOTIFICATION:
     PUSH_NOTIFICATIONS_SETTINGS = {
         "FCM_API_KEY": env.str("FCM_API_KEY"),
         "APNS_CERTIFICATE": env.str("APNS_CERTIFICATE"),
+        "APNS_TOPIC": env.str("APNS_TOPIC"),
         "UPDATE_ON_DUPLICATE_REG_ID": True,
     }
 

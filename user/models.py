@@ -7,6 +7,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
+from push_notifications.exceptions import NotificationError
 from push_notifications.models import APNSDevice, GCMDevice
 
 from lukimgather.auth_validators import CustomASCIIUsernameValidator
@@ -165,7 +166,10 @@ class User(AbstractUser):
         if not devices:
             return
         for device in devices:
-            device.send_message(f"{message}")
+            try:
+                device.send_message(f"{message}")
+            except NotificationError:
+                pass
 
 
 class PasswordResetPin(TimeStampedModel):
