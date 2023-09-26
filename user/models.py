@@ -99,6 +99,11 @@ class User(AbstractUser):
             kwargs["update_fields"] = changed_fields
         super().save(*args, **kwargs)
 
+    def delete(self):
+        if self.projects:
+            self.projects.clear()
+        super(User, self).delete()
+
     def notify(
         self,
         actor,
