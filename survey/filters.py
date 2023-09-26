@@ -37,3 +37,8 @@ class SurveyFilter(django_filters.FilterSet):
             "id": ["exact"],
             "title": ["exact", "contains"],
         }
+
+    @property
+    def qs(self):
+        parent = super(SurveyFilter, self).qs.order_by("-created_at")
+        return parent
