@@ -31,6 +31,9 @@ class APITest(TestBase):
         cls.happening_survey = cls.baker.make(
             "survey.HappeningSurvey", title="test", _quantity=1
         )[0]
+        cls.survey = cls.baker.make("survey.Survey", title="Survey Title", _quantity=1)[
+            0
+        ]
         cls.activated_user = authenticate(
             username=users[0].username, password=cls.activated_initial_password
         )
@@ -53,6 +56,53 @@ class APITest(TestBase):
               }
             }
             """,
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_create_survey(self):
+        response = self.query(
+            """
+            mutation CreateWritableSurvey($input: WritableSurveyMutationInput!) {
+              createWritableSurvey(input: $input) {
+                id
+                title
+                answer
+                errors {
+                  field
+                  messages
+                }
+              }
+            }
+            """,
+            input_data={
+                "title": "Test Survey",
+                "answer": '[{"data": [{"key": "value"}]}]',
+            },
+            headers=self.headers,
+        )
+        self.assertResponseNoErrors(response)
+
+    def test_update_survey(self):
+        response = self.query(
+            """
+            mutation UpdateSurvey($id: ID!, $answer: JSONString!) {
+              updateSurvey(id: $id, answer: $answer) {
+                result {
+                  answer
+                }
+                errors {
+                  field
+                  messages
+                }
+              }
+            }
+            """,
+            variables={
+                "id": self.survey.id,
+                "title": "Updated Title",
+                "answer": '[{"data": [{"key": "updated-value"}]}]',
+            },
             headers=self.headers,
         )
         self.assertResponseNoErrors(response)
