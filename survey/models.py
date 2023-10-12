@@ -31,6 +31,9 @@ class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
 class Survey(UserStampedModel, TimeStampedModel):
     title = models.CharField(_("title"), max_length=255)
     answer = models.JSONField(_("answer"), blank=True, default=dict)
+    answer_sorted = models.JSONField(
+        _("Sorted answer"), blank=True, null=True, default=dict
+    )
 
     def __str__(self):
         return self.title

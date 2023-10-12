@@ -38,18 +38,19 @@ class UpdateSurveyMutation(graphene.Mutation):
     class Input:
         id = graphene.ID(description="ID", required=True)
         answer = graphene.JSONString(required=True)
+        answer_sorted = graphene.JSONString(required=False)
 
     errors = graphene.Field(ErrorType)
     ok = graphene.Boolean()
     result = graphene.Field(SurveyType)
 
     @can_edit_survey
-    def mutate(self, info, id, answer):
-        if not isinstance(answer, dict):
-            raise GraphQLError("Answer must be a valid JSON object.")
+    def mutate(self, info, id, answer, answer_sorted=None):
         try:
             survey_obj = Survey.objects.get(id=id)
             survey_obj.answer = answer
+            if answer_sorted:
+                survey_obj.answer_sorted = answer_sorted
             survey_obj.updated_by = info.context.user
             survey_obj.save()
         except Exception as e:
