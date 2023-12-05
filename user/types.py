@@ -9,6 +9,9 @@ class PrivateUserType(DjangoObjectType):
     has_password = graphene.Boolean(
         description="Determine if user has set password or not."
     )
+    has_project_permission = graphene.Boolean(
+        description="Determine if user can accept/reject project."
+    )
 
     class Meta:
         model = User
@@ -21,6 +24,14 @@ class PrivateUserType(DjangoObjectType):
 
     def resolve_has_password(self, info):
         if self.has_usable_password():
+            return True
+        return False
+
+    def resolve_has_project_permission(self, info):
+        user_perm = info.context.user.user_permissions.filter(
+            codename="can_accept_reject_project"
+        ).exists()
+        if info.context.user.is_superuser or user_perm:
             return True
         return False
 

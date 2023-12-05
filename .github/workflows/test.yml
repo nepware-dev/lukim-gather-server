@@ -16,9 +16,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: iamsauravsharma/create-dotenv@v1.2.2
+      - uses: iamsauravsharma/create-dotenv@v2.0.1
         with:
-          env-prefix: "ENV_"
+          input-prefix: "ENV_"
         env:
           ENV_PROJECT_NAME: "lukimgather"
           ENV_SERVER_ENVIRONMENT: "testing"

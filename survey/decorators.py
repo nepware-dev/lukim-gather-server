@@ -16,10 +16,16 @@ def can_edit_happening_survey(resolver_func):
         is_project_admin = ProjectUser.objects.filter(
             user=info.context.user, is_admin=True, project=obj.project
         ).exists()
+        user_has_permission = info.context.user.user_permissions.filter(
+            codename="can_accept_reject_project"
+        ).exists()
+        is_valid_data = len(kwargs.get("data", {})) == 1 and "status" in kwargs["data"]
+        can_accept_reject_project = user_has_permission and is_valid_data
         if (
             is_project_admin
-            or info.context.user.is_staff
             or info.context.user == obj.created_by
+            or info.context.user.is_superuser
+            or can_accept_reject_project
         ):
             return resolver_func(*args, **kwargs)
         raise GraphQLError("You do not have permission to perform this action.")
@@ -35,7 +41,7 @@ def can_edit_survey(resolver_func):
         obj = Survey.objects.filter(id=kwargs.get("id")).first()
         if not obj:
             return GraphQLError("Survey doesn't exist.")
-        if info.context.user.is_staff or info.context.user == obj.created_by:
+        if info.context.user.is_superuser or info.context.user == obj.created_by:
             return resolver_func(*args, **kwargs)
         raise GraphQLError("You do not have permission to perform this action.")
 
