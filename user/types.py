@@ -15,10 +15,9 @@ class PrivateUserType(DjangoObjectType):
         exclude = ("password",)
 
     def resolve_avatar(self, info):
-        if self.avatar and self.avatar.url:
-            return info.context.build_absolute_uri(self.avatar.url)
-        else:
+        if not self.avatar or not self.avatar.url:
             return None
+        return info.context.build_absolute_uri(self.avatar.url)
 
     def resolve_has_password(self, info):
         if self.has_usable_password():
@@ -32,10 +31,9 @@ class UserType(DjangoObjectType):
         fields = ("id", "first_name", "last_name", "avatar")
 
     def resolve_avatar(self, info):
-        if self.avatar and self.avatar.url:
-            return info.context.build_absolute_uri(self.avatar.url)
-        else:
+        if not self.avatar or not self.avatar.url:
             return None
+        return info.context.build_absolute_uri(self.avatar.url)
 
 
 class PasswordResetPinType(DjangoObjectType):
