@@ -55,7 +55,7 @@ safety = "^2.3.5"
 django-extensions = "^3.1.5"
 pre-commit = "^2.16.0"
 model-bakery = "^1.4.0"
-Werkzeug = "2.2.3"
+Werkzeug = "2.3.8"
 
 [tool.poetry.extras]
 asgi = ["uvicorn", "gunicorn"]
