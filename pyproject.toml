@@ -32,7 +32,7 @@ djangorestframework = "^3.13.1"
 django-admin-autocomplete-filter = "^0.7.1"
 djangorestframework-gis = "^0.18"
 django-cors-headers = "^3.11.0"
-Pillow = "^9.1.0"
+pillow = "^10.1.0"
 graphene-django-extras = "^1.0.0"
 django-admin-interface = "^0.19.0"
 django-json-widget = "^1.1.1"
@@ -48,14 +48,14 @@ django-push-notifications = {version = "^3.0.0", extras = ["WP", "APNS"]}
 py3-validate-email = "^1.0.5.post1"
 sorl-thumbnail = "^12.9.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^22.3.0"
 isort = "^5.10.1"
 safety = "^2.3.5"
 django-extensions = "^3.1.5"
 pre-commit = "^2.16.0"
 model-bakery = "^1.4.0"
-Werkzeug = "2.2.3"
+werkzeug = "^3.0.1"
 
 [tool.poetry.extras]
 asgi = ["uvicorn", "gunicorn"]

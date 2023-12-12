@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.contrib.admin.utils import NestedObjects, model_ngettext, quote
+from django.contrib.auth import get_permission_codename
 from django.core.exceptions import PermissionDenied
 from django.db import models, router
 from django.shortcuts import render
@@ -98,7 +99,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     )
 
     @admin.action(
-        permissions=["change"],
+        permissions=["project_accept_reject"],
         description=_("Approve/Reject selected %(verbose_name_plural)s"),
     )
     def approve_reject_happening_survey(modeladmin, request, queryset):
@@ -194,3 +195,16 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
                     "protected": protected,
                 },
             )
+
+    def has_project_accept_reject_permission(self, request):
+        opts = self.opts
+        codename = get_permission_codename("can_accept_reject_project", opts)
+        return request.user.has_perm("%s.%s" % (opts.app_label, codename))
+
+    def get_readonly_fields(self, request, obj=None):
+        can_accept_reject_project = request.user.user_permissions.filter(
+            codename="can_accept_reject_project"
+        ).exists()
+        if request.user.is_superuser or can_accept_reject_project:
+            return self.readonly_fields
+        return self.readonly_fields + ("status",)

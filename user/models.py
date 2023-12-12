@@ -176,6 +176,9 @@ class User(AbstractUser):
             except NotificationError:
                 pass
 
+    class Meta:
+        permissions = (("can_accept_reject_project", "Can accept/reject project"),)
+
 
 class PasswordResetPin(TimeStampedModel):
     user = models.OneToOneField(

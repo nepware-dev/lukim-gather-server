@@ -29,11 +29,11 @@ class APITest(TestBase):
             "project.Project", title="project test", _quantity=1
         )[0]
         cls.happening_survey = cls.baker.make(
-            "survey.HappeningSurvey", title="test", _quantity=1
+            "survey.HappeningSurvey", title="test", created_by=users[0], _quantity=1
         )[0]
-        cls.survey = cls.baker.make("survey.Survey", title="Survey Title", _quantity=1)[
-            0
-        ]
+        cls.survey = cls.baker.make(
+            "survey.Survey", title="Survey Title", created_by=users[0], _quantity=1
+        )[0]
         cls.activated_user = authenticate(
             username=users[0].username, password=cls.activated_initial_password
         )
