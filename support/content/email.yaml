@@ -99,3 +99,16 @@
       Thanks,
       Lukim Gather Team
     text_message: *contact_us_content
+- model: support.EmailTemplate
+  pk: 7
+  fields:
+    identifier: category_email_trigger
+    subject: New Survey Conducted
+    html_message: &category_trigger_content |
+      Dear Sir/Madam,
+
+      Please click <a href="{{category_trigger_object}}">here</a> to view survey details.
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *category_trigger_content

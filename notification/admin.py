@@ -3,7 +3,13 @@ from django.utils.translation import gettext_lazy as _
 
 from lukimgather.admin import UserStampedModelAdmin
 
-from .models import Announcement, Notice, Notification
+from .models import (
+    Announcement,
+    CategoryActivityTrigger,
+    ContactEmail,
+    Notice,
+    Notification,
+)
 
 
 @admin.register(Notification)
@@ -71,3 +77,15 @@ class AnnouncementAdmin(UserStampedModelAdmin):
         "created_at",
         "modified_at",
     )
+
+
+class ContactEmailInline(admin.TabularInline):
+    model = ContactEmail
+
+
+@admin.register(CategoryActivityTrigger)
+class CategoryActivityTriggerAdmin(UserStampedModelAdmin):
+    autocomplete_fields = ("category",)
+    list_display = ("category",)
+    list_filter = ("category",)
+    inlines = [ContactEmailInline]
