@@ -25,7 +25,7 @@
     identifier: email_confirm
     subject: Email confirmation mail
     html_message: &email_confirm_content |
-      Dear {{ user.username }}
+      Dear {{ user.username }},
       Welcome to Lukim Gather,
       Recently you have created new account with us.
       We have send this email to verify your email address.
@@ -44,7 +44,7 @@
     identifier: password_reset
     subject: Password reset pin mail
     html_message: &password_reset_content |
-      Dear {{ user.username }}
+      Dear {{ user.username }},
       You have recently requested for password reset email
       If you have not requested password reset email you can safely ignore this email.
 
@@ -60,7 +60,7 @@
     identifier: account_blocked
     subject: Account blocked mail
     html_message: &account_blocked_content |
-      Dear {{ user.username }}
+      Dear {{ user.username }},
       Your Account on Lukim Gather has been blocked.
 
       To get support, please contact us at support@lukimgather.org.
@@ -74,9 +74,28 @@
     identifier: announcement
     subject: Announcement
     html_message: &announcement_content |
-      Dear {{ user.username }}
+      Dear {{ user.username }},
       {{announcement_object}}
 
       Thanks,
       Lukim Gather Team
     text_message: *announcement_content
+- model: support.EmailTemplate
+  pk: 6
+  fields:
+    identifier: contact_us
+    subject: Inquiry/Assistance Needed - Lukim Gather
+    html_message: &contact_us_content |
+      Dear Team,
+
+      **Subject:** {{contact_us_object.subject}}
+
+      **Name:** {{contact_us_object.name}}
+      **Email:** {{contact_us_object.email}}
+
+      **Message:**
+      {{contact_us_object.message}}
+
+      Thanks,
+      Lukim Gather Team
+    text_message: *contact_us_content
