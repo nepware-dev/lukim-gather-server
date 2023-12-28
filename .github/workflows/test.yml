@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: iamsauravsharma/create-dotenv@v2.0.1
         with:
           input-prefix: "ENV_"
