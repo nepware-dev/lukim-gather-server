@@ -1,7 +1,11 @@
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 
+from notification.models import CategoryActivityTrigger, ContactEmail
 from region.models import ProtectedArea, Region
+from support.models import EmailTemplate
+from user.tasks import send_email_address_mail
 
 from .models import HappeningSurvey
 
@@ -55,3 +59,34 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
         instance.region = survey_region
         instance.protected_area = protected_area
         instance.save()
+
+
+@receiver(post_save, sender=HappeningSurvey)
+def trigger_happening_survey_activity(sender, instance, created, **kwargs):
+    if created:
+        if not instance.category:
+            return
+        trigger = CategoryActivityTrigger.objects.filter(
+            category=instance.category
+        ).first()
+        if not trigger:
+            return
+        contact_list = ContactEmail.objects.filter(category_activity_trigger=trigger)
+        if not contact_list:
+            return
+        (subject, html_message, text_message,) = EmailTemplate.objects.get(
+            identifier="category_email_trigger"
+        ).get_email_contents(
+            {
+                "category_trigger_object": f"https://{'' if settings.SERVER_ENVIRONMENT == 'production' else 'staging.'}lukimgather.org/surveys/{instance.id}"
+            }
+        )
+        for contact in contact_list:
+            if settings.ENABLE_CELERY:
+                send_email_address_mail.delay(
+                    contact.email,
+                    f"{subject} in {instance.category}: {instance.title}",
+                    text_message,
+                    from_email=settings.SERVER_EMAIL,
+                    html_message=html_message,
+                )

@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.validators import EmailValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -115,3 +116,24 @@ class Notice(UserStampedModel, TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class CategoryActivityTrigger(UserStampedModel, TimeStampedModel):
+    category = models.ForeignKey(
+        "survey.ProtectedAreaCategory",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="category_activity_triggers",
+    )
+
+
+class ContactEmail(UserStampedModel, TimeStampedModel):
+    email = models.EmailField(max_length=254, validators=[EmailValidator])
+    category_activity_trigger = models.ForeignKey(
+        "CategoryActivityTrigger",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="contact_emails",
+    )

@@ -57,6 +57,7 @@ class AreaCategoryAdmin(UserStampedModelAdmin, DraggableMPTTAdmin):
         "code",
     )
     list_display_links = ("indented_title",)
+    search_fields = ("title",)
 
 
 @admin.register(HappeningSurvey)

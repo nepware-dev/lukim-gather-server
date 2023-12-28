@@ -14,7 +14,7 @@ Django = "^3.2.18"
 environs = {version = "^9.4.0", extras = ["django"]}
 marshmallow = "^3.14.1"
 psycopg2-binary = "^2.9.3"
-uvicorn = {version = "^0.16.0", optional = true, extras = ["standard"]}
+uvicorn = {version = "^0.25.0", optional = true, extras = ["standard"]}
 gunicorn = {version = "^20.1.0", optional = true}
 graphene-django = {version = "^3.0.0-beta.7", allow-prereleases = true}
 django-filter = "^22.1"
