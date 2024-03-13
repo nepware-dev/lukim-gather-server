@@ -30,4 +30,5 @@ class NoticeFilter(django_filters.FilterSet):
             "title": ["contains"],
             "description": ["contains"],
             "notice_type": ["exact"],
+            "is_active": ["exact"],
         }
