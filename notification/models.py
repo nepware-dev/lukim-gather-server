@@ -118,6 +118,11 @@ class Notice(UserStampedModel, TimeStampedModel):
         return self.title
 
 
+class EventStatus(models.TextChoices):
+    CREATED = "created", _("Created")
+    APPROVED = "approved", _("Approved")
+
+
 class CategoryActivityTrigger(UserStampedModel, TimeStampedModel):
     category = models.ForeignKey(
         "survey.ProtectedAreaCategory",
@@ -125,6 +130,14 @@ class CategoryActivityTrigger(UserStampedModel, TimeStampedModel):
         null=True,
         on_delete=models.SET_NULL,
         related_name="category_activity_triggers",
+    )
+    event = models.CharField(
+        verbose_name=_("Event"),
+        max_length=10,
+        null=False,
+        blank=False,
+        default=EventStatus.CREATED,
+        choices=EventStatus.choices,
     )
 
 
