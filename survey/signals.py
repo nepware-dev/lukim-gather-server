@@ -92,6 +92,6 @@ def trigger_happening_survey_activity(sender, instance, created, **kwargs):
                 contact.email,
                 f"{subject} in {instance.category}: {instance.title}",
                 text_message,
-                from_email=settings.SERVER_EMAIL,
+                from_email=settings.DEFAULT_FROM_EMAIL,
                 html_message=html_message,
             )
