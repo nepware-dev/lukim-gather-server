@@ -6,6 +6,7 @@ from django.core.validators import EmailValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from mptt.models import TreeForeignKey
 
 from lukimgather.models import TimeStampedModel, UserStampedModel
 
@@ -124,7 +125,7 @@ class EventStatus(models.TextChoices):
 
 
 class CategoryActivityTrigger(UserStampedModel, TimeStampedModel):
-    category = models.ForeignKey(
+    category = TreeForeignKey(
         "survey.ProtectedAreaCategory",
         blank=True,
         null=True,

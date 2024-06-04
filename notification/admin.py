@@ -81,11 +81,11 @@ class AnnouncementAdmin(UserStampedModelAdmin):
 
 class ContactEmailInline(admin.TabularInline):
     model = ContactEmail
+    extra = 1
 
 
 @admin.register(CategoryActivityTrigger)
 class CategoryActivityTriggerAdmin(UserStampedModelAdmin):
-    autocomplete_fields = ("category",)
     list_display = ("category",)
     list_filter = ("category",)
     inlines = [ContactEmailInline]
