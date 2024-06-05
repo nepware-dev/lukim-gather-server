@@ -65,33 +65,47 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
 def trigger_happening_survey_activity(sender, instance, created, **kwargs):
     if not instance.category:
         return
-    trigger = CategoryActivityTrigger.objects.filter(category=instance.category).first()
-    if not trigger or (created and trigger.event != "created"):
+
+    if instance.category.is_root_node():
+        triggers = CategoryActivityTrigger.objects.filter(
+            category__in=instance.category.get_descendants(include_self=True)
+        )
+    else:
+        triggers = CategoryActivityTrigger.objects.filter(
+            category__in=instance.category.get_family()
+        )
+
+    if not triggers:
         return
 
-    if not created:
-        update_fields = kwargs.get("update_fields")
-        if not update_fields or "status" not in update_fields:
+    for trigger in triggers:
+        if created and trigger.event != "created":
             return
 
-        if trigger.event != instance.status:
+        if not created:
+            update_fields = kwargs.get("update_fields")
+            if not update_fields or "status" not in update_fields:
+                return
+
+            if trigger.event != instance.status:
+                return
+
+        contact_list = ContactEmail.objects.filter(category_activity_trigger=trigger)
+        if not contact_list:
             return
-    contact_list = ContactEmail.objects.filter(category_activity_trigger=trigger)
-    if not contact_list:
-        return
-    (subject, html_message, text_message,) = EmailTemplate.objects.get(
-        identifier="category_email_trigger"
-    ).get_email_contents(
-        {
-            "category_trigger_object": f"https://{'' if settings.SERVER_ENVIRONMENT == 'production' else 'staging.'}lukimgather.org/surveys/{instance.id}"
-        }
-    )
-    for contact in contact_list:
-        if settings.ENABLE_CELERY:
-            send_email_address_mail.delay(
-                contact.email,
-                f"{subject} in {instance.category}: {instance.title}",
-                text_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                html_message=html_message,
-            )
+        (subject, html_message, text_message,) = EmailTemplate.objects.get(
+            identifier="category_email_trigger"
+        ).get_email_contents(
+            {
+                "category_trigger_object": f"https://{'' if settings.SERVER_ENVIRONMENT == 'production' else 'staging.'}lukimgather.org/surveys/{instance.id}"
+            }
+        )
+        for contact in contact_list:
+            if settings.ENABLE_CELERY:
+                send_email_address_mail.delay(
+                    contact.email,
+                    f"{subject} in {instance.category}: {instance.title}",
+                    text_message,
+                    from_email=settings.ACTIVITY_NOTIFICATION_EMAIL,
+                    html_message=html_message,
+                )

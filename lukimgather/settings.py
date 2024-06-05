@@ -10,7 +10,7 @@ from django.conf import global_settings
 from django.core.management.utils import get_random_secret_key
 from django.utils.translation import gettext_lazy as _
 from environs import Env
-from marshmallow.validate import OneOf
+from marshmallow.validate import Email, OneOf
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -253,6 +253,9 @@ if "SERVER_EMAIL" in email_config:
     SERVER_EMAIL = email_config["SERVER_EMAIL"]
 if "DEFAULT_FROM_EMAIL" in email_config:
     DEFAULT_FROM_EMAIL = email_config["DEFAULT_FROM_EMAIL"]
+ACTIVITY_NOTIFICATION_EMAIL = env.str(
+    "ACTIVITY_NOTIFICATION_EMAIL", validate=[Email()], default=DEFAULT_FROM_EMAIL
+)
 
 # Amazon Simple Notification Service (SNS)
 ENABLE_SNS = env.bool("ENABLE_SNS", default=False)
