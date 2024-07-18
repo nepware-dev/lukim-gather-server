@@ -260,10 +260,15 @@ class ChangePassword(graphene.Mutation):
         user = User.objects.filter_by_username(
             info.context.user.username, is_active=True
         ).first()
+        current_password = data.password
         new_password = data.new_password
         re_new_password = data.re_password
         if re_new_password != new_password:
             raise GraphQLError("New password and re new password doesn't match")
+        if current_password == re_new_password:
+            raise GraphQLError(
+                "The new password cannot be the same as the old password."
+            )
         try:
             validate_password(password=new_password, user=user)
         except ValidationError as e:
