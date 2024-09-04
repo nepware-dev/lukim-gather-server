@@ -28,4 +28,4 @@ jobs:
           ln -s docker/docker-compose.test.yml docker-compose.yml
       - name: Run test
         run: |
-          docker-compose up --exit-code-from server
+          docker compose up --exit-code-from server

@@ -62,7 +62,7 @@ class AreaCategoryAdmin(UserStampedModelAdmin, DraggableMPTTAdmin):
 
 @admin.register(HappeningSurvey)
 class HappeningSurveyAdmin(UserStampedModelAdmin):
-    autocomplete_fields = ("attachment",)
+    autocomplete_fields = ("attachment", "created_by")
     actions = [
         "approve_reject_happening_survey",
     ]
@@ -83,7 +83,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
         "category",
         "region",
         "protected_area",
-        "protected_area",
+        "created_by",
         "created_at",
         "improvement",
         "is_public",
