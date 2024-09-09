@@ -68,11 +68,13 @@ def trigger_happening_survey_activity(sender, instance, created, **kwargs):
 
     if instance.category.is_root_node():
         triggers = CategoryActivityTrigger.objects.filter(
-            category__in=instance.category.get_descendants(include_self=True)
+            category__in=instance.category.get_descendants(include_self=True),
+            project=instance.project,
         )
     else:
         triggers = CategoryActivityTrigger.objects.filter(
-            category__in=instance.category.get_family()
+            category__in=instance.category.get_family(),
+            project=instance.project,
         )
 
     if not triggers:
