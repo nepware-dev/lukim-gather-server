@@ -1,17 +1,17 @@
 #!/bin/sh
-poetry install
+uv sync --frozen
 if [ "$CELERY_WORKER" = "true" ]
 then
     if [ -z "$CELERY_QUEUES" ]
     then
-        poetry run celery -A lukimgather worker -l info
+        uv run celery -A lukimgather worker -l info
     else
-        poetry run celery -A lukimgather worker -l info -Q "$CELERY_QUEUES"
+        uv run celery -A lukimgather worker -l info -Q "$CELERY_QUEUES"
     fi
 else
-    poetry run ./manage.py collectstatic --no-input
-    poetry run ./manage.py migrate --no-input
-    poetry run ./manage.py import_default_email_template
-    poetry run ./manage.py createinitialrevisions
-    poetry run ./manage.py runserver_plus 0.0.0.0:8000 || poetry run ./manage.py runserver 0.0.0.0:8000
+    uv run ./manage.py collectstatic --no-input
+    uv run ./manage.py migrate --no-input
+    uv run ./manage.py import_default_email_template
+    uv run ./manage.py createinitialrevisions
+    uv run ./manage.py runserver_plus 0.0.0.0:8000 || uv run ./manage.py runserver 0.0.0.0:8000
 fi
