@@ -8,7 +8,7 @@ FROM python:3.11-bullseye as python-base
 # Non interactive frontend
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install requiremnts for python3.9
+# Install requiremnts for python3.11
 RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     software-properties-common \
@@ -19,19 +19,14 @@ RUN apt-get update \
     gdal-bin \
     gettext
 
-ENV POETRY_VERSION=1.7.1 \
-    POETRY_HOME="/opt/poetry" \
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    POETRY_NO_INTERACTION=1
+ENV UV_LINK_MODE=copy \
+    PYTHONPATH="/code" \
+    VIRTUAL_ENV="/code/.venv"
 
-# Add poetry home to path
-ENV PATH="$POETRY_HOME/bin:$PATH"
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Install virtualenv
-RUN pip install -U virtualenv
-
-# Install Poetry - respects $POETRY_VERSION & $POETRY_HOME
-RUN curl -sSL https://install.python-poetry.org | python
+# Install astral uv
+COPY --from=ghcr.io/astral-sh/uv:0.5.26 /uv /uvx /bin/
 
 # Testing stage
 FROM python-base as testing
@@ -54,7 +49,7 @@ WORKDIR /code
 
 COPY . /code/
 
-# Install all dependencies
-RUN poetry install --no-dev --extras asgi
+# Install dependencies
+RUN uv sync --frozen --no-dev --all-extras
 
 ENTRYPOINT [ "/code/docker/entrypoint.prod.sh"]

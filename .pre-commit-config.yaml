@@ -4,12 +4,12 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: poetry run black . --check
+        entry: uv run black . --check
         pass_filenames: false
         language: system
       - id: isort
         name: isort
-        entry: poetry run isort . --check-only
+        entry: uv run isort . --check-only
         pass_filenames: false
         language: system
       - id: safety

@@ -42,7 +42,7 @@ git clone --branch develop https://github.com/undp-png/lukim-gather-server.git &
 1. Apply the [Django fixtures](https://docs.djangoproject.com/en/dev/howto/initial-data/#providing-data-with-fixtures) defined in the `fixtures` folder:
 
 ```bash
-docker-compose exec container_name poetry run ./manage.py loaddata survey/fixtures/category.json  # Add protected area categories
+docker-compose exec container_name uv run ./manage.py loaddata survey/fixtures/category.json  # Add protected area categories
 ```
 
 ## Datasets
