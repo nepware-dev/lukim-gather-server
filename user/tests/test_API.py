@@ -15,15 +15,7 @@ from lukimgather.tests import TestBase
 class APITest(TestBase):
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
-        users = cls.baker.make(settings.AUTH_USER_MODEL, is_active=True, _quantity=4)
-        cls.activated_initial_password = get_user_model().objects.make_random_password()
-        users[0].set_password(cls.activated_initial_password)
-        users[0].save()
-        cls.activated_user = authenticate(
-            username=users[0].username, password=cls.activated_initial_password
-        )
-        cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
+        super().setUpClassInit()
 
     def generate_photo_file(self):
         file = io.BytesIO()
@@ -98,10 +90,10 @@ class APITest(TestBase):
 
     def test_user_change_password(self):
         user = self.baker.make(settings.AUTH_USER_MODEL, is_active=True)
-        user_initial_password = get_user_model().objects.make_random_password()
+        user_initial_password = super().make_random_password()
         user.set_password(user_initial_password)
         user.save()
-        new_password = get_user_model().objects.make_random_password()
+        new_password = super().make_random_password()
         response = self.query(
             """
             mutation Mutation($input: ChangePasswordInput!) {
@@ -117,7 +109,7 @@ class APITest(TestBase):
                 "newPassword": new_password,
                 "rePassword": new_password,
             },
-            headers={"HTTP_AUTHORIZATION": f"Bearer {get_token(user)}"},
+            headers={"Authorization": f"Bearer {get_token(user)}"},
         )
         self.assertEqual(response.status_code, 200)
         user = authenticate(username=user.username, password=new_password)
@@ -125,7 +117,7 @@ class APITest(TestBase):
 
     @skip("Temporarily skip 2 step email verification test")
     def test_user_email_verify(self):
-        non_activated_user_pass = get_user_model().objects.make_random_password()
+        non_activated_user_pass = super().make_random_password()
         non_activated_user_username = random_gen.gen_string(15)
         user_data = {
             "firstName": random_gen.gen_string(150),
@@ -369,7 +361,7 @@ class APITest(TestBase):
         self.assertResponseNoErrors(response)
 
     def test_user_phone_number_verify(self):
-        non_activated_user_pass = get_user_model().objects.make_random_password()
+        non_activated_user_pass = super().make_random_password()
         non_activated_user_username = random_gen.gen_string(15)
         user_data = {
             "firstName": random_gen.gen_string(150),

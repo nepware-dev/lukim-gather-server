@@ -40,5 +40,5 @@ class SurveyFilter(django_filters.FilterSet):
 
     @property
     def qs(self):
-        parent = super(SurveyFilter, self).qs.order_by("-created_at")
+        parent = super().qs.order_by("-created_at")
         return parent

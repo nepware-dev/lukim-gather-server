@@ -93,7 +93,11 @@ def trigger_happening_survey_activity(sender, instance, created, **kwargs):
         contact_list = ContactEmail.objects.filter(category_activity_trigger=trigger)
         if not contact_list:
             return
-        (subject, html_message, text_message,) = EmailTemplate.objects.get(
+        (
+            subject,
+            html_message,
+            text_message,
+        ) = EmailTemplate.objects.get(
             identifier="category_email_trigger"
         ).get_email_contents(
             {

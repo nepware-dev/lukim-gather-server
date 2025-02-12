@@ -2,9 +2,9 @@ import logging
 from functools import wraps
 
 from django.utils.translation import gettext_lazy as _
-from ratelimit import ALL
-from ratelimit.exceptions import Ratelimited
-from ratelimit.utils import is_ratelimited
+from django_ratelimit import ALL
+from django_ratelimit.core import is_ratelimited
+from django_ratelimit.exceptions import Ratelimited
 
 logger = logging.getLogger(__name__)
 

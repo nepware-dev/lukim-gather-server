@@ -9,6 +9,7 @@ class NotificationType(DjangoObjectType):
         model = Notification
         description = "Type definition for a notification"
         pagination = LimitOffsetGraphqlPagination(ordering="-name")
+        fields = "__all__"
 
 
 class NoticeType(DjangoObjectType):
@@ -16,3 +17,4 @@ class NoticeType(DjangoObjectType):
         model = Notice
         description = "Type definition for a notice"
         pagination = LimitOffsetGraphqlPagination(ordering="-created_at")
+        fields = "__all__"

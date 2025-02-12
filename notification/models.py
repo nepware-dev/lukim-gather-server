@@ -97,7 +97,9 @@ class Notification(TimeStampedModel):
 
     class Meta:
         ordering = ("-created_at",)
-        index_together = ("recipient", "has_read")
+        indexes = [
+            models.Index(fields=["recipient", "has_read"]),
+        ]
 
 
 class Notice(UserStampedModel, TimeStampedModel):

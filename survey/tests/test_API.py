@@ -2,11 +2,8 @@ import io
 import json
 from uuid import uuid4
 
-from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model
 from django.contrib.gis import geos
 from django.utils import timezone
-from graphql_jwt.shortcuts import get_token
 from PIL import Image
 
 from lukimgather.tests import TestBase
@@ -15,13 +12,7 @@ from lukimgather.tests import TestBase
 class APITest(TestBase):
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
-        users = cls.baker.make(
-            settings.AUTH_USER_MODEL, is_active=True, is_staff=True, _quantity=1
-        )
-        cls.activated_initial_password = get_user_model().objects.make_random_password()
-        users[0].set_password(cls.activated_initial_password)
-        users[0].save()
+        super().setUpClassInit(is_staff=True)
         cls.category = cls.baker.make(
             "survey.ProtectedAreaCategory", title="test", _quantity=1
         )[0]
@@ -29,15 +20,17 @@ class APITest(TestBase):
             "project.Project", title="project test", _quantity=1
         )[0]
         cls.happening_survey = cls.baker.make(
-            "survey.HappeningSurvey", title="test", created_by=users[0], _quantity=1
+            "survey.HappeningSurvey",
+            title="test",
+            created_by=cls.activated_user,
+            _quantity=1,
         )[0]
         cls.survey = cls.baker.make(
-            "survey.Survey", title="Survey Title", created_by=users[0], _quantity=1
+            "survey.Survey",
+            title="Survey Title",
+            created_by=cls.activated_user,
+            _quantity=1,
         )[0]
-        cls.activated_user = authenticate(
-            username=users[0].username, password=cls.activated_initial_password
-        )
-        cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
 
     def generate_photo_file(self):
         file = io.BytesIO()
@@ -56,7 +49,7 @@ class APITest(TestBase):
               }
             }
             """,
-            headers=self.headers,
+            headers=self.http_headers,
         )
         self.assertResponseNoErrors(response)
 
@@ -79,7 +72,7 @@ class APITest(TestBase):
                 "title": "Test Survey",
                 "answer": '[{"data": [{"key": "value"}]}]',
             },
-            headers=self.headers,
+            headers=self.http_headers,
         )
         self.assertResponseNoErrors(response)
 
@@ -121,7 +114,7 @@ class APITest(TestBase):
               }
             }
             """,
-            headers=self.headers,
+            headers=self.http_headers,
         )
         self.assertResponseNoErrors(response)
 
@@ -185,7 +178,7 @@ class APITest(TestBase):
                     }
                 ),
             },
-            **self.headers,
+            **self.http_headers,
         )
         response_without_id = self.client.post(
             self.GRAPHQL_URL,
@@ -207,7 +200,7 @@ class APITest(TestBase):
                     }
                 ),
             },
-            **self.headers,
+            **self.http_headers,
         )
         self.assertResponseNoErrors(response_with_id)
         self.assertResponseNoErrors(response_without_id)
@@ -224,7 +217,7 @@ class APITest(TestBase):
               }
             }
             """,
-            headers=self.headers,
+            headers=self.http_headers,
         )
         self.assertResponseNoErrors(response)
 
@@ -283,7 +276,7 @@ class APITest(TestBase):
                     }
                 ),
             },
-            **self.headers,
+            **self.http_headers,
         )
         self.assertResponseNoErrors(response)
 
@@ -341,7 +334,7 @@ class APITest(TestBase):
                     }
                 ),
             },
-            **self.headers,
+            **self.http_headers,
         )
         self.assertResponseNoErrors(response)
 
@@ -409,6 +402,6 @@ class APITest(TestBase):
               }
             }
             """,
-            headers=self.headers,
+            headers=self.http_headers,
         )
         self.assertResponseNoErrors(response)

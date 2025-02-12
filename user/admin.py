@@ -45,6 +45,7 @@ class CustomUserChangeForm(UserChangeForm):
         return phone_number
 
 
+@admin.register(User)
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     fieldsets = UserAdmin.fieldsets + ADDITIONAL_USER_FIELDS
@@ -81,9 +82,9 @@ class CustomUserAdmin(UserAdmin):
         happening_survey_qs = HappeningSurvey.objects.filter(created_by=obj[0])
         survey_qs = Survey.objects.filter(created_by=obj[0])
         if happening_survey_qs:
-            model_count[
-                HappeningSurvey._meta.verbose_name_plural
-            ] = happening_survey_qs.count()
+            model_count[HappeningSurvey._meta.verbose_name_plural] = (
+                happening_survey_qs.count()
+            )
             deleted_objects += list(happening_survey_qs)
         if survey_qs:
             model_count[Survey._meta.verbose_name_plural] = survey_qs.count()
@@ -109,6 +110,3 @@ class GrantAdmin(UserStampedModelAdmin):
         "title",
         "user",
     )
-
-
-admin.site.register(User, CustomUserAdmin)

@@ -35,7 +35,7 @@ class WritableSurveyMutation(SerializerMutation):
 
 
 class UpdateSurveyMutation(graphene.Mutation):
-    class Input:
+    class Arguments:
         id = graphene.ID(description="ID", required=True)
         answer = graphene.JSONString(required=True)
         answer_sorted = graphene.JSONString(required=False)
@@ -195,7 +195,7 @@ class UpdateHappeningSurveyInput(graphene.InputObjectType):
 
 
 class UpdateHappeningSurvey(graphene.Mutation):
-    class Input:
+    class Arguments:
         id = graphene.UUID(description="UUID", required=True)
         data = UpdateHappeningSurveyInput(
             description="Fields required to update a happening survey.",
@@ -251,7 +251,7 @@ class UpdateHappeningSurvey(graphene.Mutation):
 
 
 class EditHappeningSurvey(graphene.Mutation):
-    class Input:
+    class Arguments:
         id = graphene.UUID(description="UUID", required=True)
         data = UpdateHappeningSurveyInput(
             description="Fields required to edit a happening survey.",

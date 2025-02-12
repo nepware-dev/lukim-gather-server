@@ -17,7 +17,7 @@ class NotificationFilter(django_filters.FilterSet):
 
     @property
     def qs(self):
-        parent = super(NotificationFilter, self).qs
+        parent = super().qs
         if self.request.user.is_anonymous:
             return parent.none()
         return parent.filter(recipient=self.request.user)

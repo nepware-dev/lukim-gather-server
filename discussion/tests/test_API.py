@@ -1,23 +1,14 @@
-from django.conf import settings
-from django.contrib.auth import authenticate, get_user_model
-from graphql_jwt.shortcuts import get_token
-
 from lukimgather.tests import TestBase
 
 
 class APITest(TestBase):
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
-        users = cls.baker.make(settings.AUTH_USER_MODEL, is_active=True, _quantity=1)
-        cls.activated_initial_password = get_user_model().objects.make_random_password()
-        users[0].set_password(cls.activated_initial_password)
-        users[0].save()
+        super().setUpClassInit()
         survey = cls.baker.make("survey.HappeningSurvey", _quantity=5)
         comment = cls.baker.make("discussion.Comment", _quantity=5)
         cls.survey = survey.pop()
         cls.comment = comment.pop()
-        cls.headers = {"HTTP_AUTHORIZATION": f"Bearer {get_token(users[0])}"}
 
     def test_create_comment(self):
         response = self.query(

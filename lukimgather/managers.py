@@ -15,5 +15,5 @@ class CustomUserManager(UserManager):
             Q(username__iexact=username)
             | Q(email__iexact=username)
             | Q(phone_number__iexact=username),
-            **kwargs
+            **kwargs,
         )

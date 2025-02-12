@@ -120,7 +120,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
                 has_admin = model in admin_site._registry
                 opts = obj._meta
 
-                no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+                no_edit_link = "{}: {}".format(capfirst(opts.verbose_name), obj)
 
                 if has_admin:
                     if not admin_site._registry[model].has_change_permission(
@@ -200,7 +200,7 @@ class HappeningSurveyAdmin(UserStampedModelAdmin):
     def has_project_accept_reject_permission(self, request):
         opts = self.opts
         codename = get_permission_codename("can_accept_reject_project", opts)
-        return request.user.has_perm("%s.%s" % (opts.app_label, codename))
+        return request.user.has_perm("{}.{}".format(opts.app_label, codename))
 
     def get_readonly_fields(self, request, obj=None):
         can_accept_reject_project = request.user.user_permissions.filter(
