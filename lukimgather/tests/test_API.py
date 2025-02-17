@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
 from lukimgather.tests import TestBase
 
@@ -13,7 +12,7 @@ class APITest(TestBase):
             is_superuser=True,
             is_active=True,
         )
-        cls.user_pass = get_user_model().objects.make_random_password()
+        cls.user_pass = super().make_random_password()
         user.set_password(cls.user_pass)
         user.save()
         cls.user = user

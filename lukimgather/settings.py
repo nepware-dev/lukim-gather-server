@@ -10,7 +10,7 @@ from django.conf import global_settings
 from django.core.management.utils import get_random_secret_key
 from django.utils.translation import gettext_lazy as _
 from environs import Env
-from marshmallow.validate import Email, OneOf
+from marshmallow.validate import URL, Email, OneOf
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -25,7 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SERVER_ENVIRONMENT = env.str(
     "SERVER_ENVIRONMENT",
     validate=OneOf(choices=["development", "testing", "staging", "production"]),
-    error="SERVER_ENVIRONMENT can only be one of {choices}",
+    metadata={
+        "error": "SERVER_ENVIRONMENT can only be one of {choices}",
+    },
 )
 
 # Is server secure server?
@@ -134,6 +136,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # Graphene
@@ -272,8 +275,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
@@ -363,10 +364,8 @@ MEDIA_LOCATION = "media"
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static/")]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/")]
 
 # CELERY
 ENABLE_CELERY = env.bool("ENABLE_CELERY", default=True)
@@ -376,7 +375,9 @@ if ENABLE_CELERY:
         "CELERY_BROKER_TYPE",
         default="filesystem",
         validate=OneOf(choices=["redis", "filesystem"]),
-        error="CELERY_BROKER_TYPE can only be one of {choices}",
+        metadata={
+            "error": "CELERY_BROKER_TYPE can only be one of {choices}",
+        },
     )
 
     if CELERY_BROKER_TYPE == "redis":
@@ -397,6 +398,7 @@ if ENABLE_CELERY:
     CELERY_TIMEZONE = TIME_ZONE
     CELERY_WORKER_HIJACK_ROOT_LOGGER = False
     CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+    CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -538,8 +540,11 @@ CKEDITOR_CONFIGS = {
 ENABLE_SENTRY = env.bool("ENABLE_SENTRY", default=False)
 if ENABLE_SENTRY:
     sentry_sdk.init(
-        dsn=env.url("SENTRY_DSN"),
-        integrations=[DjangoIntegration(), CeleryIntegration()],
+        dsn=env.str("SENTRY_DSN", validate=URL()),
+        integrations=[
+            DjangoIntegration(),
+            CeleryIntegration(),
+        ],
         traces_sample_rate=1.0,
         send_default_pii=True,
         environment=SERVER_ENVIRONMENT,
@@ -564,3 +569,6 @@ if ENABLE_PUSH_NOTIFICATION:
 OAUTH2_PROVIDER = {
     "PKCE_REQUIRED": False,
 }
+
+# Django MPTT
+MPTT_ALLOW_TESTING_GENERATORS = True

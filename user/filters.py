@@ -51,7 +51,7 @@ class UserFilter(django_filters.FilterSet):
 
     @property
     def qs(self):
-        parent = super(UserFilter, self).qs
+        parent = super().qs
         if self.request.user.is_anonymous:
             return parent.none()
         search_params = self.data.get("search")

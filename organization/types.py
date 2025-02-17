@@ -13,6 +13,7 @@ class OrganizationType(DjangoObjectType):
         model = Organization
         description = "Type defincation for a organization"
         paginations = LimitOffsetGraphqlPagination(ordering="title")
+        fields = "__all__"
 
     members_count = graphene.Int()
 

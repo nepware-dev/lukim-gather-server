@@ -102,7 +102,7 @@ class User(AbstractUser):
     def delete(self):
         if self.projects:
             self.projects.clear()
-        super(User, self).delete()
+        super().delete()
 
     def notify(
         self,

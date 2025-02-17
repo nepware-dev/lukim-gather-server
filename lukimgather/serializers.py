@@ -34,7 +34,7 @@ class RichTextUploadingSerializerField(CharField):
 
 class RichTextUploadingModelSerializer(UserModelSerializer):
     def __init__(self, *args, **kwargs):
-        self.serializer_field_mapping[
-            RichTextUploadingField
-        ] = RichTextUploadingSerializerField
+        self.serializer_field_mapping[RichTextUploadingField] = (
+            RichTextUploadingSerializerField
+        )
         super().__init__(*args, **kwargs)

@@ -19,11 +19,10 @@ class CommentAdmin(MPTTModelAdmin):
     search_fields = ("user__username", "content_type")
     autocomplete_fields = ("user", "parent")
 
+    @admin.display(description="Description")
     def truncated_description(self, obj):
         description = "%s" % obj.description
         return Truncator(description).chars(100)
-
-    truncated_description.short_description = "Description"
 
 
 @admin.register(LikeComment)
