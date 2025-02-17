@@ -43,7 +43,7 @@ class Notification(TimeStampedModel):
         on_delete=models.CASCADE,
         verbose_name=_("actor content type"),
     )
-    actor_object_id = models.CharField(
+    actor_object_id = models.CharField(  # noqa: DJ001
         _("actor object id"),
         null=True,
         blank=True,
@@ -68,7 +68,7 @@ class Notification(TimeStampedModel):
         on_delete=models.CASCADE,
         verbose_name=_("action object content type"),
     )
-    action_object_object_id = models.CharField(
+    action_object_object_id = models.CharField(  # noqa: DJ001
         _("action object object id"),
         null=True,
         blank=True,
@@ -87,7 +87,7 @@ class Notification(TimeStampedModel):
         on_delete=models.CASCADE,
         verbose_name=_("target content type"),
     )
-    target_object_id = models.CharField(
+    target_object_id = models.CharField(  # noqa: DJ001
         _("target object id"),
         null=True,
         blank=True,

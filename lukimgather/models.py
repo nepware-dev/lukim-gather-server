@@ -36,7 +36,7 @@ class UserStampedModel(models.Model):
 
 
 class CodeModel(models.Model):
-    code = models.CharField(_("code"), max_length=50, unique=True, null=True)
+    code = models.CharField(_("code"), max_length=50, unique=True, null=True)  # noqa: DJ001
 
     class Meta:
         abstract = True

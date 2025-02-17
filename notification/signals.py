@@ -1,4 +1,4 @@
-from celery.utils.imports import instantiate
+from celery.utils.imports import instantiate  # noqa: F401
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch.dispatcher import receiver
 from django.utils.html import strip_tags

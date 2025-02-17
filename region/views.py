@@ -1,5 +1,3 @@
-from django.contrib.gis.db.models import GeometryField
-from django.db.models.functions import Coalesce
 from django.views.generic import ListView
 from vectortiles import VectorLayer
 from vectortiles.views import MVTView

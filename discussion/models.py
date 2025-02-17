@@ -20,7 +20,7 @@ class Comment(TimeStampedModel, MPTTModel):
     )
     description = RichTextField()
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.CharField(_("object id"), max_length=255, null=True, blank=True)
+    object_id = models.CharField(_("object id"), max_length=255, null=True, blank=True)  # noqa: DJ001
     content_object = GenericForeignKey()
     parent = TreeForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="replies"

@@ -1,6 +1,4 @@
 import graphene
-from django.utils import timezone
-from django.utils.translation import gettext as _
 from graphene_django_extras import DjangoFilterPaginateListField
 from graphql_jwt.decorators import login_required
 

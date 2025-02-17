@@ -11,7 +11,7 @@ class UploadImage(graphene.Scalar):
         try:
             image = Image.open(upload)
             image.verify()
-        except:
+        except:  # noqa : E722
             raise GraphQLError(
                 "Upload a valid image. The file you uploaded was either not an image or a corrupted image."
             )

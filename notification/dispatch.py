@@ -10,7 +10,7 @@ def notification(
     actor,
     verb,
     notification_type=None,
-    timestamp=timezone.now(),
+    timestamp=None,
     action_object=None,
     target=None,
     description=None,
@@ -29,6 +29,9 @@ def notification(
     This function is wrapper around UserModel.notify() function and can be used for calling single user or multiple
     users with help of queryset or list of users
     """
+    if timestamp is None:
+        timestamp = timezone.now()
+
     if isinstance(user, (QuerySet, list)) and all(
         isinstance(u, UserModel) for u in user
     ):

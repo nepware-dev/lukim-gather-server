@@ -22,7 +22,7 @@ jobs:
         with:
           version: "0.5.26"
       - name: Load cached venv
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .venv
           key: uv-venv-${{ hashFiles('uv.lock') }}
@@ -30,7 +30,5 @@ jobs:
         run: uv sync --frozen --all-extras --dev
       - name: Lint python projects
         run: |
-          source .venv/bin/activate
-          black . --check
-          isort . --check-only
-          uv pip freeze | safety check --stdin
+          uv run ruff check .
+          uv run ruff format . --check

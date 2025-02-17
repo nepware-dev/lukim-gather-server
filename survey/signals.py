@@ -20,7 +20,7 @@ def send_survey_approval_notification(sender, instance, created, **kwargs):
                     instance.updated_by,
                     f'has made the project "{instance.title}" private',
                     action_object=instance,
-                    notification_type=f"happening_survey_private",
+                    notification_type="happening_survey_private",
                 )
                 instance.created_by.send_push_notification(
                     message=f"{instance.updated_by} has made the project '{instance.title}' private."

@@ -22,12 +22,9 @@ class ProjectType(DjangoObjectType):
         return self.users.count()
 
     def resolve_is_admin(self, info):
-        is_admin = ProjectUser.objects.filter(
+        return ProjectUser.objects.filter(
             project=self, user=info.context.user, is_admin=True
-        )
-        if is_admin:
-            return True
-        return False
+        ).exists()
 
     def resolve_survey_count(self, info):
         return HappeningSurvey.objects.filter(project=self).count()

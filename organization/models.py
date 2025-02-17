@@ -9,7 +9,7 @@ from lukimgather.models import TimeStampedModel, UserStampedModel
 
 class Organization(UserStampedModel, TimeStampedModel):
     title = models.CharField(_("title"), max_length=255, unique=True)
-    acronym = models.CharField(
+    acronym = models.CharField(  # noqa: DJ001
         _("acronym"), max_length=50, null=True, blank=True, default=None
     )
     description = RichTextField(_("description"), null=True, blank=True, default=None)
@@ -25,12 +25,12 @@ class Organization(UserStampedModel, TimeStampedModel):
         blank=True,
         default=None,
     )
-    point_of_contact = models.TextField(
+    point_of_contact = models.TextField(  # noqa: DJ001
         _("point of contact"), null=True, blank=True, default=None
     )
     phone_number = PhoneNumberField(blank=True, null=True)
-    website = models.URLField(_("website"), blank=True, null=True, max_length=200)
-    address = models.TextField(_("Address"), blank=True, null=True, max_length=255)
+    website = models.URLField(_("website"), blank=True, null=True, max_length=200)  # noqa: DJ001
+    address = models.TextField(_("Address"), blank=True, null=True, max_length=255)  # noqa: DJ001
 
     def __str__(self):
         return self.title

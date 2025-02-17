@@ -50,18 +50,19 @@ asgi = [
 
 [dependency-groups]
 dev = [
-    "black>=24,<25",
-    "isort>=5.10.1,<6",
-    "safety>=3.2.5,<4",
     "django-extensions>=3.1.5,<4",
     "pre-commit>=4,<5",
     "model-bakery>=1.4.0,<2",
     "werkzeug>=3.0.1,<4",
+    "ruff>=0.9.6,<1",
 ]
 
-[tool.black]
-extend-exclude = "migrations/"
+[tool.ruff]
+target-version = "py311"
+exclude = ["*/migrations/*","__pycache__"]
 
-[tool.isort]
-skip_glob = ["__pycache__", "**/migrations"]
-profile = "black"
+[tool.ruff.lint]
+extend-select = ["B008", "C4", "DJ", "FIX", "I", "Q", "S", "T10", "T20", "W"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
