@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -18,7 +17,7 @@ class Comment(TimeStampedModel, MPTTModel):
         blank=True,
         related_name="comments",
     )
-    description = RichTextField()
+    description = models.TextField()
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.CharField(_("object id"), max_length=255, null=True, blank=True)  # noqa: DJ001
     content_object = GenericForeignKey()

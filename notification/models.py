@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -13,7 +12,7 @@ from lukimgather.models import TimeStampedModel, UserStampedModel
 
 class Announcement(UserStampedModel, TimeStampedModel):
     title = models.CharField(_("title"), max_length=255)
-    description = RichTextField(_("description"), blank=True, null=True, default=None)
+    description = models.TextField(_("description"), blank=True, default=None)
     organization = models.ManyToManyField(
         "organization.Organization", blank=True, verbose_name=_("Organizations")
     )
@@ -108,7 +107,7 @@ class Notice(UserStampedModel, TimeStampedModel):
         PUBLIC = "public", _("Public")
 
     title = models.CharField(_("title"), max_length=255)
-    description = RichTextField(_("description"), blank=True, null=True, default=None)
+    description = models.TextField(_("description"), blank=True, default=None)
     notice_type = models.CharField(
         _("notice type"),
         max_length=6,

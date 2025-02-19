@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.translation import gettext_lazy as _
 
-from lukimgather.admin import UserStampedModelAdmin
+from lukimgather.admin import CKEditorModelAdmin, UserStampedModelAdmin
 from support.models import AccountDeletionRequest
 from survey.models import HappeningSurvey, Survey
 
@@ -103,10 +103,11 @@ class CustomUserAdmin(UserAdmin):
 
 
 @admin.register(Grant)
-class GrantAdmin(UserStampedModelAdmin):
+class GrantAdmin(CKEditorModelAdmin, UserStampedModelAdmin):
     search_fields = ("title",)
     autocomplete_fields = ("user",)
     list_display = (
         "title",
         "user",
     )
+    ckeditor_fields = ("description",)

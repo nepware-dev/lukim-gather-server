@@ -1,7 +1,6 @@
 import uuid
 
 import reversion
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.gis.db.models import MultiPolygonField, PointField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -14,9 +13,7 @@ from lukimgather.models import CodeModel, TimeStampedModel, UserStampedModel
 
 class Form(CodeModel, UserStampedModel, TimeStampedModel, OrderedModel):
     title = models.CharField(_("title"), max_length=255)
-    description = RichTextUploadingField(
-        _("description"), blank=True, null=True, default=None
-    )
+    description = models.TextField(_("description"), blank=True, default=None)
     xform = models.JSONField(_("XForms"), blank=True, default=dict)
     question_mapping = models.JSONField(_("Question mapping"), blank=True, default=dict)
 

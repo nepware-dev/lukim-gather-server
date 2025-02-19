@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from lukimgather.admin import UserStampedModelAdmin
+from lukimgather.admin import CKEditorModelAdmin, UserStampedModelAdmin
 
 from .models import (
     Announcement,
@@ -33,7 +33,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 
 @admin.register(Notice)
-class NoticeAdmin(UserStampedModelAdmin):
+class NoticeAdmin(CKEditorModelAdmin, UserStampedModelAdmin):
     list_display = (
         "title",
         "notice_type",
@@ -53,10 +53,11 @@ class NoticeAdmin(UserStampedModelAdmin):
         "created_at",
         "modified_at",
     )
+    ckeditor_fields = ("description",)
 
 
 @admin.register(Announcement)
-class AnnouncementAdmin(UserStampedModelAdmin):
+class AnnouncementAdmin(CKEditorModelAdmin, UserStampedModelAdmin):
     autocomplete_fields = (
         "organization",
         "user",
@@ -77,6 +78,7 @@ class AnnouncementAdmin(UserStampedModelAdmin):
         "created_at",
         "modified_at",
     )
+    ckeditor_fields = ("description",)
 
 
 class ContactEmailInline(admin.TabularInline):

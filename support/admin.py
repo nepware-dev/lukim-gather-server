@@ -4,7 +4,7 @@ from modeltranslation.admin import TranslationAdmin
 from mptt.admin import DraggableMPTTAdmin
 from ordered_model.admin import OrderedModelAdmin
 
-from lukimgather.admin import UserStampedModelAdmin
+from lukimgather.admin import CKEditorModelAdmin, UserStampedModelAdmin
 from support.models import (
     AccountDeletionRequest,
     Category,
@@ -30,8 +30,9 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
 
 @admin.register(LegalDocument)
-class LegalDocumentAdmin(UserStampedModelAdmin, TranslationAdmin):
+class LegalDocumentAdmin(CKEditorModelAdmin, UserStampedModelAdmin, TranslationAdmin):
     list_display = ("document_type",)
+    ckeditor_fields = ("description",)
 
     class Meta:
         verbose_name = _("legal document")
@@ -39,8 +40,9 @@ class LegalDocumentAdmin(UserStampedModelAdmin, TranslationAdmin):
 
 
 @admin.register(Feedback)
-class FeedbackAdmin(UserStampedModelAdmin):
+class FeedbackAdmin(CKEditorModelAdmin, UserStampedModelAdmin):
     list_display = ("title",)
+    ckeditor_fields = ("description",)
 
     class Meta:
         verbose_name = _("feedback")
@@ -49,9 +51,10 @@ class FeedbackAdmin(UserStampedModelAdmin):
 
 @admin.register(FrequentlyAskedQuestion)
 class FrequentlyAskedQuestionAdmin(
-    UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin
+    CKEditorModelAdmin, UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin
 ):
     list_display = ("question", "move_up_down_links")
+    ckeditor_fields = ("answer",)
 
     class Meta:
         verbose_name = _("frequently asked question")
@@ -59,8 +62,11 @@ class FrequentlyAskedQuestionAdmin(
 
 
 @admin.register(Tutorial)
-class TutorialAdmin(UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin):
+class TutorialAdmin(
+    CKEditorModelAdmin, UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin
+):
     list_display = ("question", "move_up_down_links")
+    ckeditor_fields = ("answer",)
 
     class Meta:
         verbose_name = _("tutorial")
@@ -78,7 +84,9 @@ class ResourceTagAdmin(UserStampedModelAdmin, OrderedModelAdmin):
 
 
 @admin.register(Resource)
-class ResourceAdmin(UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin):
+class ResourceAdmin(
+    CKEditorModelAdmin, UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin
+):
     list_display = (
         "title",
         "resource_type",
@@ -87,6 +95,7 @@ class ResourceAdmin(UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin):
         "move_up_down_links",
     )
     autocomplete_fields = ("tags",)
+    ckeditor_fields = ("description",)
 
     class Meta:
         verbose_name = _("resource")
@@ -94,8 +103,9 @@ class ResourceAdmin(UserStampedModelAdmin, OrderedModelAdmin, TranslationAdmin):
 
 
 @admin.register(EmailTemplate)
-class EmailTemplateAdmin(admin.ModelAdmin):
+class EmailTemplateAdmin(CKEditorModelAdmin, admin.ModelAdmin):
     list_display = ("identifier",)
+    ckeditor_fields = ("html_message",)
 
     def has_add_permission(self, request):
         return False
@@ -109,13 +119,14 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 
 @admin.register(ContactUs)
-class ContactUsAdmin(admin.ModelAdmin):
+class ContactUsAdmin(CKEditorModelAdmin, admin.ModelAdmin):
     list_display = (
         "name",
         "email",
         "subject",
         "message",
     )
+    ckeditor_fields = ("message",)
 
     class Meta:
         verbose_plural_name = _("Contact Us")

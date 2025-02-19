@@ -40,6 +40,7 @@ dependencies = [
     "django-push-notifications[WP, APNS]>=3.0.0,<4",
     "py3-validate-email>=1.0.5.post1,<2",
     "sorl-thumbnail>=12.10.0,<12.11.0",
+    "django-ckeditor-5>=0.2.15,<0.3",
 ]
 
 [project.optional-dependencies]

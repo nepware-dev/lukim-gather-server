@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.utils.text import Truncator
 from mptt.admin import MPTTModelAdmin
 
+from lukimgather.admin import CKEditorModelAdmin
+
 from .models import Comment, LikeComment
 
 
 @admin.register(Comment)
-class CommentAdmin(MPTTModelAdmin):
+class CommentAdmin(CKEditorModelAdmin, MPTTModelAdmin):
     list_display = (
         "created_at",
         "__str__",
@@ -18,6 +20,7 @@ class CommentAdmin(MPTTModelAdmin):
     list_filter = ("is_deleted",)
     search_fields = ("user__username", "content_type")
     autocomplete_fields = ("user", "parent")
+    ckeditor_fields = ("description",)
 
     @admin.display(description="Description")
     def truncated_description(self, obj):
