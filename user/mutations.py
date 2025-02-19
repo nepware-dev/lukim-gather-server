@@ -97,7 +97,9 @@ class RegisterUserInput(graphene.InputObjectType):
             sign_in_method = (
                 "email"
                 if user_email
-                else "phone number" if user_phone_number else "username"
+                else "phone number"
+                if user_phone_number
+                else "username"
             )
             raise ValidationError(
                 f"This {sign_in_method} is already registered to another user. Try another {sign_in_method}."

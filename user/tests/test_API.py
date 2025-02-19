@@ -183,7 +183,7 @@ class APITest(TestBase):
                 ok
               }
             }
-        """
+        """  # noqa: S105
         password_reset_verify_mutation = """
             mutation Mutation($input: PasswordResetPinInput!) {
               passwordResetVerify(data: $input) {
@@ -194,7 +194,7 @@ class APITest(TestBase):
                 ok
               }
             }
-        """
+        """  # noqa: S105
         password_reset_change_mutation = """
             mutation Mutation($input: PasswordResetChangeInput!) {
               passwordResetChange(data: $input) {
@@ -203,7 +203,7 @@ class APITest(TestBase):
                 ok
               }
             }
-        """
+        """  # noqa: S105
         password_reset_response = self.query(
             password_reset_mutation, input_data={"username": user.username}
         )
@@ -219,7 +219,7 @@ class APITest(TestBase):
         identifier = password_reset_verify_response.json()["data"][
             "passwordResetVerify"
         ]["result"]["identifier"]
-        new_pass = "secure^78@12"
+        new_pass = self.make_random_password()
         password_reset_change_response = self.query(
             password_reset_change_mutation,
             input_data={

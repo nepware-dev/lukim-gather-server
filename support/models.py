@@ -44,7 +44,7 @@ class LegalDocument(UserStampedModel, TimeStampedModel):
                             new_val = new_val.lower()
                     if old_val != new_val:
                         changed_fields.append(field_name)
-                except Exception:
+                except Exception:  # noqa: S110
                     pass
             kwargs["update_fields"] = changed_fields
         super().save(*args, **kwargs)
@@ -60,7 +60,7 @@ class Feedback(UserStampedModel, TimeStampedModel):
 
 class Category(MPTTModel):
     title = models.TextField(_("title"), max_length=255)
-    icon = models.TextField(_("icon"), blank=True, null=True, max_length=50)
+    icon = models.TextField(_("icon"), blank=True, null=True, max_length=50)  # noqa: DJ001
     parent = TreeForeignKey(
         "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
     )
@@ -123,7 +123,7 @@ class Resource(UserStampedModel, TimeStampedModel, OrderedModel):
     resource_type = models.CharField(
         _("resource type"), max_length=10, choices=ResourceTypeChoices.choices
     )
-    video_url = models.URLField(_("video url"), null=True, blank=True, default=None)
+    video_url = models.URLField(_("video url"), null=True, blank=True, default=None)  # noqa: DJ001
     attachment = models.FileField(_("attachment"), null=True, blank=True, default=None)
     tags = models.ManyToManyField(
         "ResourceTag", related_name="resources", verbose_name=_("resource tags")
@@ -163,7 +163,7 @@ class AccountDeletionRequest(models.Model):
         blank=True,
         default=None,
     )
-    reason = models.TextField(
+    reason = models.TextField(  # noqa: DJ001
         _("reason"),
         null=True,
         blank=True,
@@ -178,6 +178,10 @@ class AccountDeletionRequest(models.Model):
         blank=True,
         default=None,
     )
+
+    def __str__(self):
+        username = self.account.username if self.account else "Unknown User"
+        return username
 
 
 class ContactUs(TimeStampedModel):

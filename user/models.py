@@ -58,7 +58,7 @@ class User(AbstractUser):
             "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
         ),
     )
-    organization = models.CharField(
+    organization = models.CharField(  # noqa: DJ001
         _("organization"), max_length=255, null=True, blank=True, default=None
     )
     avatar = models.ImageField(
@@ -69,7 +69,7 @@ class User(AbstractUser):
         default=None,
     )
     phone_number = PhoneNumberField(blank=True, null=True)
-    gender = models.CharField(
+    gender = models.CharField(  # noqa: DJ001
         blank=True,
         null=True,
         max_length=15,
@@ -94,7 +94,7 @@ class User(AbstractUser):
                             new_val = new_val.lower()
                     if old_val != new_val:
                         changed_fields.append(field_name)
-                except Exception:
+                except Exception:  # noqa: S110
                     pass
             kwargs["update_fields"] = changed_fields
         super().save(*args, **kwargs)
@@ -109,7 +109,7 @@ class User(AbstractUser):
         actor,
         verb,
         notification_type=None,
-        timestamp=timezone.now(),
+        timestamp=None,
         action_object=None,
         target=None,
         description=None,
@@ -133,6 +133,9 @@ class User(AbstractUser):
             if target:
                 extra_content += f" on {target}"
             description = f"{actor} {verb}{extra_content}"
+
+        if timestamp is None:
+            timestamp = timezone.now()
 
         NotificationModel = apps.get_model("notification", "Notification")
         NotificationModel.objects.create(

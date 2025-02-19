@@ -44,17 +44,14 @@ else:
     )
 
 # Debug
-if IS_SERVER_SECURE:
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = False if IS_SERVER_SECURE else True
 
 # List of allowed hosts
 DJANGO_ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[], subcast=str)
 if IS_SERVER_SECURE:
     ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS
 else:
-    LOCAL_ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
+    LOCAL_ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]  # noqa: S104
     ALLOWED_HOSTS = LOCAL_ALLOWED_HOSTS + DJANGO_ALLOWED_HOSTS
 
 
@@ -279,7 +276,7 @@ USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
-gettext = lambda s: s
+gettext = lambda s: s  # noqa : E731
 
 LANGUAGES = (
     ("en", _("English")),
@@ -390,9 +387,9 @@ if ENABLE_CELERY:
         CELERY_BROKER_URL = "filesystem://"
         CELERY_RESULT_BACKEND = "file:///tmp"
         CELERY_BROKER_TRANSPORT_OPTIONS = {
-            "data_folder_in": "/tmp",
-            "data_folder_out": "/tmp",
-            "data_folder_processed": "/tmp",
+            "data_folder_in": "/tmp",  # noqa: S108
+            "data_folder_out": "/tmp",  # noqa: S108
+            "data_folder_processed": "/tmp",  # noqa: S108
         }
 
     CELERY_TIMEZONE = TIME_ZONE

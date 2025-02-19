@@ -32,22 +32,13 @@ class NotificationSerializer(UserModelSerializer):
         fields = "__all__"
 
     def get_actor_str(self, instance):
-        if instance.actor:
-            return str(instance.actor)
-        else:
-            None
+        return str(instance.actor) if instance.actor else None
 
     def get_target_str(self, instance):
-        if instance.target:
-            return str(instance.target)
-        else:
-            None
+        return str(instance.target) if instance.target else None
 
     def get_action_object_str(self, instance):
-        if instance.action_object:
-            return str(instance.action_object)
-        else:
-            None
+        return str(instance.action_object) if instance.action_object else None
 
 
 class UnReadCountResponseSerializer(serializers.Serializer):
@@ -64,7 +55,7 @@ class CustomGCMDeviceSerializer(GCMDeviceSerializer):
 
     def validate_device_id(self, value):
         try:
-            value = int(value, 16) if type(value) != int else value
+            value = int(value, 16) if not isinstance(value, int) else value
         except ValueError:
             raise serializers.ValidationError("Device ID is not a valid hex number")
         return value
@@ -80,7 +71,7 @@ class CustomAPNSDeviceSerializer(APNSDeviceSerializer):
 
     def validate_device_id(self, value):
         try:
-            value = int(value, 16) if type(value) != int else value
+            value = int(value, 16) if not isinstance(value, int) else value
         except ValueError:
             raise serializers.ValidationError("Device ID is not a valid hex number")
         return value

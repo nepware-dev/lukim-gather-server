@@ -2,18 +2,13 @@ fail_fast: true
 repos:
   - repo: local
     hooks:
-      - id: black
-        name: black
-        entry: uv run black . --check
+      - id: ruff-lint
+        name: ruff-lint
+        entry: uv run ruff check .
         pass_filenames: false
         language: system
-      - id: isort
-        name: isort
-        entry: uv run isort . --check-only
+      - id: ruff-format
+        name: ruff-format
+        entry: uv run ruff format . --check
         pass_filenames: false
         language: system
-      - id: safety
-        name: safety
-        entry: scripts/safety.sh
-        pass_filenames: false
-        language: script

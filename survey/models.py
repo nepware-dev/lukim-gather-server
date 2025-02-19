@@ -45,7 +45,7 @@ class Survey(UserStampedModel, TimeStampedModel):
 
 class ProtectedAreaCategory(MPTTModel, TimeStampedModel, UserStampedModel, CodeModel):
     title = models.CharField(_("Title"), max_length=255)
-    description = models.TextField(
+    description = models.TextField(  # noqa: DJ001
         _("Description"), null=True, blank=True, default=None
     )
     parent = TreeForeignKey(
@@ -88,13 +88,13 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
     project = models.ForeignKey(
         "project.Project", on_delete=models.CASCADE, blank=True, null=True, default=None
     )
-    title = models.CharField(
+    title = models.CharField(  # noqa: DJ001
         _("title"), max_length=255, null=True, blank=True, default=None
     )
-    description = models.TextField(
+    description = models.TextField(  # noqa: DJ001
         _("Description"), null=True, blank=True, default=None
     )
-    sentiment = models.TextField(_("Sentiments"), blank=True, null=True, default=None)
+    sentiment = models.TextField(_("Sentiments"), blank=True, null=True, default=None)  # noqa: DJ001
     attachment = models.ManyToManyField(
         "gallery.Gallery", blank=True, verbose_name=_("Attachments")
     )
@@ -114,7 +114,7 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
         default=Status.PENDING,
         choices=Status.choices,
     )
-    improvement = models.CharField(
+    improvement = models.CharField(  # noqa: DJ001
         verbose_name=_("Happening Survey Improvement Status"),
         max_length=11,
         null=True,
@@ -158,7 +158,7 @@ class HappeningSurvey(TimeStampedModel, UserStampedModel):
                     new_val = getattr(self, field_name)
                     if old_val != new_val:
                         changed_fields.append(field_name)
-                except Exception:
+                except Exception:  # noqa: S110
                     pass
             if changed_fields:
                 kwargs["update_fields"] = changed_fields

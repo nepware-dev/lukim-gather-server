@@ -8,4 +8,4 @@ class NotificationConfig(AppConfig):
     verbose_name = _("notification")
 
     def ready(self):
-        from notification import signals
+        from notification import signals  # noqa: F401

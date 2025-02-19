@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
-from django.template.loader import get_template
 from django.utils import timezone
 
 from lukimgather.utils import gen_random_number
