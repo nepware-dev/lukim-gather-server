@@ -14,7 +14,7 @@ class ProjectType(DjangoObjectType):
 
     class Meta:
         model = Project
-        description = "Type defination for a project"
+        description = "Type definition for a project"
         fields = "__all__"
         pagination = LimitOffsetGraphqlPagination(default_limit=100, ordering="-order")
 

@@ -20,7 +20,7 @@ Repository for Lukim Gather Server
   - PostgreSQL 13+
 
 ## Install
-### Clone the repositary
+### Clone the repository
 ```bash
 git clone --branch develop https://github.com/undp-png/lukim-gather-server.git && cd lukim-gather-server
 ```
@@ -72,11 +72,11 @@ The data collected at lukim gather app is synced to [PNG Geoportal](https://png-
 | description    | Description | string   | Survey description |
 | sentiment      | Sentiments | string   | sentiments |
 | attachment     | Attachments | file   | attachments |
-| location       | Location | string   | Survey co-ordinates |
+| location       | Location | string   | Survey coordinates |
 | boundary       | Boundary | string   | Survey boundary area |
 | status         | Status | string   | Survey answer status |
 | improvement    | Improvement | string   | Survey improvement status. |
-| is_public      | Is Public? | boolean   | Flat to determine wheter submitted survey is public or not. |
+| is_public      | Is Public? | boolean   | Flat to determine whether submitted survey is public or not. |
 | is_test        | Is Test? | boolean   | Flag to determine whether submitted survey is test or not. |
 
 ## Translation
