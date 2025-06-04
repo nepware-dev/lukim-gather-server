@@ -134,6 +134,15 @@ class CategoryActivityTrigger(UserStampedModel, TimeStampedModel):
         on_delete=models.SET_NULL,
         related_name="category_activity_triggers",
     )
+    project = models.ForeignKey(
+        "project.Project",
+        on_delete=models.CASCADE,
+        related_name="projects",
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name=_("project"),
+    )
     event = models.CharField(
         verbose_name=_("Event"),
         max_length=10,
@@ -142,6 +151,10 @@ class CategoryActivityTrigger(UserStampedModel, TimeStampedModel):
         default=EventStatus.CREATED,
         choices=EventStatus.choices,
     )
+
+    class Meta:
+        verbose_name = _("activity trigger")
+        verbose_name_plural = _("activity triggers")
 
 
 class ContactEmail(UserStampedModel, TimeStampedModel):
