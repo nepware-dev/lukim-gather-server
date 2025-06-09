@@ -3,7 +3,7 @@ name = "lukim-gather-server"
 version = "0.1.0"
 description = '"Lukim gather server"'
 authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.11,<4"
+requires-python = ">=3.13,<4"
 dependencies = [
     "Django>=4.2,<5",
     "environs[django]>=13,<14",
