@@ -14,35 +14,35 @@ from support.models import (
 class AccountDeletionRequestType(DjangoObjectType):
     class Meta:
         model = AccountDeletionRequest
-        description = "Type defination for account deletion request"
+        description = "Type definition for account deletion request"
         fields = ("reason",)
 
 
 class CategoryType(DjangoObjectType):
     class Meta:
         model = Category
-        description = "Type defination for a category"
+        description = "Type definition for a category"
         fields = "__all__"
 
 
 class LegalDocumentType(DjangoObjectType):
     class Meta:
         model = LegalDocument
-        description = "Type defination for a legal document"
+        description = "Type definition for a legal document"
         fields = "__all__"
 
 
 class ResourceTagType(DjangoObjectType):
     class Meta:
         model = ResourceTag
-        description = "Type defination for a resource tag"
+        description = "Type definition for a resource tag"
         fields = "__all__"
 
 
 class ResourceType(DjangoObjectType):
     class Meta:
         model = Resource
-        description = "Type defination for a resource"
+        description = "Type definition for a resource"
         fields = "__all__"
 
     def resolve_attachment(self, info):
@@ -55,12 +55,12 @@ class ResourceType(DjangoObjectType):
 class FrequentlyAskedQuestionType(DjangoObjectType):
     class Meta:
         model = FrequentlyAskedQuestion
-        description = "Type defination for a frequently asked question"
+        description = "Type definition for a frequently asked question"
         fields = "__all__"
 
 
 class TutorialType(DjangoObjectType):
     class Meta:
         model = Tutorial
-        description = "Type defination for a tutorials"
+        description = "Type definition for a tutorials"
         fields = "__all__"
