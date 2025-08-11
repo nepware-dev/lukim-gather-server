@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.db import models
 from django.template import Context, Template
@@ -24,7 +23,7 @@ class LegalDocument(UserStampedModel, TimeStampedModel):
         choices=LegalDocumentTypeChoice.choices,
         unique=True,
     )
-    description = RichTextField(_("description"))
+    description = models.TextField(_("description"))
 
     def __str__(self):
         return self.document_type
@@ -52,7 +51,7 @@ class LegalDocument(UserStampedModel, TimeStampedModel):
 
 class Feedback(UserStampedModel, TimeStampedModel):
     title = models.CharField(_("title"), max_length=255)
-    description = RichTextField(_("description"))
+    description = models.TextField(_("description"))
 
     def __str__(self):
         return self.title
@@ -74,7 +73,7 @@ class Category(MPTTModel):
 
 class FrequentlyAskedQuestion(UserStampedModel, TimeStampedModel, OrderedModel):
     question = models.TextField(_("question"))
-    answer = RichTextField(_("answer"))
+    answer = models.TextField(_("answer"))
     category = models.ForeignKey(
         "Category",
         null=True,
@@ -91,7 +90,7 @@ class FrequentlyAskedQuestion(UserStampedModel, TimeStampedModel, OrderedModel):
 
 class Tutorial(UserStampedModel, TimeStampedModel, OrderedModel):
     question = models.TextField(_("question"))
-    answer = RichTextField(_("answer"))
+    answer = models.TextField(_("answer"))
     category = models.ForeignKey(
         "Category", null=True, related_name="tutorials", on_delete=models.CASCADE
     )
@@ -119,7 +118,7 @@ class Resource(UserStampedModel, TimeStampedModel, OrderedModel):
         VIDEO = "video", _("Video")
 
     title = models.TextField(_("title"), max_length=255)
-    description = RichTextField(_("description"))
+    description = models.TextField(_("description"))
     resource_type = models.CharField(
         _("resource type"), max_length=10, choices=ResourceTypeChoices.choices
     )
@@ -139,7 +138,7 @@ class Resource(UserStampedModel, TimeStampedModel, OrderedModel):
 class EmailTemplate(models.Model):
     identifier = models.CharField(_("identifier"), max_length=50, unique=True)
     subject = models.CharField(_("subject"), max_length=255)
-    html_message = RichTextField(_("html message"))
+    html_message = models.TextField(_("html message"))
     text_message = models.TextField(_("text message"))
 
     def __str__(self):
@@ -188,7 +187,7 @@ class ContactUs(TimeStampedModel):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     subject = models.CharField(max_length=255)
-    message = RichTextField(_("message"))
+    message = models.TextField(_("message"))
 
     def __str__(self):
         return self.name

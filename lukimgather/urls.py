@@ -31,7 +31,7 @@ urlpatterns += [
         ),
         name="api",
     ),
-    path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path("api/user", UserInfoView.as_view()),
     path("accounts/", include("allauth.urls")),

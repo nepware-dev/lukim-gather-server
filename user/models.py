@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -273,7 +272,7 @@ class Grant(UserStampedModel, TimeStampedModel):
         related_name="grant",
     )
     title = models.CharField(_("title"), max_length=255)
-    description = RichTextField(_("description"), null=True, blank=True, default=None)
+    description = models.TextField(_("description"), blank=True, default=None)
     organization = models.ManyToManyField(
         "organization.Organization", blank=True, verbose_name=_("Organizations")
     )

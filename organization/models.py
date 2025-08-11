@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
@@ -12,7 +11,7 @@ class Organization(UserStampedModel, TimeStampedModel):
     acronym = models.CharField(  # noqa: DJ001
         _("acronym"), max_length=50, null=True, blank=True, default=None
     )
-    description = RichTextField(_("description"), null=True, blank=True, default=None)
+    description = models.TextField(_("description"), blank=True, default=None)
     email = LowerEmailField(
         verbose_name=_("Email Address"),
         blank=True,

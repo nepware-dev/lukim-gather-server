@@ -12,12 +12,12 @@ from django_json_widget.widgets import JSONEditorWidget
 from mptt.admin import DraggableMPTTAdmin
 from ordered_model.admin import OrderedModelAdmin
 
-from lukimgather.admin import UserStampedModelAdmin
+from lukimgather.admin import CKEditorModelAdmin, UserStampedModelAdmin
 from survey.models import Form, HappeningSurvey, ProtectedAreaCategory, Survey
 
 
 @admin.register(Form)
-class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
+class FormAdmin(CKEditorModelAdmin, UserStampedModelAdmin, OrderedModelAdmin):
     list_display = (
         "code",
         "title",
@@ -35,6 +35,7 @@ class FormAdmin(UserStampedModelAdmin, OrderedModelAdmin):
     formfield_overrides = {
         models.JSONField: {"widget": JSONEditorWidget},
     }
+    ckeditor_fields = ("description",)
 
 
 @admin.register(Survey)

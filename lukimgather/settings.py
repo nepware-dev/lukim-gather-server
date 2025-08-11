@@ -93,8 +93,7 @@ INTERNAL_APPS = [
 THIRD_PARTY_APPS = [
     "admin_auto_filters",
     "corsheaders",
-    "ckeditor",
-    "ckeditor_uploader",
+    "django_ckeditor_5",
     "django_filters",
     "django_json_widget",
     "graphene_django",
@@ -401,136 +400,121 @@ if ENABLE_CELERY:
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # CKEDITOR settings
-CKEDITOR_UPLOAD_PATH = "ckeditor-uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_ALLOW_NONIMAGE_FILES = False
-CKEDITOR_CONFIGS = {
+CKEDITOR_5_FILE_STORAGE = "lukimgather.storage_backends.CKEditorStorage"
+CKEDITOR_5_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_5_MAX_FILE_SIZE = 5
+CKEDITOR_5_USER_LANGUAGE = True
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
+
+CKEDITOR_5_CONFIGS = {
     "default": {
-        "toolbar_CustomToolbarConfig": [
-            {
-                "name": "document",
-                "items": [
-                    "Source",
-                    "-",
-                    "Save",
-                    "NewPage",
-                    "Preview",
-                    "Print",
-                    "-",
-                    "Templates",
-                ],
-            },
-            {
-                "name": "clipboard",
-                "items": [
-                    "Cut",
-                    "Copy",
-                    "Paste",
-                    "PasteText",
-                    "PasteFromWord",
-                    "-",
-                    "Undo",
-                    "Redo",
-                ],
-            },
-            {
-                "name": "editing",
-                "items": ["Find", "Replace", "-", "SelectAll", "-", "Scayt"],
-            },
-            {
-                "name": "forms",
-                "items": [
-                    "Form",
-                    "Checkbox",
-                    "Radio",
-                    "TextField",
-                    "Textarea",
-                    "Select",
-                    "Button",
-                    "ImageButton",
-                    "HiddenField",
-                ],
-            },
-            "/",
-            {
-                "name": "basicstyles",
-                "items": [
-                    "Bold",
-                    "Italic",
-                    "Underline",
-                    "Strike",
-                    "Subscript",
-                    "Superscript",
-                    "-",
-                    "CopyFormatting",
-                    "RemoveFormat",
-                ],
-            },
-            {
-                "name": "paragraph",
-                "items": [
-                    "NumberedList",
-                    "BulletedList",
-                    "-",
-                    "Outdent",
-                    "Indent",
-                    "-",
-                    "Blockquote",
-                    "CreateDiv",
-                    "-",
-                    "JustifyLeft",
-                    "JustifyCenter",
-                    "JustifyRight",
-                    "JustifyBlock",
-                    "-",
-                    "BidiLtr",
-                    "BidiRtl",
-                    "Language",
-                ],
-            },
-            {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
-            {
-                "name": "insert",
-                "items": [
-                    "Image",
-                    "Flash",
-                    "Table",
-                    "HorizontalRule",
-                    "Smiley",
-                    "SpecialChar",
-                    "PageBreak",
-                    "Iframe",
-                ],
-            },
-            "/",
-            {"name": "styles", "items": ["Styles", "Format", "Font", "FontSize"]},
-            {"name": "colors", "items": ["TextColor", "BGColor"]},
-            {"name": "tools", "items": ["Maximize", "ShowBlocks"]},
-            {"name": "about", "items": ["About"]},
-            "/",
-            {"name": "embeding_tools", "items": ["Embed", "Mathjax", "CodeSnippet"]},
-        ],
-        "toolbar": "CustomToolbarConfig",
-        "tabSpaces": 4,
-        "extraPlugins": ",".join(
-            [
-                "uploadimage",
-                "div",
-                "autolink",
-                "autoembed",
-                "embedsemantic",
-                "autogrow",
-                "widget",
-                "lineutils",
-                "clipboard",
-                "dialog",
-                "dialogui",
-                "elementspath",
-                "embed",
-                "codesnippet",
+        "toolbar": {
+            "items": [
+                "sourceEditing",
+                "codeBlock",
+                "|",
+                "heading",
+                "|",
+                "undo",
+                "redo",
+                "FindAndReplace",
+                "|",
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "subscript",
+                "superscript",
+                "highlight",
+                "link",
+                "code",
+                "|",
+                "blockQuote",
+                "Alignment",
+                "outdent",
+                "indent",
+                "|",
+                "fontSize",
+                "fontFamily",
+                "fontColor",
+                "fontBackgroundColor",
+                "removeFormat",
+                "|",
+                "insertImage",
+                "mediaEmbed",
+                "insertTable",
+                "HorizontalLine",
+                "specialCharacters",
+                "|",
+                "bulletedList",
+                "numberedList",
+                "todoList",
+                "|",
+            ],
+            "shouldNotGroupWhenFull": True,
+        },
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "|",
+                "imageStyle:alignLeft",
+                "imageStyle:alignCenter",
+                "imageStyle:alignRight",
+                "imageStyle:side",
+                "|",
+            ],
+            "styles": [
+                "full",
+                "side",
+                "alignLeft",
+                "alignCenter",
+                "alignRight",
+            ],
+        },
+        "table": {
+            "contentToolbar": [
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells",
+                "tableProperties",
+                "tableCellProperties",
             ]
-        ),
-    }
+        },
+        "heading": {
+            "options": [
+                {
+                    "model": "paragraph",
+                    "title": "Paragraph",
+                    "class": "ck-heading_paragraph",
+                },
+                {
+                    "model": "heading1",
+                    "view": "h1",
+                    "title": "Heading 1",
+                    "class": "ck-heading_heading1",
+                },
+                {
+                    "model": "heading2",
+                    "view": "h2",
+                    "title": "Heading 2",
+                    "class": "ck-heading_heading2",
+                },
+                {
+                    "model": "heading3",
+                    "view": "h3",
+                    "title": "Heading 3",
+                    "class": "ck-heading_heading3",
+                },
+            ]
+        },
+    },
+    "list": {
+        "properties": {
+            "styles": "true",
+            "startIndex": "true",
+            "reversed": "true",
+        }
+    },
 }
 
 # Sentry

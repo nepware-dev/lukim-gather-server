@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from lukimgather.admin import UserStampedModelAdmin
+from lukimgather.admin import CKEditorModelAdmin, UserStampedModelAdmin
 
 from .models import Organization
 
 
 @admin.register(Organization)
-class OrganizationAdmin(UserStampedModelAdmin):
+class OrganizationAdmin(CKEditorModelAdmin, UserStampedModelAdmin):
     list_display = (
         "title",
         "acronym",
@@ -18,6 +18,7 @@ class OrganizationAdmin(UserStampedModelAdmin):
         "acronym",
         "description",
     )
+    ckeditor_fields = ("description",)
 
     class Meta:
         verbose_name = _("organization")
