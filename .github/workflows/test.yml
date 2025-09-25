@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: iamsauravsharma/create-dotenv@v3.2.0
+      - uses: iamsauravsharma/create-dotenv@v4.0.0
         with:
           input-prefix: "ENV_"
         env:
